@@ -1,15 +1,19 @@
 import React from 'react';
 import {
-  Container,
+  ListGroup,
   FormControl,
   Nav,
   Form,
   Button,
   Navbar,
   Card,
+  DropdownButton,
+  Dropdown,
 } from 'react-bootstrap';
+import './Dashboard.css';
+import { FaEllipsisH } from 'react-icons/fa';
 
-const dashboard = () => {
+const Dashboard = () => {
   return (
     <div>
       <Navbar bg='light' variant='light'>
@@ -26,8 +30,8 @@ const dashboard = () => {
         </Nav>
       </Navbar>
 
-      <div className='d-flex mx-auto w-75'>
-        <div className='left-container w-75'>
+      <div className='main-container d-flex mx-auto mt-3'>
+        <div className='left-container mx-2'>
           <Card className='w-50'>
             <Card.Body>
               <Card.Title> $3,917.88</Card.Title>
@@ -45,10 +49,45 @@ const dashboard = () => {
           </Card>
         </div>
 
-        <div className='right-container w-25'>
+        <div className='right-container mr-2'>
           <Card>
-            <h2>Stocks</h2>
-            <h2>Lists</h2>
+            <Card.Header className='d-flex'>
+              <Card.Title className='text-left mb-0'>Stocks</Card.Title>
+              {/* <FaEllipsisH className='logo-size ml-auto' /> */}
+              <DropdownButton
+                id='dropdown-basic-button'
+                title=''
+                className='ml-auto pt-0'
+                variant='outline-dark'
+              >
+                <Dropdown.Item href='/stocks'>Buy</Dropdown.Item>
+                <Dropdown.Item href='/stocks'>Sell</Dropdown.Item>
+              </DropdownButton>
+            </Card.Header>
+            <ListGroup variant='flush'>
+              <ListGroup.Item action href='/stocks/AAPL'>
+                AAPL
+              </ListGroup.Item>
+              <ListGroup.Item action href='/stocks/TSLA'>
+                TSLA
+              </ListGroup.Item>
+              <ListGroup.Item action href='/stocks/AAL'>
+                AAL
+              </ListGroup.Item>
+            </ListGroup>
+
+            <Card.Header className='text-left'>My Watched Lists</Card.Header>
+            <ListGroup variant='flush'>
+              <ListGroup.Item action href='#link1'>
+                Cras justo odio
+              </ListGroup.Item>
+              <ListGroup.Item action href='#link2'>
+                Dapibus ac facilisis in
+              </ListGroup.Item>
+              <ListGroup.Item action href='#link3'>
+                Vestibulum at eros
+              </ListGroup.Item>
+            </ListGroup>
           </Card>
         </div>
       </div>
@@ -56,4 +95,4 @@ const dashboard = () => {
   );
 };
 
-export default dashboard;
+export default Dashboard;

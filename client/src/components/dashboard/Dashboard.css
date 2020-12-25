@@ -1,0 +1,21 @@
+.main-container {
+  width: 900px;
+}
+
+.left-container {
+  width: 650px;
+}
+
+.right-container {
+  width: 250px;
+}
+
+.logo-size {
+  font-size: 25px;
+}
+
+.btn-outline-dark.dropdown-toggle {
+  padding: 0 5px;
+  margin: 0;
+  border: none;
+}
