@@ -13,10 +13,12 @@ const LandingPage = () => {
           <Nav.Link href='#pricing'>Pricing</Nav.Link>
         </Nav>
         <Form inline>
-          <Button variant='outline-primary' className='mr-2'>
+          <Button variant='outline-primary' href='/login' className='mr-2'>
             Log In
           </Button>
-          <Button variant='primary'>Sign up</Button>
+          <Button variant='primary' href='/signup'>
+            Sign up
+          </Button>
         </Form>
       </Navbar>
 

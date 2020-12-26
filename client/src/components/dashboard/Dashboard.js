@@ -24,9 +24,19 @@ const Dashboard = () => {
         </Form>
 
         <Nav className='ml-auto'>
-          <Nav.Link href='#features'>Portfolio</Nav.Link>
-          <Nav.Link href='#home'>Order</Nav.Link>
-          <Nav.Link href='#pricing'>Account</Nav.Link>
+          <Nav.Link href='/dashboard'>Portfolio</Nav.Link>
+          <Nav.Link href='/stocks'>Order</Nav.Link>
+          {/* <Nav.Link href='#pricing'>Account</Nav.Link> */}
+          <DropdownButton
+            title='Account'
+            variant='outline-secondary'
+            menuAlign='right'
+            id='dropdown-menu-align-right'
+          >
+            <Dropdown.Item href='#/action-1'>Account</Dropdown.Item>
+            <Dropdown.Item href='#/action-2'>Help Center</Dropdown.Item>
+            <Dropdown.Item href='#/action-3'>Log Out</Dropdown.Item>
+          </DropdownButton>
         </Nav>
       </Navbar>
 
@@ -52,7 +62,7 @@ const Dashboard = () => {
         <div className='right-container mr-2'>
           <Card>
             <Card.Header className='d-flex'>
-              <Card.Title className='text-left mb-0'>Stocks</Card.Title>
+              <Card.Title className='text-left mb-0'>My Stocks</Card.Title>
               {/* <FaEllipsisH className='logo-size ml-auto' /> */}
               <DropdownButton
                 id='dropdown-basic-button'
@@ -65,8 +75,9 @@ const Dashboard = () => {
               </DropdownButton>
             </Card.Header>
             <ListGroup variant='flush'>
-              <ListGroup.Item action href='/stocks/AAPL'>
-                AAPL
+              <ListGroup.Item action href='/stocks/AAPL' className='d-flex'>
+                <div>AAPL</div>
+                <div className='ml-auto'> 1 share @ $130 </div>
               </ListGroup.Item>
               <ListGroup.Item action href='/stocks/TSLA'>
                 TSLA

@@ -19,3 +19,8 @@
   margin: 0;
   border: none;
 }
+
+#dropdown-menu-align-right.dropdown-toggle {
+  border: none;
+  padding-top: 8px;
+}
