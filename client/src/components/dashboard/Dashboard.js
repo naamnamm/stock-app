@@ -11,9 +11,8 @@ import {
   Dropdown,
 } from 'react-bootstrap';
 import './Dashboard.css';
-import { FaEllipsisH } from 'react-icons/fa';
 
-const Dashboard = () => {
+const Dashboard = ({ handleLogin }) => {
   return (
     <div>
       <Navbar bg='light' variant='light'>
@@ -26,7 +25,6 @@ const Dashboard = () => {
         <Nav className='ml-auto'>
           <Nav.Link href='/dashboard'>Portfolio</Nav.Link>
           <Nav.Link href='/stocks'>Order</Nav.Link>
-          {/* <Nav.Link href='#pricing'>Account</Nav.Link> */}
           <DropdownButton
             title='Account'
             variant='outline-secondary'
@@ -35,7 +33,9 @@ const Dashboard = () => {
           >
             <Dropdown.Item href='#/action-1'>Account</Dropdown.Item>
             <Dropdown.Item href='#/action-2'>Help Center</Dropdown.Item>
-            <Dropdown.Item href='#/action-3'>Log Out</Dropdown.Item>
+            <Dropdown.Item as='button' onClick={() => handleLogin(false)}>
+              Log Out
+            </Dropdown.Item>
           </DropdownButton>
         </Nav>
       </Navbar>
@@ -63,7 +63,6 @@ const Dashboard = () => {
           <Card>
             <Card.Header className='d-flex'>
               <Card.Title className='text-left mb-0'>My Stocks</Card.Title>
-              {/* <FaEllipsisH className='logo-size ml-auto' /> */}
               <DropdownButton
                 id='dropdown-basic-button'
                 title=''
