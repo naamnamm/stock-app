@@ -24,3 +24,13 @@
   border: none;
   padding-top: 8px;
 }
+
+.option-container {
+  width: 400px;
+  margin-left: 100px;
+}
+
+#results {
+  position: absolute;
+  z-index: 2;
+}

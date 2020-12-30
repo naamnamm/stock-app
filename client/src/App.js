@@ -13,7 +13,7 @@ import Signup from './components/login-signup/Signup';
 
 function App() {
   const [user, setUser] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isSignedUp, setIsSignedUp] = useState(false);
 
   return (

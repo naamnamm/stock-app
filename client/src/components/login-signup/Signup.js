@@ -58,7 +58,7 @@ const Signup = ({ handleSignup }) => {
           </Form.Row>
 
           <Form.Group id='formGridCheckbox'>
-            <Form.Check type='checkbox' label='Check me out' />
+            <Form.Check type='checkbox' label='Agree to our terms' />
           </Form.Group>
 
           <Button

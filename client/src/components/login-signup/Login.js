@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Navbar, Nav } from 'react-bootstrap';
+import { Form, Button, Navbar, Nav, Col, Row } from 'react-bootstrap';
 import './Login-Signup.css';
 
 const Login = ({ handleLogin }) => {
@@ -13,29 +13,34 @@ const Login = ({ handleLogin }) => {
           <Nav.Link href='#pricing'>Pricing</Nav.Link>
         </Nav>
       </Navbar>
-      <div className='login-container mx-auto'>
+      <div className='login-container mx-auto mt-4'>
         <Form>
-          <Form.Group>
-            <Form.Label>Username</Form.Label>
-            <Form.Control type='text' className='mx-sm-3' id='inputUsername' />
-            <Form.Text id='passwordHelpBlock' muted>
-              Enter your username
-            </Form.Text>
+          <Form.Group as={Row} controlId='formHorizontalEmail'>
+            <Form.Label column sm={3} className='text-left'>
+              Email
+            </Form.Label>
+            <Col sm={9}>
+              <Form.Control type='email' placeholder='Email' />
+            </Col>
+          </Form.Group>
 
-            <Form.Label htmlFor='inputPassword6'>Password</Form.Label>
-            <Form.Control
-              type='password'
-              className='mx-sm-3'
-              id='inputPassword6'
-              aria-describedby='passwordHelpInline'
-            />
-            <Form.Text id='passwordHelpBlock' muted>
-              Must be 8-20 characters long.
-            </Form.Text>
+          <Form.Group as={Row} controlId='formHorizontalPassword'>
+            <Form.Label column sm={3} className='text-left'>
+              Password
+            </Form.Label>
+            <Col sm={9}>
+              <Form.Control type='password' placeholder='Password' />
+            </Col>
           </Form.Group>
           <Button type='submit' onClick={() => handleLogin(true)}>
             Login
           </Button>
+          <Form.Text id='passwordHelpBlock' muted className='mt-3'>
+            Don't have an account
+          </Form.Text>
+          <div className='mt-3'>
+            <Button href='/signup'>Create an Account</Button>
+          </div>
         </Form>
       </div>
     </>

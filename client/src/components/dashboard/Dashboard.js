@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ListGroup,
   FormControl,
@@ -11,15 +11,80 @@ import {
   Dropdown,
 } from 'react-bootstrap';
 import './Dashboard.css';
+import Stocks from './Stocks';
 
 const Dashboard = ({ handleLogin }) => {
+  const [searchInput, setSearchInput] = useState('');
+  const [stocks, setStocks] = useState([]);
+  const [options, setOptions] = useState([]);
+
+  console.log(searchInput);
+  console.log(options);
+
+  useEffect(() => {
+    //filter and update options
+    if (searchInput === 0) {
+      setSearchInput('');
+      setOptions('');
+    } else {
+      console.log(searchInput);
+      const filterSearch = stocks
+        .filter((s) => s.symbol.includes(searchInput.toUpperCase()))
+        .slice(0, 6);
+
+      console.log(filterSearch);
+      setOptions(filterSearch);
+    }
+    //handleSearch();
+  }, [searchInput]);
+
+  useEffect(() => {
+    const getStocksList = async () => {
+      try {
+        const response = await fetch(
+          'https://api.iextrading.com/1.0/ref-data/symbols'
+        );
+        const data = await response.json();
+        console.log(data);
+        setStocks(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getStocksList();
+  }, []);
+
+  // const handleSearch = async () => {
+  //   console.log(searchInput);
+  //   if (!searchInput) return;
+
+  //   try {
+  //     const response = await fetch(`/stocks/search/:${searchInput}`);
+  //     const msgData = await response.json();
+
+  //     if (response.ok) {
+  //       console.log('response from a server =', msgData);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+
+  //   setSearchInput('');
+  // };
+
   return (
     <div>
       <Navbar bg='light' variant='light'>
         <Navbar.Brand href='#home'>Infovest</Navbar.Brand>
         <Form inline>
-          <FormControl type='text' placeholder='Search' className='mr-sm-2' />
-          <Button variant='outline-primary'>Search</Button>
+          <FormControl
+            type='text'
+            placeholder='Search Symbol'
+            id='search-bar'
+            className='mr-sm-2'
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
         </Form>
 
         <Nav className='ml-auto'>
@@ -39,6 +104,15 @@ const Dashboard = ({ handleLogin }) => {
           </DropdownButton>
         </Nav>
       </Navbar>
+      <ListGroup id='results' className='option-container'>
+        {options.map((option) => {
+          return (
+            <ListGroup.Item action>
+              {option.symbol} {option.name}
+            </ListGroup.Item>
+          );
+        })}
+      </ListGroup>
 
       <div className='main-container d-flex mx-auto mt-3'>
         <div className='left-container mx-2'>
