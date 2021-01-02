@@ -7,6 +7,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import Dashboard from './components/dashboard/Dashboard';
+import Stocks from './components/dashboard/Stocks';
 import LandingPage from './components/landing-page/LandingPage';
 import Login from './components/login-signup/Login';
 import Signup from './components/login-signup/Signup';
@@ -15,6 +16,9 @@ function App() {
   const [user, setUser] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isSignedUp, setIsSignedUp] = useState(false);
+  const [selectedStock, setSelectedStock] = useState([]);
+
+  console.log(selectedStock);
 
   return (
     <div className='App'>
@@ -37,7 +41,11 @@ function App() {
             path='/dashboard'
             render={(props) =>
               isAuthenticated ? (
-                <Dashboard {...props} handleLogin={setIsAuthenticated} />
+                <Dashboard
+                  {...props}
+                  handleLogin={setIsAuthenticated}
+                  setSelectedStock={setSelectedStock}
+                />
               ) : (
                 <Redirect to='/' />
               )
@@ -70,6 +78,22 @@ function App() {
                 />
               ) : (
                 <Redirect to='/login' />
+              )
+            }
+          />
+
+          <Route
+            path='/stock'
+            render={(props) =>
+              selectedStock ? (
+                <Stocks
+                  {...props}
+                  handleLogin={setIsAuthenticated}
+                  setSelectedStock={setSelectedStock}
+                  selectedStock={selectedStock}
+                />
+              ) : (
+                <Redirect to='/dashboard' />
               )
             }
           />
