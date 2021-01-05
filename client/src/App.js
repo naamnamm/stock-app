@@ -25,7 +25,13 @@ function App() {
 
   return (
     <div className='App'>
-      <Router>
+      <Stocks
+        handleLogin={setIsAuthenticated}
+        setSelectedStock={setSelectedStock}
+        selectedStock={selectedStock}
+        refs={{ ulRef, inputRef }}
+      />
+      {/* <Router>
         <Switch>
           <Route
             exact
@@ -103,7 +109,7 @@ function App() {
             }
           />
         </Switch>
-      </Router>
+      </Router> */}
     </div>
   );
 }

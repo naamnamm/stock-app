@@ -1,0 +1,19 @@
+.row-buy-sell.form-group {
+  width: 248px;
+  margin: 0;
+  font-size: 14px;
+  text-align: left;
+}
+
+#formHorizontalPrice,
+#formHorizontalAmount {
+  font-size: 14px;
+}
+
+.total-line {
+  width: 200px;
+}
+
+/* .label-alert.form-label {
+  margin: 0;
+} */

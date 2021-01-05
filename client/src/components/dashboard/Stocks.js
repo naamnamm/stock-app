@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import SearchNav from './SearchNav';
+import Transaction from './Transaction';
 import { Chart } from 'react-google-charts';
-import stockimage from '../images/stock.png';
+import './Stocks.css';
 import {
   ListGroup,
   FormControl,
@@ -12,50 +13,53 @@ import {
   Card,
   DropdownButton,
   Dropdown,
+  Tabs,
+  Tab,
 } from 'react-bootstrap';
 
 const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
   const [stock, setStock] = useState('');
   const [chart, setChart] = useState([]);
 
-  console.log(selectedStock);
+  //console.log(selectedStock);
 
-  // const getStock = async () => {
-  //   const url = `https://sandbox.iexapis.com/stable/stock/${selectedStock.toLowerCase()}/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
+  const getStock = async () => {
+    //const url = `https://sandbox.iexapis.com/stable/stock/${selectedStock.toLowerCase()}/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
+    const url = `https://sandbox.iexapis.com/stable/stock/AAPL/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
 
-  //   const response = await fetch(url);
-  //   const data = await response.json();
+    const response = await fetch(url);
+    const data = await response.json();
 
-  //   setStock(data);
-  //   console.log(data);
+    setStock(data);
+    console.log(data);
 
-  //   const mappedArr = data.chart.map((item) => [item.date, item.open]);
-  //   mappedArr.unshift(['date', 'price']);
+    const mappedArr = data.chart.map((item) => [item.date, item.open]);
+    mappedArr.unshift(['date', 'price']);
 
-  //   setChart(mappedArr);
-  // };
+    setChart(mappedArr);
+  };
 
   const companyName = stock ? stock.quote.companyName : null;
 
-  // const displayChart = chart ? (
-  //   <Chart
-  //     width={'600px'}
-  //     height={'400px'}
-  //     chartType='LineChart'
-  //     loader={<div>Loading Chart</div>}
-  //     data={chart}
-  //     title={companyName}
-  //     options={{
-  //       hAxis: {
-  //         title: 'Date',
-  //       },
-  //       vAxis: {
-  //         title: 'Price',
-  //       },
-  //     }}
-  //     rootProps={{ 'data-testid': '1' }}
-  //   />
-  // ) : null;
+  const displayChart = chart ? (
+    <Chart
+      width={'600px'}
+      height={'400px'}
+      chartType='LineChart'
+      loader={<div>Loading Chart</div>}
+      data={chart}
+      title={companyName}
+      options={{
+        hAxis: {
+          title: 'Date',
+        },
+        vAxis: {
+          title: 'Price',
+        },
+      }}
+      rootProps={{ 'data-testid': '1' }}
+    />
+  ) : null;
 
   useEffect(() => {
     refs.inputRef.current.addEventListener('click', (e) => {
@@ -70,6 +74,7 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
         refs.ulRef.current.style.display = 'none';
       }
     });
+    getStock();
   }, []);
 
   // useEffect(() => {
@@ -88,15 +93,11 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
       <div>stock page</div>
       {/* <div>{companyName}</div> */}
       <div>Apple INc</div>
-      <div className='d-flex mx-auto'>
-        {/* <div> {displayChart} </div> */}
-        <div>
-          {' '}
-          <img src={stockimage} alt='stock-image' />{' '}
-        </div>
+      <div className='stock-main-container d-flex mx-auto'>
+        <div> {displayChart} </div>
         <div className='right-container'>
           <Card className='mt-3'>
-            <Card.Header className='d-flex'>
+            {/* <Card.Header className='d-flex'>
               <Card.Title className='text-left mb-0'>My Stocks</Card.Title>
               <DropdownButton
                 id='dropdown-basic-button'
@@ -107,19 +108,15 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
                 <Dropdown.Item href='/stocks'>Buy</Dropdown.Item>
                 <Dropdown.Item href='/stocks'>Sell</Dropdown.Item>
               </DropdownButton>
-            </Card.Header>
-            <ListGroup variant='flush'>
-              <ListGroup.Item action href='/stocks/AAPL' className='d-flex'>
-                <div>AAPL</div>
-                <div className='ml-auto'> 1 share @ $130 </div>
-              </ListGroup.Item>
-              <ListGroup.Item action href='/stocks/TSLA'>
-                TSLA
-              </ListGroup.Item>
-              <ListGroup.Item action href='/stocks/AAL'>
-                AAL
-              </ListGroup.Item>
-            </ListGroup>
+            </Card.Header> */}
+            <Tabs defaultActiveKey='profile' id='uncontrolled-tab-example'>
+              <Tab eventKey='home' title='Buy'>
+                <Transaction />
+              </Tab>
+              <Tab eventKey='profile' title='Sell'>
+                <Transaction />
+              </Tab>
+            </Tabs>
           </Card>
         </div>
       </div>
