@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -17,6 +17,9 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [selectedStock, setSelectedStock] = useState([]);
+
+  const ulRef = useRef();
+  const inputRef = useRef();
 
   console.log(selectedStock);
 
@@ -45,6 +48,7 @@ function App() {
                   {...props}
                   handleLogin={setIsAuthenticated}
                   setSelectedStock={setSelectedStock}
+                  refs={{ ulRef, inputRef }}
                 />
               ) : (
                 <Redirect to='/' />
@@ -91,6 +95,7 @@ function App() {
                   handleLogin={setIsAuthenticated}
                   setSelectedStock={setSelectedStock}
                   selectedStock={selectedStock}
+                  refs={{ ulRef, inputRef }}
                 />
               ) : (
                 <Redirect to='/dashboard' />

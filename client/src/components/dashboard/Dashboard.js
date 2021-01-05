@@ -14,21 +14,18 @@ import './Dashboard.css';
 import { Link } from 'react-router-dom';
 import SearchNav from './SearchNav';
 
-const Dashboard = ({ setSelectedStock, handleLogin }) => {
-  const ulRef = useRef();
-  const inputRef = useRef();
-
+const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
   useEffect(() => {
-    inputRef.current.addEventListener('click', (e) => {
-      if (inputRef) {
+    refs.inputRef.current.addEventListener('click', (e) => {
+      if (refs.inputRef) {
         e.stopPropagation();
-        ulRef.current.style.display = 'flex';
+        refs.ulRef.current.style.display = 'flex';
       }
     });
 
     document.addEventListener('click', (e) => {
-      if (ulRef) {
-        ulRef.current.style.display = 'none';
+      if (refs.ulRef) {
+        refs.ulRef.current.style.display = 'none';
       }
     });
   }, []);
@@ -38,7 +35,7 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
       <SearchNav
         setSelectedStock={setSelectedStock}
         handleLogin={handleLogin}
-        forwardedRef={{ ulRef, inputRef }}
+        refs={refs}
       />
 
       <div className='main-container d-flex mx-auto mt-3'>

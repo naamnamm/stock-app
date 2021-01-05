@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const SearchNav = ({ setSelectedStock, handleLogin, forwardedRef }) => {
+const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
   const [searchInput, setSearchInput] = useState('');
   const [stocks, setStocks] = useState([]);
   const [options, setOptions] = useState([]);
@@ -62,7 +62,7 @@ const SearchNav = ({ setSelectedStock, handleLogin, forwardedRef }) => {
             id='search-bar'
             className='mr-sm-2'
             onChange={(e) => setSearchInput(e.target.value)}
-            ref={forwardedRef.inputRef}
+            ref={refs.inputRef}
           />
         </Form>
 
@@ -83,11 +83,7 @@ const SearchNav = ({ setSelectedStock, handleLogin, forwardedRef }) => {
           </DropdownButton>
         </Nav>
       </Navbar>
-      <ListGroup
-        id='results'
-        className='option-container'
-        ref={forwardedRef.ulRef}
-      >
+      <ListGroup id='results' className='option-container' ref={refs.ulRef}>
         {options.length > 0
           ? options.map((option) => {
               console.log(option);
