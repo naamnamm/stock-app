@@ -2,6 +2,8 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const fetch = require('node-fetch');
+const stockData = require('./mockAPI/stockData');
+const companyData = require('./mockAPI/company');
 
 const port = process.env.PORT || 5000;
 
@@ -20,6 +22,18 @@ app.get('/stocks/search/:searchInput', async (req, res) => {
   console.log('data =' + data);
 
   res.json('yes');
+});
+
+app.get('/stock/data', async (req, res) => {
+  if (stockData) {
+    res.send(stockData);
+  }
+});
+
+app.get('/stock/company', async (req, res) => {
+  if (companyData) {
+    res.send(companyData);
+  }
 });
 
 app.get('/*', (req, res) => {

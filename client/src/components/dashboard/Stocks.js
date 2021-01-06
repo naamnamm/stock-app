@@ -3,43 +3,53 @@ import SearchNav from './SearchNav';
 import Transaction from './Transaction';
 import { Chart } from 'react-google-charts';
 import './Stocks.css';
+import moment from 'moment';
 import {
-  ListGroup,
-  FormControl,
-  Nav,
-  Form,
+  ButtonGroup,
   Button,
-  Navbar,
   Card,
-  DropdownButton,
-  Dropdown,
   Tabs,
   Tab,
+  ButtonToolbar,
 } from 'react-bootstrap';
 
 const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
   const [stock, setStock] = useState('');
   const [chart, setChart] = useState([]);
+  const [company, setCompany] = useState('');
 
   //console.log(selectedStock);
 
   const getStock = async () => {
     //const url = `https://sandbox.iexapis.com/stable/stock/${selectedStock.toLowerCase()}/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
-    const url = `https://sandbox.iexapis.com/stable/stock/AAPL/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
-
-    const response = await fetch(url);
+    // const url = `https://sandbox.iexapis.com/stable/stock/AAPL/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
+    // const response = await fetch(url);
+    const response = await fetch('/stock/data');
     const data = await response.json();
 
     setStock(data);
-    console.log(data);
+    console.log(data.quote.latestPrice);
 
-    const mappedArr = data.chart.map((item) => [item.date, item.open]);
+    const mappedArr = data.chart.map((item) => [
+      // moment(item.date).format('MMM'),
+      new Date(item.date),
+      item.open,
+    ]);
     mappedArr.unshift(['date', 'price']);
 
+    console.log(mappedArr);
+    console.log(moment('2020-12-07').format('ll'));
     setChart(mappedArr);
   };
 
-  const companyName = stock ? stock.quote.companyName : null;
+  const getCompany = async () => {
+    const response = await fetch('/stock/company');
+    const data = await response.json();
+    console.log(data);
+    setCompany(data);
+  };
+
+  const displayCompanyName = company ? company.company.companyName : null;
 
   const displayChart = chart ? (
     <Chart
@@ -48,13 +58,26 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
       chartType='LineChart'
       loader={<div>Loading Chart</div>}
       data={chart}
-      title={companyName}
+      //title={}
       options={{
-        hAxis: {
-          title: 'Date',
+        chartArea: {
+          left: 50,
+          top: 30,
+          bottom: 30,
+          right: 60,
+          width: '80%',
+          height: '100%',
         },
+        legend: 'none',
         vAxis: {
-          title: 'Price',
+          gridlines: {
+            color: 'transparent',
+          },
+        },
+        hAxis: {
+          gridlines: {
+            color: 'transparent',
+          },
         },
       }}
       rootProps={{ 'data-testid': '1' }}
@@ -75,13 +98,8 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
       }
     });
     getStock();
+    getCompany();
   }, []);
-
-  // useEffect(() => {
-  //   if (selectedStock) {
-  //     getStock();
-  //   }
-  // }, [selectedStock]);
 
   return (
     <>
@@ -90,13 +108,28 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
         handleLogin={handleLogin}
         refs={refs}
       />
-      <div>stock page</div>
-      {/* <div>{companyName}</div> */}
-      <div>Apple INc</div>
-      <div className='stock-main-container d-flex mx-auto'>
-        <div> {displayChart} </div>
+      <div className='stock-main-container d-flex mx-auto mt-3'>
+        <div>
+          <div className='text-left header-graph-container'>
+            {company ? company.company.companyName : null}
+          </div>
+          <div className='text-left header-graph-container'>
+            $ {stock ? stock.quote.latestPrice : null}
+          </div>
+          {displayChart}
+          <ButtonToolbar aria-label='Toolbar with button groups'>
+            <ButtonGroup className='range-container' aria-label='First group'>
+              <Button className='range-selection'>1D</Button>{' '}
+              <Button className='range-selection'>1W</Button>{' '}
+              <Button className='range-selection'>1M</Button>{' '}
+              <Button className='range-selection'>3M</Button>{' '}
+              <Button className='range-selection'>1Y</Button>{' '}
+              <Button className='range-selection'>5Y</Button>
+            </ButtonGroup>
+          </ButtonToolbar>
+        </div>
         <div className='right-container'>
-          <Card className='mt-3'>
+          <Card className=''>
             {/* <Card.Header className='d-flex'>
               <Card.Title className='text-left mb-0'>My Stocks</Card.Title>
               <DropdownButton
