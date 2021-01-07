@@ -2,7 +2,8 @@
   margin: 0;
 }
 
-.stock-main-container {
+.stock-main-container,
+.company-info-container {
   width: 900px;
 }
 
@@ -21,9 +22,17 @@
 .range-selection.btn-primary:hover {
   background-color: white;
   border-color: white;
-  color: blue;
+  color: #e0440e;
 }
 
 .header-graph-container {
   width: 600px;
+}
+
+.info-text.card-body {
+  font-size: 12px;
+}
+
+.about-text {
+  font-size: 14px;
 }

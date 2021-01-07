@@ -4,6 +4,7 @@ const app = express();
 const fetch = require('node-fetch');
 const stockData = require('./mockAPI/stockData');
 const companyData = require('./mockAPI/company');
+const quoteData = require('./mockAPI/quote');
 
 const port = process.env.PORT || 5000;
 
@@ -33,6 +34,12 @@ app.get('/stock/data', async (req, res) => {
 app.get('/stock/company', async (req, res) => {
   if (companyData) {
     res.send(companyData);
+  }
+});
+
+app.get('/stock/quote', async (req, res) => {
+  if (quoteData) {
+    res.send(quoteData);
   }
 });
 

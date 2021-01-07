@@ -17,6 +17,7 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
   const [stock, setStock] = useState('');
   const [chart, setChart] = useState([]);
   const [company, setCompany] = useState('');
+  const [quote, setQuote] = useState('');
 
   //console.log(selectedStock);
 
@@ -49,6 +50,13 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
     setCompany(data);
   };
 
+  const getQuote = async () => {
+    const response = await fetch('/stock/quote');
+    const data = await response.json();
+    console.log(data);
+    setQuote(data);
+  };
+
   const displayCompanyName = company ? company.company.companyName : null;
 
   const displayChart = chart ? (
@@ -60,24 +68,35 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
       data={chart}
       //title={}
       options={{
+        colors: ['#e0440e'],
         chartArea: {
           left: 50,
           top: 30,
-          bottom: 30,
+          bottom: 40,
           right: 60,
           width: '80%',
           height: '100%',
         },
         legend: 'none',
-        vAxis: {
-          gridlines: {
-            color: 'transparent',
-          },
+        // vAxis: {
+        //   gridlines: {
+        //     color: 'transparent',
+        //   },
+        // },
+        // hAxis: {
+        //   gridlines: {
+        //     color: 'transparent',
+        //   },
+        // },
+        timeline: {
+          groupByRowLabel: true,
         },
         hAxis: {
-          gridlines: {
-            color: 'transparent',
-          },
+          format: 'M/d/yy',
+          // gridlines: { count: 15 },
+        },
+        vAxis: {
+          gridlines: { color: 'none' },
         },
       }}
       rootProps={{ 'data-testid': '1' }}
@@ -99,6 +118,7 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
     });
     getStock();
     getCompany();
+    getQuote();
   }, []);
 
   return (
@@ -152,6 +172,81 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
             </Tabs>
           </Card>
         </div>
+      </div>
+
+      <div className='company-info-container mx-auto mt-4'>
+        <Card>
+          <Card.Header>About</Card.Header>
+          <Card.Body>
+            <p className='text-left about-text'>
+              {company ? company.company.description : null}
+            </p>
+            <div className='upper-container d-flex mx-auto'>
+              <Card style={{ width: '13rem' }}>
+                <Card.Body className='info-text text-left'>
+                  <Card.Title>CEO</Card.Title>
+                  <Card.Text>{company ? company.company.CEO : null}</Card.Text>
+                </Card.Body>
+              </Card>
+
+              <Card style={{ width: '13rem' }} className='info-text'>
+                <Card.Body className='info-text text-left'>
+                  <Card.Title>Headquarters</Card.Title>
+                  <Card.Text>{company ? company.company.city : null}</Card.Text>
+                </Card.Body>
+              </Card>
+
+              <Card style={{ width: '13rem' }}>
+                <Card.Body className='info-text text-left'>
+                  <Card.Title>Card Title</Card.Title>
+                  <Card.Text>
+                    Some quick example text to build on the card title and make
+                    up the bulk of the card's content.
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+              <Card style={{ width: '13rem' }}>
+                <Card.Body className='info-text text-left'>
+                  <Card.Title>Card Title</Card.Title>
+                  <Card.Text>
+                    Some quick example text to build on the card title and make
+                    up the bulk of the card's content.
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </div>
+
+            <div className='lower-container d-flex mx-auto'>
+              <Card style={{ width: '13rem' }}>
+                <Card.Body className='info-text text-left'>
+                  <Card.Title>Market Cap</Card.Title>
+                  <Card.Text>{quote ? quote.marketCap : null}</Card.Text>
+                </Card.Body>
+              </Card>
+
+              <Card style={{ width: '13rem' }}>
+                <Card.Body className='info-text text-left'>
+                  <Card.Title>Price-Earnings Ratio</Card.Title>
+                  <Card.Text>{quote ? quote.peRatio : null}</Card.Text>
+                </Card.Body>
+              </Card>
+
+              <Card style={{ width: '13rem' }}>
+                <Card.Body className='info-text text-left'>
+                  <Card.Title>Dividend Yield</Card.Title>
+                  <Card.Text>{quote ? quote.open : null}</Card.Text>
+                </Card.Body>
+              </Card>
+
+              <Card style={{ width: '13rem' }}>
+                <Card.Body className='info-text text-left'>
+                  <Card.Title>Dividend Yield</Card.Title>
+                  <Card.Text>{quote ? quote.open : null}</Card.Text>
+                </Card.Body>
+              </Card>
+            </div>
+          </Card.Body>
+        </Card>
       </div>
     </>
   );
