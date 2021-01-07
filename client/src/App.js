@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import Dashboard from './components/dashboard/Dashboard';
 import Stocks from './components/dashboard/Stocks';
+import Cash from './components/dashboard/Cash';
 import LandingPage from './components/landing-page/LandingPage';
 import Login from './components/login-signup/Login';
 import Signup from './components/login-signup/Signup';
@@ -17,6 +18,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [selectedStock, setSelectedStock] = useState([]);
+  const [balance, setBalance] = useState('');
 
   const ulRef = useRef();
   const inputRef = useRef();
@@ -25,13 +27,7 @@ function App() {
 
   return (
     <div className='App'>
-      <Stocks
-        handleLogin={setIsAuthenticated}
-        setSelectedStock={setSelectedStock}
-        selectedStock={selectedStock}
-        refs={{ ulRef, inputRef }}
-      />
-      {/* <Router>
+      <Router>
         <Switch>
           <Route
             exact
@@ -108,8 +104,22 @@ function App() {
               )
             }
           />
+
+          <Route
+            exact
+            path='/cash'
+            render={(props) => (
+              <Cash
+                {...props}
+                handleLogin={setIsAuthenticated}
+                setSelectedStock={setSelectedStock}
+                refs={{ ulRef, inputRef }}
+                handleBalance={setBalance}
+              />
+            )}
+          />
         </Switch>
-      </Router> */}
+      </Router>
     </div>
   );
 }

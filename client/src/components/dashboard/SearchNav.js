@@ -54,7 +54,9 @@ const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
   return (
     <div>
       <Navbar bg='light' variant='light'>
-        <Navbar.Brand href='#home'>Infovest</Navbar.Brand>
+        <Navbar.Brand>
+          <Link to={'/dashboard'}>Infovest</Link>
+        </Navbar.Brand>
         <Form inline>
           <FormControl
             type='text'
@@ -68,7 +70,7 @@ const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
 
         <Nav className='ml-auto'>
           <Nav.Link href='/dashboard'>Portfolio</Nav.Link>
-          <Nav.Link href='/stocks'>Order</Nav.Link>
+          <Nav.Link href='/cash'>Cash</Nav.Link>
           <DropdownButton
             title='Account'
             variant='outline-secondary'
