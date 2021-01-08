@@ -12,9 +12,48 @@ import {
 } from 'react-bootstrap';
 import './Dashboard.css';
 import { Link } from 'react-router-dom';
+import { Chart } from 'react-google-charts';
 import SearchNav from './SearchNav';
+import { FaPlus } from 'react-icons/fa';
 
 const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
+  const [currentValue, setCurrentValue] = useState([]);
+
+  const displayChart = currentValue ? (
+    <Chart
+      width={'600px'}
+      height={'400px'}
+      chartType='LineChart'
+      loader={<div>Loading Chart</div>}
+      data={currentValue}
+      options={{
+        title: 'Value (in dollars)',
+        colors: ['#e0440e'],
+        chartArea: {
+          left: 50,
+          top: 40,
+          bottom: 40,
+          right: 60,
+          width: '80%',
+          height: '100%',
+        },
+        legend: 'none',
+        timeline: {
+          groupByRowLabel: true,
+        },
+        hAxis: {
+          format: 'M/d/yy',
+          // gridlines: { count: 15 },
+          gridlines: { color: 'none' },
+        },
+        vAxis: {
+          // gridlines: { color: 'none' },
+        },
+      }}
+      rootProps={{ 'data-testid': '1' }}
+    />
+  ) : null;
+
   useEffect(() => {
     refs.inputRef.current.addEventListener('click', (e) => {
       if (refs.inputRef) {
@@ -28,6 +67,22 @@ const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
         refs.ulRef.current.style.display = 'none';
       }
     });
+
+    setCurrentValue([
+      ['x', 'dogs'],
+      [0, 0],
+      [1, 10],
+      [2, 23],
+      [3, 17],
+      [4, 18],
+      [5, 9],
+      [6, 11],
+      [7, 27],
+      [8, 33],
+      [9, 40],
+      [10, 32],
+      [11, 35],
+    ]);
   }, []);
 
   return (
@@ -40,60 +95,92 @@ const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
 
       <div className='main-container d-flex mx-auto mt-3'>
         <div className='left-container mx-2'>
-          <Card className='w-50'>
-            <Card.Body>
-              <Card.Title> $3,917.88</Card.Title>
-              <Card.Subtitle className='mb-2 text-muted'>
-                -$53.23 (-1.33%) Today
-              </Card.Subtitle>
-            </Card.Body>
-          </Card>
-          <Card>
-            <h2>Portfolio Graph</h2>
-          </Card>
+          <div className='holder-summary d-flex'>
+            <Card className='w-50'>
+              <Card.Body>
+                <Card.Title> $3,917.88</Card.Title>
+                <Card.Subtitle className='mb-2 text-muted'>
+                  Current Value
+                </Card.Subtitle>
+              </Card.Body>
+            </Card>
+            <Card className='w-50'>
+              <Card.Body>
+                <Card.Title> +$3,917.88</Card.Title>
+                <Card.Subtitle className='mb-2 text-muted'>
+                  Gain/Loss
+                </Card.Subtitle>
+              </Card.Body>
+            </Card>
+          </div>
+          <Card>{displayChart}</Card>
           <Card>
             <h2>Portfolio Details</h2>
             <p>Buying Power</p>
+            <p>$40</p>
           </Card>
         </div>
 
         <div className='right-container mr-2'>
           <Card>
             <Card.Header className='d-flex'>
-              <Card.Title className='text-left mb-0'>My Stocks</Card.Title>
+              <Card.Title className='text-left mb-0'>Stocks</Card.Title>
               <DropdownButton
                 id='dropdown-basic-button'
                 title=''
                 className='ml-auto pt-0'
                 variant='outline-dark'
               >
-                <Dropdown.Item href='/stocks'>Buy</Dropdown.Item>
-                <Dropdown.Item href='/stocks'>Sell</Dropdown.Item>
+                <Dropdown.Item href='/stock'>Buy</Dropdown.Item>
+                <Dropdown.Item href='/stock'>Sell</Dropdown.Item>
               </DropdownButton>
             </Card.Header>
             <ListGroup variant='flush'>
-              <ListGroup.Item action href='/stocks/AAPL' className='d-flex'>
-                <div>AAPL</div>
-                <div className='ml-auto'> 1 share @ $130 </div>
+              <ListGroup.Item action>
+                <Link to='/stock/AAPL' className='d-flex'>
+                  <div className='stock-left text-left'>
+                    <div className='font-weight-bold'>AAPL</div>
+                    <div className='text-muted'>1 Share</div>
+                  </div>
+                  <div className='stock-right ml-auto'>
+                    <div className=''> $130 </div>
+                  </div>
+                </Link>
               </ListGroup.Item>
-              <ListGroup.Item action href='/stocks/TSLA'>
-                TSLA
+              <ListGroup.Item action href='/stocks/TSLA' className='d-flex'>
+                <div className='stock-left text-left'>
+                  <div className='font-weight-bold'>TSLA</div>
+                  <div className='text-muted'>1 Share</div>
+                </div>
+                <div className='stock-right ml-auto'>
+                  <div className=''> $130 </div>
+                </div>
               </ListGroup.Item>
-              <ListGroup.Item action href='/stocks/AAL'>
-                AAL
+              <ListGroup.Item action href='/stocks/AAL' className='d-flex'>
+                <div className='stock-left text-left'>
+                  <div className='font-weight-bold'>AAL</div>
+                  <div className='text-muted'>1 Share</div>
+                </div>
+                <div className='stock-right ml-auto'>
+                  <div className=''> $130 </div>
+                </div>
               </ListGroup.Item>
             </ListGroup>
+          </Card>
 
-            <Card.Header className='text-left'>My Watched Lists</Card.Header>
+          <Card className='mt-2'>
+            <Card.Header className='d-flex'>
+              <Card.Title className='text-left mb-0'>Watchlists</Card.Title>
+              <Button className='add-button ml-auto' variant='outline-dark'>
+                <FaPlus />
+              </Button>
+            </Card.Header>
             <ListGroup variant='flush'>
-              <ListGroup.Item action href='#link1'>
-                Cras justo odio
-              </ListGroup.Item>
-              <ListGroup.Item action href='#link2'>
-                Dapibus ac facilisis in
-              </ListGroup.Item>
-              <ListGroup.Item action href='#link3'>
-                Vestibulum at eros
+              <ListGroup.Item action>
+                <Link to='/stock/AAPL' className='d-flex'>
+                  <div className='font-weight-bold'>AAPL</div>
+                  <div className='stock-right ml-auto'> $130</div>
+                </Link>
               </ListGroup.Item>
             </ListGroup>
           </Card>

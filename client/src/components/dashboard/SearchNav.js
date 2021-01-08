@@ -70,7 +70,7 @@ const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
 
         <Nav className='ml-auto'>
           <Nav.Link href='/dashboard'>Portfolio</Nav.Link>
-          <Nav.Link href='/cash'>Cash</Nav.Link>
+          <Nav.Link href='/balance'>Balance</Nav.Link>
           <DropdownButton
             title='Account'
             variant='outline-secondary'

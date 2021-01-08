@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import Dashboard from './components/dashboard/Dashboard';
 import Stocks from './components/dashboard/Stocks';
-import Cash from './components/dashboard/Cash';
+import Balance from './components/dashboard/Balance';
 import LandingPage from './components/landing-page/LandingPage';
 import Login from './components/login-signup/Login';
 import Signup from './components/login-signup/Signup';
@@ -107,9 +107,9 @@ function App() {
 
           <Route
             exact
-            path='/cash'
+            path='/balance'
             render={(props) => (
-              <Cash
+              <Balance
                 {...props}
                 handleLogin={setIsAuthenticated}
                 setSelectedStock={setSelectedStock}

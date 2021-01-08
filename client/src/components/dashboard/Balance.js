@@ -1,9 +1,9 @@
 import React from 'react';
 import SearchNav from './SearchNav';
-import './Cash.css';
+import './Balance.css';
 import { Form, Col, Row, Button, Card } from 'react-bootstrap';
 
-const Cash = ({ setSelectedStock, handleBalance, handleLogin, refs }) => {
+const Balance = ({ setSelectedStock, handleBalance, handleLogin, refs }) => {
   return (
     <>
       <SearchNav
@@ -18,10 +18,12 @@ const Cash = ({ setSelectedStock, handleBalance, handleLogin, refs }) => {
           <div>
             <hr />{' '}
           </div>
+          <p> You have $0 to trade</p>
           <h3 className='text-left'>Transfer History</h3>
           <div>
             <hr />{' '}
           </div>
+          <p> No transaction history</p>
         </div>
         <div className='right-container'>
           <Card>
@@ -91,4 +93,4 @@ const Cash = ({ setSelectedStock, handleBalance, handleLogin, refs }) => {
   );
 };
 
-export default Cash;
+export default Balance;

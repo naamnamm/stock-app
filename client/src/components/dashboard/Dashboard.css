@@ -34,3 +34,16 @@
   position: absolute;
   z-index: 2;
 }
+
+.add-button.btn-outline-dark {
+  padding: 0;
+  border: 0;
+  border-width: 0px;
+  border: none;
+  background-color: none;
+}
+
+.add-button.btn-outline-dark:hover {
+  color: royalblue;
+  background-color: transparent;
+}
