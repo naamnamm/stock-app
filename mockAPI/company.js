@@ -24,4 +24,14 @@ const companyData = {
   },
 };
 
+//https://iexcloud.io/core-data-catalog/
+//logo
+//https://iexcloud.io/docs/api/#logo
+//https://iexcloud.io/docs/api/#company
+//https://iexcloud.io/docs/api/#quote
+
+//https://iexcloud.io/docs/api/#historical-prices
+//https://iexcloud.io/docs/api/#dividends-basic
+//https://sandbox.iexapis.com/stable/stock/twtr/chart/dynamic?token=Tsk_66820f5895ad4695ba96beee7925717b
+
 module.exports = companyData;

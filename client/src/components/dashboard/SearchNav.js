@@ -28,7 +28,12 @@ const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
         .filter((s) => s.symbol.includes(searchInput.toUpperCase()))
         .slice(0, 6);
 
-      //console.log(filterSearch);
+      // const filterSearchName = stocks
+      //   .filter((s) => s.name.includes(searchInput.toUpperCase()))
+      //   .slice(0, 6);
+
+      // console.log(filterSearch);
+      // console.log(filterSearchName);
       setOptions(filterSearch);
     }
     //handleSearch();

@@ -15,7 +15,7 @@ import Signup from './components/login-signup/Signup';
 
 function App() {
   const [user, setUser] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [selectedStock, setSelectedStock] = useState([]);
   const [balance, setBalance] = useState('');
