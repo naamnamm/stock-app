@@ -1,8 +1,40 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Form, Button, Col, Navbar, Nav } from 'react-bootstrap';
 import './Login-Signup.css';
 
 const Signup = ({ handleSignup }) => {
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const data = {
+        username: usernameRef.current.value.toLowerCase(),
+        password: passwordRef.current.value,
+      };
+
+      const config = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      };
+
+      const response = await fetch('/signup', config);
+      console.log(response);
+      const signupData = await response.json();
+      console.log(signupData);
+
+      !response.ok ? setErrorMsg(signupData) : handleSignup(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Navbar bg='light' variant='light'>
@@ -14,18 +46,34 @@ const Signup = ({ handleSignup }) => {
         </Nav>
       </Navbar>
       <div className='signup-container mx-auto'>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Row>
             <Form.Group as={Col} controlId='formGridEmail'>
-              <Form.Label>Email</Form.Label>
-              <Form.Control type='email' placeholder='Enter email' />
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type='username'
+                placeholder='Enter Username'
+                ref={usernameRef}
+                required
+              />
             </Form.Group>
 
             <Form.Group as={Col} controlId='formGridPassword'>
               <Form.Label>Password</Form.Label>
-              <Form.Control type='password' placeholder='Password' />
+              <Form.Control
+                type='password'
+                placeholder='Password'
+                ref={passwordRef}
+                required
+              />
             </Form.Group>
           </Form.Row>
+
+          {errorMsg
+            ? errorMsg.map((err) => (
+                <div className='text-danger'>{err.message}</div>
+              ))
+            : null}
 
           <Form.Group controlId='formGridAddress1'>
             <Form.Label>Address</Form.Label>
@@ -61,11 +109,7 @@ const Signup = ({ handleSignup }) => {
             <Form.Check type='checkbox' label='Agree to our terms' />
           </Form.Group>
 
-          <Button
-            variant='primary'
-            type='submit'
-            onClick={() => handleSignup(true)}
-          >
+          <Button variant='primary' type='submit'>
             Signup
           </Button>
         </Form>

@@ -1,8 +1,45 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Form, Button, Navbar, Nav, Col, Row } from 'react-bootstrap';
 import './Login-Signup.css';
 
 const Login = ({ handleLogin }) => {
+  const [errorMsg, setErrorMsg] = useState('');
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const data = {
+        username: usernameRef.current.value.toLowerCase(),
+        password: passwordRef.current.value,
+      };
+
+      const config = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      };
+
+      const response = await fetch('/login', config);
+      const loginData = await response.json();
+
+      if (!response.ok) {
+        setErrorMsg(loginData.error.message);
+      } else {
+        // localStorage.setItem('accessToken', JSON.stringify(loginData.token));
+        handleLogin(true);
+        //onUserSubmit(loginData);
+        //setAuth(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Navbar bg='light' variant='light'>
@@ -14,13 +51,17 @@ const Login = ({ handleLogin }) => {
         </Nav>
       </Navbar>
       <div className='login-container mx-auto mt-4'>
-        <Form>
+        <Form onSubmit={handleLoginSubmit}>
           <Form.Group as={Row} controlId='formHorizontalEmail'>
             <Form.Label column sm={3} className='text-left'>
-              Email
+              Username
             </Form.Label>
             <Col sm={9}>
-              <Form.Control type='email' placeholder='Email' />
+              <Form.Control
+                type='username'
+                placeholder='Username'
+                ref={usernameRef}
+              />
             </Col>
           </Form.Group>
 
@@ -29,12 +70,15 @@ const Login = ({ handleLogin }) => {
               Password
             </Form.Label>
             <Col sm={9}>
-              <Form.Control type='password' placeholder='Password' />
+              <Form.Control
+                type='password'
+                placeholder='Password'
+                ref={passwordRef}
+              />
             </Col>
           </Form.Group>
-          <Button type='submit' onClick={() => handleLogin(true)}>
-            Login
-          </Button>
+          {errorMsg ? <div className='text-danger'>{errorMsg}</div> : null}
+          <Button type='submit'>Login</Button>
           <Form.Text id='passwordHelpBlock' muted className='mt-3'>
             Don't have an account
           </Form.Text>
