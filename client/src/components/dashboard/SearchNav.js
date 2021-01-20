@@ -17,7 +17,7 @@ import {
 } from '../../context/optionsContext';
 import './SearchNav.css';
 
-const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
+const SearchNav = ({ setSelectedStock, handleLogin }) => {
   //const [searchInput, setSearchInput] = useState('');
   const { searchInput, setSearchInput } = useContext(OptionsContext);
   const [stocks, setStocks] = useState([]);
@@ -69,7 +69,7 @@ const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
             id='search-bar'
             className='mr-sm-2'
             onChange={(e) => setSearchInput(e.target.value)}
-            ref={refs.inputRef}
+            //ref={refs.inputRef}
           />
         </Form>
 
@@ -93,7 +93,7 @@ const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
       <ListGroup
         id='results'
         className='option-container'
-        ref={refs.ulRef}
+        //ref={refs.ulRef}
         //ref={ulRef}
       >
         {options.length > 0

@@ -36,8 +36,23 @@ export default function App() {
     setOptions,
   ]);
 
-  const ulRef = useRef();
-  const inputRef = useRef();
+  useEffect(() => {
+    // refs.inputRef.current.addEventListener('click', (e) => {
+    //   if (refs.inputRef) {
+    //     e.stopPropagation();
+    //     refs.ulRef.current.style.display = 'flex';
+    //   }
+    // });
+
+    document.addEventListener('click', (e) => {
+      if (options) {
+        setOptions([]);
+      }
+    });
+  }, []);
+
+  // const ulRef = useRef();
+  // const inputRef = useRef();
 
   console.log(selectedStock);
 
@@ -99,7 +114,7 @@ export default function App() {
                       {...props}
                       handleLogin={setIsAuthenticated}
                       setSelectedStock={setSelectedStock}
-                      refs={{ ulRef, inputRef }}
+                      //refs={{ ulRef, inputRef }}
                     />
                   ) : (
                     <Redirect to='/' />
@@ -116,7 +131,7 @@ export default function App() {
                       handleLogin={setIsAuthenticated}
                       setSelectedStock={setSelectedStock}
                       selectedStock={selectedStock}
-                      refs={{ ulRef, inputRef }}
+                      //refs={{ ulRef, inputRef }}
                     />
                   ) : (
                     <Redirect to='/dashboard' />
@@ -132,7 +147,7 @@ export default function App() {
                     {...props}
                     handleLogin={setIsAuthenticated}
                     setSelectedStock={setSelectedStock}
-                    refs={{ ulRef, inputRef }}
+                    //refs={{ ulRef, inputRef }}
                     handleBalance={setBalance}
                   />
                 )}

@@ -57,18 +57,18 @@ const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
   ) : null;
 
   useEffect(() => {
-    refs.inputRef.current.addEventListener('click', (e) => {
-      if (refs.inputRef) {
-        e.stopPropagation();
-        refs.ulRef.current.style.display = 'flex';
-      }
-    });
+    // refs.inputRef.current.addEventListener('click', (e) => {
+    //   if (refs.inputRef) {
+    //     e.stopPropagation();
+    //     refs.ulRef.current.style.display = 'flex';
+    //   }
+    // });
 
-    document.addEventListener('click', (e) => {
-      if (refs.ulRef) {
-        refs.ulRef.current.style.display = 'none';
-      }
-    });
+    // document.addEventListener('click', (e) => {
+    //   if (refs.ulRef) {
+    //     refs.ulRef.current.style.display = 'none';
+    //   }
+    // });
 
     setCurrentValue([
       ['x', 'dogs'],
@@ -92,7 +92,7 @@ const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
       <SearchNav
         setSelectedStock={setSelectedStock}
         handleLogin={handleLogin}
-        refs={refs}
+        //refs={refs}
       />
 
       <div className='main-container d-flex mx-auto mt-3'>

@@ -4,27 +4,27 @@ import './Balance.css';
 import { Form, Col, Row, Button, Card } from 'react-bootstrap';
 
 const Balance = ({ setSelectedStock, handleBalance, handleLogin, refs }) => {
-  useEffect(() => {
-    refs.inputRef.current.addEventListener('click', (e) => {
-      if (refs.inputRef) {
-        e.stopPropagation();
-        refs.ulRef.current.style.display = 'flex';
-      }
-    });
+  // useEffect(() => {
+  //   refs.inputRef.current.addEventListener('click', (e) => {
+  //     if (refs.inputRef) {
+  //       e.stopPropagation();
+  //       refs.ulRef.current.style.display = 'flex';
+  //     }
+  //   });
 
-    document.addEventListener('click', (e) => {
-      if (refs.ulRef) {
-        refs.ulRef.current.style.display = 'none';
-      }
-    });
-  }, []);
+  //   document.addEventListener('click', (e) => {
+  //     if (refs.ulRef) {
+  //       refs.ulRef.current.style.display = 'none';
+  //     }
+  //   });
+  // }, []);
 
   return (
     <>
       <SearchNav
         setSelectedStock={setSelectedStock}
         handleLogin={handleLogin}
-        refs={refs}
+        //refs={refs}
       />
 
       <div className='cash-main-container d-flex mx-auto mt-3'>
