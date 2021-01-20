@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -12,13 +12,29 @@ import Balance from './components/dashboard/Balance';
 import LandingPage from './components/landing-page/LandingPage';
 import Login from './components/login-signup/Login';
 import Signup from './components/login-signup/Signup';
+import { OptionsContext, OptionsUpdateContext } from './context/optionsContext';
 
-function App() {
+//need to usecontext with login usernameRef, ulRef, inputRef, selectedstock
+//export const optionContext = React.createContext();
+
+export default function App() {
   const [user, setUser] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [selectedStock, setSelectedStock] = useState([]);
   const [balance, setBalance] = useState('');
+
+  const [searchInput, setSearchInput] = useState('');
+  const [options, setOptions] = useState([]);
+
+  const searchValue = useMemo(() => ({ searchInput, setSearchInput }), [
+    searchInput,
+    setSearchInput,
+  ]);
+  const optionsValue = useMemo(() => ({ options, setOptions }), [
+    options,
+    setOptions,
+  ]);
 
   const ulRef = useRef();
   const inputRef = useRef();
@@ -41,22 +57,6 @@ function App() {
             }
           />
 
-          <Route
-            exact
-            path='/dashboard'
-            render={(props) =>
-              isAuthenticated ? (
-                <Dashboard
-                  {...props}
-                  handleLogin={setIsAuthenticated}
-                  setSelectedStock={setSelectedStock}
-                  refs={{ ulRef, inputRef }}
-                />
-              ) : (
-                <Redirect to='/' />
-              )
-            }
-          />
           <Route
             exact
             path='/login'
@@ -88,40 +88,59 @@ function App() {
             }
           />
 
-          <Route
-            path='/stock'
-            render={(props) =>
-              selectedStock ? (
-                <Stocks
-                  {...props}
-                  handleLogin={setIsAuthenticated}
-                  setSelectedStock={setSelectedStock}
-                  selectedStock={selectedStock}
-                  refs={{ ulRef, inputRef }}
-                />
-              ) : (
-                <Redirect to='/dashboard' />
-              )
-            }
-          />
-
-          <Route
-            exact
-            path='/balance'
-            render={(props) => (
-              <Balance
-                {...props}
-                handleLogin={setIsAuthenticated}
-                setSelectedStock={setSelectedStock}
-                refs={{ ulRef, inputRef }}
-                handleBalance={setBalance}
+          <OptionsContext.Provider value={searchValue}>
+            <OptionsUpdateContext.Provider value={optionsValue}>
+              <Route
+                exact
+                path='/dashboard'
+                render={(props) =>
+                  isAuthenticated ? (
+                    <Dashboard
+                      {...props}
+                      handleLogin={setIsAuthenticated}
+                      setSelectedStock={setSelectedStock}
+                      refs={{ ulRef, inputRef }}
+                    />
+                  ) : (
+                    <Redirect to='/' />
+                  )
+                }
               />
-            )}
-          />
+
+              <Route
+                path='/stock'
+                render={(props) =>
+                  selectedStock ? (
+                    <Stocks
+                      {...props}
+                      handleLogin={setIsAuthenticated}
+                      setSelectedStock={setSelectedStock}
+                      selectedStock={selectedStock}
+                      refs={{ ulRef, inputRef }}
+                    />
+                  ) : (
+                    <Redirect to='/dashboard' />
+                  )
+                }
+              />
+
+              <Route
+                exact
+                path='/balance'
+                render={(props) => (
+                  <Balance
+                    {...props}
+                    handleLogin={setIsAuthenticated}
+                    setSelectedStock={setSelectedStock}
+                    refs={{ ulRef, inputRef }}
+                    handleBalance={setBalance}
+                  />
+                )}
+              />
+            </OptionsUpdateContext.Provider>
+          </OptionsContext.Provider>
         </Switch>
       </Router>
     </div>
   );
 }
-
-export default App;

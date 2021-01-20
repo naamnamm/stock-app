@@ -30,11 +30,6 @@
   margin-left: 100px;
 }
 
-#results {
-  position: absolute;
-  z-index: 2;
-}
-
 .add-button.btn-outline-dark {
   padding: 0;
   border: 0;

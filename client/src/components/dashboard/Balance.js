@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SearchNav from './SearchNav';
 import './Balance.css';
 import { Form, Col, Row, Button, Card } from 'react-bootstrap';
 
 const Balance = ({ setSelectedStock, handleBalance, handleLogin, refs }) => {
+  useEffect(() => {
+    refs.inputRef.current.addEventListener('click', (e) => {
+      if (refs.inputRef) {
+        e.stopPropagation();
+        refs.ulRef.current.style.display = 'flex';
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (refs.ulRef) {
+        refs.ulRef.current.style.display = 'none';
+      }
+    });
+  }, []);
+
   return (
     <>
       <SearchNav

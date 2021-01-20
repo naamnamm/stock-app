@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import {
   ListGroup,
   FormControl,
@@ -11,11 +11,17 @@ import {
   Dropdown,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import {
+  OptionsContext,
+  OptionsUpdateContext,
+} from '../../context/optionsContext';
+import './SearchNav.css';
 
 const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
-  const [searchInput, setSearchInput] = useState('');
+  //const [searchInput, setSearchInput] = useState('');
+  const { searchInput, setSearchInput } = useContext(OptionsContext);
   const [stocks, setStocks] = useState([]);
-  const [options, setOptions] = useState([]);
+  const { options, setOptions } = useContext(OptionsUpdateContext);
 
   useEffect(() => {
     //filter and update options
@@ -28,12 +34,6 @@ const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
         .filter((s) => s.symbol.includes(searchInput.toUpperCase()))
         .slice(0, 6);
 
-      // const filterSearchName = stocks
-      //   .filter((s) => s.name.includes(searchInput.toUpperCase()))
-      //   .slice(0, 6);
-
-      // console.log(filterSearch);
-      // console.log(filterSearchName);
       setOptions(filterSearch);
     }
     //handleSearch();
@@ -90,7 +90,12 @@ const SearchNav = ({ setSelectedStock, handleLogin, refs }) => {
           </DropdownButton>
         </Nav>
       </Navbar>
-      <ListGroup id='results' className='option-container' ref={refs.ulRef}>
+      <ListGroup
+        id='results'
+        className='option-container'
+        ref={refs.ulRef}
+        //ref={ulRef}
+      >
         {options.length > 0
           ? options.map((option) => {
               console.log(option);
