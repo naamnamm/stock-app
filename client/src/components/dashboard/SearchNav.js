@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import {
-  useInputRef,
+  useRefContext,
   useOptions,
   useOptionsUpdate,
 } from '../../context/optionsContext';
@@ -22,7 +22,7 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
   const { searchInput, setSearchInput } = useOptions();
   const [stocks, setStocks] = useState([]);
   const { options, setOptions } = useOptionsUpdate();
-  const { inputRef } = useInputRef();
+  const { inputRef, ulRef } = useRefContext();
 
   useEffect(() => {
     //filter and update options
@@ -91,12 +91,7 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
           </DropdownButton>
         </Nav>
       </Navbar>
-      <ListGroup
-        id='results'
-        className='option-container'
-        //ref={ulRef}
-        //ref={ulRef}
-      >
+      <ListGroup id='results' className='option-container' ref={ulRef}>
         {options.length > 0
           ? options.map((option) => {
               console.log(option);
