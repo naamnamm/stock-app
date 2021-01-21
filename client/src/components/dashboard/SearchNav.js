@@ -24,8 +24,6 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
   const { options, setOptions } = useOptionsUpdate();
   const { inputRef } = useInputRef();
 
-  //const { ulRef, inputRef } = useContext(useRefContext);
-
   useEffect(() => {
     //filter and update options
     if (searchInput.length === 0) {

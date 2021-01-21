@@ -43,6 +43,7 @@ export const OptionsProvider = ({ children }) => {
       }
     });
     console.log(searchInput);
+    console.log(options);
 
     // inputRef.current.addEventListener('click', (e) => {
     //   if (inputRef) {

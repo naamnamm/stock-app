@@ -29,30 +29,6 @@ export default function App() {
   const [selectedStock, setSelectedStock] = useState([]);
   const [balance, setBalance] = useState('');
 
-  // const inputRef = useRef();
-  // const ulRef = useRef();
-
-  useEffect(() => {
-    // debugger;
-    // if (!inputRef.current) {
-    //   return;
-    // }
-    // inputRef.current.addEventListener('click', (e) => {
-    //   if (inputRef) {
-    //     e.stopPropagation();
-    //     ulRef.current.style.display = 'flex';
-    //   }
-    // });
-    // document.addEventListener('click', (e) => {
-    //   if (ulRef) {
-    //     ulRef.current.style.display = 'none';
-    //   }
-    // });
-  }, []);
-
-  // const ulRef = useRef();
-  // const inputRef = useRef();
-
   console.log(selectedStock);
 
   return (
@@ -102,9 +78,6 @@ export default function App() {
             }
           />
           <OptionsProvider>
-            {/* <OptionsContext.Provider value={searchValue}>
-            <OptionsUpdateContext.Provider value={optionsValue}> */}
-            {/* <useRefContext.Provider value={(inputRef, ulRef)}> */}
             <Route
               exact
               path='/dashboard'
@@ -114,7 +87,6 @@ export default function App() {
                     {...props}
                     handleLogin={setIsAuthenticated}
                     setSelectedStock={setSelectedStock}
-                    //refs={{ ulRef, inputRef }}
                   />
                 ) : (
                   <Redirect to='/' />
@@ -131,7 +103,6 @@ export default function App() {
                     handleLogin={setIsAuthenticated}
                     setSelectedStock={setSelectedStock}
                     selectedStock={selectedStock}
-                    //refs={{ ulRef, inputRef }}
                   />
                 ) : (
                   <Redirect to='/dashboard' />
