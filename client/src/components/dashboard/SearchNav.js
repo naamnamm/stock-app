@@ -12,16 +12,19 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import {
-  OptionsContext,
-  OptionsUpdateContext,
+  useInputRef,
+  useOptions,
+  useOptionsUpdate,
 } from '../../context/optionsContext';
 import './SearchNav.css';
 
 const SearchNav = ({ setSelectedStock, handleLogin }) => {
-  //const [searchInput, setSearchInput] = useState('');
-  const { searchInput, setSearchInput } = useContext(OptionsContext);
+  const { searchInput, setSearchInput } = useOptions();
   const [stocks, setStocks] = useState([]);
-  const { options, setOptions } = useContext(OptionsUpdateContext);
+  const { options, setOptions } = useOptionsUpdate();
+  const { inputRef } = useInputRef();
+
+  //const { ulRef, inputRef } = useContext(useRefContext);
 
   useEffect(() => {
     //filter and update options
@@ -69,7 +72,7 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
             id='search-bar'
             className='mr-sm-2'
             onChange={(e) => setSearchInput(e.target.value)}
-            //ref={refs.inputRef}
+            ref={inputRef}
           />
         </Form>
 
@@ -93,7 +96,7 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
       <ListGroup
         id='results'
         className='option-container'
-        //ref={refs.ulRef}
+        //ref={ulRef}
         //ref={ulRef}
       >
         {options.length > 0
