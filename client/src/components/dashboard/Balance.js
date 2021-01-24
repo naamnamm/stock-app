@@ -1,32 +1,34 @@
-import React, { useEffect } from 'react';
-import SearchNav from './SearchNav';
+import React, { useEffect, useRef } from 'react';
 import './Balance.css';
 import { Form, Col, Row, Button, Card } from 'react-bootstrap';
 
-const Balance = ({ setSelectedStock, handleBalance, handleLogin, refs }) => {
-  // useEffect(() => {
-  //   refs.inputRef.current.addEventListener('click', (e) => {
-  //     if (refs.inputRef) {
-  //       e.stopPropagation();
-  //       refs.ulRef.current.style.display = 'flex';
-  //     }
-  //   });
+const Balance = ({ user }) => {
+  const transferRef = useRef();
 
-  //   document.addEventListener('click', (e) => {
-  //     if (refs.ulRef) {
-  //       refs.ulRef.current.style.display = 'none';
-  //     }
-  //   });
-  // }, []);
+  const handleTransfer = async () => {
+    const amount = transferRef.current;
+    console.log(transferRef.current);
+
+    try {
+      const config = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount, user, type: 'transfer-in' }),
+      };
+
+      const response = await fetch('/transfer', config);
+      const data = await response.json();
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
-      <SearchNav
-        setSelectedStock={setSelectedStock}
-        handleLogin={handleLogin}
-        //refs={refs}
-      />
-
       <div className='cash-main-container d-flex mx-auto mt-3'>
         <div className='left-container balance-summary mr-3'>
           <h3 className='text-left'>Current balance</h3>
@@ -85,7 +87,7 @@ const Balance = ({ setSelectedStock, handleBalance, handleLogin, refs }) => {
                 controlId='formHorizontalPrice'
               >
                 <Form.Label column sm={4} className='px-0'>
-                  Price
+                  Amount
                 </Form.Label>
 
                 <Col sm={8} className='pl-3 pr-0'>
@@ -93,11 +95,17 @@ const Balance = ({ setSelectedStock, handleBalance, handleLogin, refs }) => {
                     type='number'
                     placeholder='$0.00'
                     className='number-input'
+                    ref={transferRef}
                   />
                 </Col>
               </Form.Group>
 
-              <Button variant='success' type='submit' className='my-3'>
+              <Button
+                variant='success'
+                type='submit'
+                className='my-3'
+                onClick={() => handleTransfer()}
+              >
                 Confirm Transfer
               </Button>
             </Form>

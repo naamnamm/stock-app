@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Form, Button, Navbar, Nav, Col, Row } from 'react-bootstrap';
 import './Login-Signup.css';
 
-const Login = ({ handleLogin }) => {
+const Login = ({ handleLogin, setUser }) => {
   const [errorMsg, setErrorMsg] = useState('');
   const usernameRef = useRef();
   const passwordRef = useRef();
@@ -27,12 +27,14 @@ const Login = ({ handleLogin }) => {
       const response = await fetch('/login', config);
       const loginData = await response.json();
 
+      console.log(loginData);
+
       if (!response.ok) {
         setErrorMsg(loginData.error.message);
       } else {
-        // localStorage.setItem('accessToken', JSON.stringify(loginData.token));
+        localStorage.setItem('accessToken', JSON.stringify(loginData.token));
         handleLogin(true);
-        //onUserSubmit(loginData);
+        setUser(loginData);
         //setAuth(true);
       }
     } catch (error) {

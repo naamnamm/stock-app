@@ -11,18 +11,37 @@ import {
   Dropdown,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import {
-  useRefContext,
-  useOptions,
-  useOptionsUpdate,
-} from '../../context/optionsContext';
+import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import './SearchNav.css';
 
-const SearchNav = ({ setSelectedStock, handleLogin }) => {
+const SearchNav = ({ setSelectedStock, handleLogin, user }) => {
   const { searchInput, setSearchInput } = useOptions();
   const [stocks, setStocks] = useState([]);
   const { options, setOptions } = useOptionsUpdate();
-  const { inputRef, ulRef } = useRefContext();
+
+  const inputRef = useRef();
+  const ulRef = useRef();
+
+  const setLoggedOut = async () => {
+    try {
+      const config = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: user.name }),
+      };
+
+      const response = await fetch('/logout', config);
+
+      if (response.ok) {
+        handleLogin(false);
+        localStorage.removeItem('accessToken');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     //filter and update options
@@ -41,6 +60,23 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
   }, [searchInput]);
 
   useEffect(() => {
+    inputRef.current.addEventListener('click', (e) => {
+      if (inputRef) {
+        e.stopPropagation();
+        ulRef.current.style.display = 'flex';
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!ulRef.current) {
+        return;
+      }
+
+      if (ulRef) {
+        ulRef.current.style.display = 'none';
+      }
+    });
+
     const getStocksList = async () => {
       try {
         const response = await fetch(
@@ -85,7 +121,7 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
           >
             <Dropdown.Item href='#/action-1'>Account</Dropdown.Item>
             <Dropdown.Item href='#/action-2'>Help Center</Dropdown.Item>
-            <Dropdown.Item as='button' onClick={() => handleLogin(false)}>
+            <Dropdown.Item as='button' onClick={() => setLoggedOut()}>
               Log Out
             </Dropdown.Item>
           </DropdownButton>

@@ -12,24 +12,49 @@ import Balance from './components/dashboard/Balance';
 import LandingPage from './components/landing-page/LandingPage';
 import Login from './components/login-signup/Login';
 import Signup from './components/login-signup/Signup';
-import {
-  OptionsContext,
-  OptionsUpdateContext,
-  useRefContext,
-  OptionsProvider,
-} from './context/optionsContext';
+import SearchNav from './components/dashboard/SearchNav';
+
+import { OptionsProvider } from './context/optionsContext';
 
 //need to usecontext with login usernameRef, ulRef, inputRef, selectedstock
 //export const optionContext = React.createContext();
 
 export default function App() {
   const [user, setUser] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [selectedStock, setSelectedStock] = useState([]);
   const [balance, setBalance] = useState('');
 
   console.log(selectedStock);
+
+  const verifyToken = async () => {
+    try {
+      const response = await fetch('/verify-token', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem('accessToken')
+          )}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.isVerified === true) {
+        setIsAuthenticated(true);
+        setUser(data);
+      } else {
+        setIsAuthenticated(false);
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    verifyToken();
+  }, []);
 
   return (
     <div className='App'>
@@ -54,7 +79,7 @@ export default function App() {
               !isAuthenticated ? (
                 <Login
                   {...props}
-                  user={user.toString()}
+                  setUser={setUser}
                   handleLogin={setIsAuthenticated}
                 />
               ) : (
@@ -62,6 +87,7 @@ export default function App() {
               )
             }
           />
+
           <Route
             exact
             path='/signup'
@@ -69,7 +95,7 @@ export default function App() {
               isSignedUp === false ? (
                 <Signup
                   {...props}
-                  user={user.toString()}
+                  //user={user.toString()}
                   handleSignup={setIsSignedUp}
                 />
               ) : (
@@ -78,6 +104,13 @@ export default function App() {
             }
           />
           <OptionsProvider>
+            {isAuthenticated ? (
+              <SearchNav
+                setSelectedStock={setSelectedStock}
+                handleLogin={setIsAuthenticated}
+                user={user}
+              />
+            ) : null}
             <Route
               exact
               path='/dashboard'
@@ -118,7 +151,7 @@ export default function App() {
                   {...props}
                   handleLogin={setIsAuthenticated}
                   setSelectedStock={setSelectedStock}
-                  //refs={{ ulRef, inputRef }}
+                  user={user}
                   handleBalance={setBalance}
                 />
               )}

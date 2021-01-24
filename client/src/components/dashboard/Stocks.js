@@ -104,18 +104,6 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
   ) : null;
 
   useEffect(() => {
-    // refs.inputRef.current.addEventListener('click', (e) => {
-    //   if (refs.inputRef) {
-    //     e.stopPropagation();
-    //     refs.ulRef.current.style.display = 'flex';
-    //   }
-    // });
-
-    // document.addEventListener('click', (e) => {
-    //   if (refs.ulRef) {
-    //     refs.ulRef.current.style.display = 'none';
-    //   }
-    // });
     getStock();
     getCompany();
     getQuote();
@@ -123,11 +111,6 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
 
   return (
     <>
-      <SearchNav
-        setSelectedStock={setSelectedStock}
-        handleLogin={handleLogin}
-        //refs={refs}
-      />
       <div className='stock-main-container d-flex mx-auto mt-3'>
         <div>
           <div className='text-left header-graph-container'>

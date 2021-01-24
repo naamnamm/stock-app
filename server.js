@@ -10,6 +10,7 @@ const quoteData = require('./mockAPI/quote');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('./database/db');
+const authToken = require('./utils/authToken');
 
 const port = process.env.PORT || 5000;
 
@@ -130,6 +131,42 @@ app.post('/login', async (req, res) => {
         error: { code: 403, message: 'Invalid Username' },
       });
     }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.post('/logout', async (req, res) => {
+  const { username } = req.body;
+
+  const logoutUser = await pool.query(
+    'UPDATE users SET last_active_at = $1 WHERE name = $2',
+    [null, username]
+  );
+
+  res.send({ msg: 'successfully logged out' });
+});
+
+app.get('/verify-token', authToken, (req, res) => {
+  try {
+    const data = Object.assign(req.user, { isVerified: true });
+    res.json(data);
+  } catch (error) {
+    res.status(403).send('Invalid or Expired token');
+  }
+});
+
+app.post('/transfer', async (req, res) => {
+  const { amount, user, type } = req.body;
+
+  try {
+    const transfer = await pool.query(
+      'INSERT INTO cash_transfer (type, amount, user_id) VALUES ($1, $2, $3) RETURNING *',
+      [type, amount, user.id]
+    );
+
+    console.log(transfer);
+    res.send({ meg: 'success' });
   } catch (error) {
     console.log(error);
   }
