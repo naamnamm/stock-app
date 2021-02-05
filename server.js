@@ -158,6 +158,7 @@ app.get('/verify-token', authToken, (req, res) => {
 
 app.post('/transfer', async (req, res) => {
   const { amount, user, type } = req.body;
+  console.log(amount, user, type);
 
   try {
     const transfer = await pool.query(
@@ -165,8 +166,8 @@ app.post('/transfer', async (req, res) => {
       [type, amount, user.id]
     );
 
-    console.log(transfer);
-    res.send({ meg: 'success' });
+    console.log('transfer', transfer);
+    res.send({ msg: 'success' });
   } catch (error) {
     console.log(error);
   }

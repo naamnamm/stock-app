@@ -2,7 +2,7 @@ CREATE DATABASE stock_app;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE OR REPLACE FUNCTION generate_uid(size INT) RETURNS TEXT AS $$
+CREATE OR REPLACE FUNCTION generate_uuid(size INT) RETURNS TEXT AS $$
 DECLARE
   characters TEXT := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   bytes BYTEA := gen_random_bytes(size);
@@ -29,12 +29,15 @@ INSERT INTO users (name, password) VALUES ('ben', '123');
 SELECT * FROM users;
 
 CREATE TABLE cash_transfer (
-  id TEXT PRIMARY KEY DEFAULT generate_uid(5),
+  id TEXT PRIMARY KEY DEFAULT generate_uuid(5),
   type TEXT NOT NULL,
   amount NUMERIC(8,2) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id uuid REFERENCES users(id)
 );
+
+
+
 
 --\c into the database
 

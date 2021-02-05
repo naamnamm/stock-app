@@ -4,10 +4,13 @@ import { Form, Col, Row, Button, Card } from 'react-bootstrap';
 
 const Balance = ({ user }) => {
   const transferRef = useRef();
+  //const [amount, setAmount] = useState('');
 
-  const handleTransfer = async () => {
-    const amount = transferRef.current;
-    console.log(transferRef.current);
+  const handleTransfer = async (e) => {
+    e.preventDefault();
+    const amount = transferRef.current.value;
+    console.log(amount);
+    console.log(user);
 
     try {
       const config = {
@@ -104,7 +107,7 @@ const Balance = ({ user }) => {
                 variant='success'
                 type='submit'
                 className='my-3'
-                onClick={() => handleTransfer()}
+                onClick={(e) => handleTransfer(e)}
               >
                 Confirm Transfer
               </Button>
