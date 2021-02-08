@@ -166,8 +166,13 @@ app.post('/transfer', async (req, res) => {
       [type, amount, user.id]
     );
 
-    console.log('transfer', transfer);
-    res.send({ msg: 'success' });
+    const transferHistory = await pool.query(
+      'SELECT * FROM cash_transfer WHERE user_id = $1',
+      [user.id]
+    );
+
+    console.log('transfer', transfer.rows[0]);
+    res.send({ msg: 'success', transaction: transferHistory.rows });
   } catch (error) {
     console.log(error);
   }

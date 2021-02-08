@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Balance.css';
 import { Form, Col, Row, Button, Card } from 'react-bootstrap';
 
 const Balance = ({ user }) => {
   const transferRef = useRef();
-  //const [amount, setAmount] = useState('');
+  const [transferHistory, setTransferHistory] = useState([]);
 
   const handleTransfer = async (e) => {
     e.preventDefault();
@@ -24,7 +24,8 @@ const Balance = ({ user }) => {
       const response = await fetch('/transfer', config);
       const data = await response.json();
 
-      console.log(data);
+      console.log(data.transaction);
+      setTransferHistory(data.transaction);
     } catch (error) {
       console.log(error);
     }
@@ -43,7 +44,13 @@ const Balance = ({ user }) => {
           <div>
             <hr />{' '}
           </div>
-          <p> No transaction history</p>
+          <div>
+            {transferHistory
+              ? transferHistory.map((t) => {
+                  return <div> {t.amount}</div>;
+                })
+              : null}
+          </div>
         </div>
         <div className='right-container'>
           <Card>
