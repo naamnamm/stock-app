@@ -5,6 +5,7 @@ import { Form, Col, Row, Button, Card } from 'react-bootstrap';
 const Balance = ({ user }) => {
   const transferRef = useRef();
   const [transferHistory, setTransferHistory] = useState([]);
+  console.log(user);
 
   const handleTransfer = async (e) => {
     e.preventDefault();
@@ -31,6 +32,27 @@ const Balance = ({ user }) => {
     }
   };
 
+  const currentBalance = transferHistory
+    ? transferHistory
+        .map((t) => {
+          console.log(t);
+          return Number(t.amount);
+        })
+        .reduce((acc, cur) => acc + cur, 0)
+    : null;
+  console.log(currentBalance);
+  //when refreshing the page i want to pull the data from database and display it
+  useEffect(() => {
+    const userid = user.id;
+
+    fetch(`/transfer/:${userid}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setTransferHistory(data);
+      });
+  }, [user]);
+
   return (
     <>
       <div className='cash-main-container d-flex mx-auto mt-3'>
@@ -39,7 +61,7 @@ const Balance = ({ user }) => {
           <div>
             <hr />{' '}
           </div>
-          <p> You have $0 to trade</p>
+          <p> You have ${currentBalance} to trade</p>
           <h3 className='text-left'>Transfer History</h3>
           <div>
             <hr />{' '}
@@ -47,7 +69,12 @@ const Balance = ({ user }) => {
           <div>
             {transferHistory
               ? transferHistory.map((t) => {
-                  return <div> {t.amount}</div>;
+                  return (
+                    <div className='d-flex'>
+                      <div> {t.type}</div>
+                      <div className='ml-auto'> {t.amount}</div>
+                    </div>
+                  );
                 })
               : null}
           </div>

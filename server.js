@@ -156,6 +156,20 @@ app.get('/verify-token', authToken, (req, res) => {
   }
 });
 
+app.get('/transfer/:userid', async (req, res) => {
+  const userid = req.params.userid.slice(1);
+  //console.log(userid);
+
+  const transferHistory = await pool.query(
+    'SELECT * FROM cash_transfer WHERE user_id::text = $1',
+    [userid]
+  );
+
+  if (transferHistory) {
+    res.send(JSON.stringify(transferHistory.rows));
+  }
+});
+
 app.post('/transfer', async (req, res) => {
   const { amount, user, type } = req.body;
   console.log(amount, user, type);
