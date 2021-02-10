@@ -147,6 +147,31 @@ app.post('/logout', async (req, res) => {
   res.send({ msg: 'successfully logged out' });
 });
 
+app.post('/watchlist', async (req, res) => {
+  const { symbol } = req.body;
+  const error = [];
+
+  const symbolMatch = await pool.query(
+    'SELECT * FROM watchlists WHERE symbol = $1',
+    [symbol]
+  );
+
+  if (symbolMatch.rows.length > 0) {
+    errors.push({ message: 'Symbol alreay exists in watchlist.' });
+  }
+
+  if (error.length > 0) {
+    return res.status(401).send(errors);
+  } else {
+    const watchlists = await pool.query(
+      'INSERT INTO watchlists (symbol) VALUES ($1) RETURNING *',
+      [symbol]
+    );
+
+    res.send(watchlists);
+  }
+});
+
 app.get('/verify-token', authToken, (req, res) => {
   try {
     const data = Object.assign(req.user, { isVerified: true });

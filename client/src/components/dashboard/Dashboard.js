@@ -3,11 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   ListGroup,
-  FormControl,
-  Nav,
-  Form,
+  Modal,
   Button,
-  Navbar,
   Card,
   DropdownButton,
   Dropdown,
@@ -16,10 +13,12 @@ import './Dashboard.css';
 import { Link } from 'react-router-dom';
 import { Chart } from 'react-google-charts';
 import SearchNav from './SearchNav';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaEdit } from 'react-icons/fa';
+import AddWatchlist from './AddWatchlist';
 
 const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
   const [currentValue, setCurrentValue] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const displayChart = currentValue ? (
     <Chart
@@ -55,6 +54,10 @@ const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
       rootProps={{ 'data-testid': '1' }}
     />
   ) : null;
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   useEffect(() => {
     setCurrentValue([
@@ -154,9 +157,28 @@ const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
           <Card className='mt-2'>
             <Card.Header className='d-flex'>
               <Card.Title className='text-left mb-0'>Watchlists</Card.Title>
-              <Button className='add-button ml-auto' variant='outline-dark'>
-                <FaPlus />
-              </Button>
+              <div className='ml-auto'>
+                <Button
+                  className='add-button mr-2'
+                  variant='outline-dark'
+                  onClick={() => setModalOpen(true)}
+                >
+                  <FaPlus />
+                </Button>
+                <Button
+                  className='add-button'
+                  variant='outline-dark'
+                  // onClick={(e) => handleTransfer(e)}
+                >
+                  <FaEdit />
+                </Button>
+              </div>
+
+              <Modal show={modalOpen} onHide={closeModal}>
+                {modalOpen === true ? (
+                  <AddWatchlist closeModal={closeModal} />
+                ) : null}
+              </Modal>
             </Card.Header>
             <ListGroup variant='flush'>
               <ListGroup.Item action>
