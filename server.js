@@ -148,27 +148,43 @@ app.post('/logout', async (req, res) => {
 });
 
 app.post('/watchlist', async (req, res) => {
-  const { symbol } = req.body;
+  const { symbol, userid } = req.body;
+  console.log(userid);
   const error = [];
 
-  const symbolMatch = await pool.query(
-    'SELECT * FROM watchlists WHERE symbol = $1',
-    [symbol]
+  const useridAndSymbolMatch = await pool.query(
+    'SELECT * FROM watchlists WHERE symbol = $1 AND user_id::text = $2',
+    [symbol, userid]
   );
 
-  if (symbolMatch.rows.length > 0) {
-    errors.push({ message: 'Symbol alreay exists in watchlist.' });
+  if (useridAndSymbolMatch.rows.length > 0) {
+    error.push({ message: 'Symbol alreay exists in watchlist.' });
   }
 
   if (error.length > 0) {
-    return res.status(401).send(errors);
+    return res.status(401).send(error);
   } else {
     const watchlists = await pool.query(
-      'INSERT INTO watchlists (symbol) VALUES ($1) RETURNING *',
-      [symbol]
+      'INSERT INTO watchlists (symbol, user_id) VALUES ($1, $2) RETURNING *',
+      [symbol, userid]
     );
 
     res.send(watchlists);
+  }
+});
+
+app.get('/watchlist/:userid', async (req, res) => {
+  const userid = req.params.userid.slice(1);
+
+  console.log('userid' + userid);
+
+  const watchlist = await pool.query(
+    'SELECT * FROM watchlists WHERE user_id::text = $1',
+    [userid]
+  );
+
+  if (watchlist) {
+    res.send(JSON.stringify(watchlist.rows));
   }
 });
 

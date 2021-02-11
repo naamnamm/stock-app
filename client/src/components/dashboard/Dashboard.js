@@ -1,6 +1,6 @@
 //functionality 1
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   ListGroup,
   Modal,
@@ -15,11 +15,15 @@ import { Chart } from 'react-google-charts';
 import SearchNav from './SearchNav';
 import { FaPlus, FaEdit } from 'react-icons/fa';
 import AddWatchlist from './AddWatchlist';
+import { UserContext } from '../../context/UserContext';
 
-const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
+const Dashboard = ({ setSelectedStock, handleLogin }) => {
   const [currentValue, setCurrentValue] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const { user } = useContext(UserContext);
+  const [watchlist, setWatchlist] = useState([]);
 
+  console.log(user);
   const displayChart = currentValue ? (
     <Chart
       width={'600px'}
@@ -58,6 +62,20 @@ const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
   const closeModal = () => {
     setModalOpen(false);
   };
+
+  const getWatchlist = async () => {
+    const userid = user.id;
+    console.log(userid);
+    const response = await fetch(`/watchlist/:${userid}`);
+    const data = await response.json();
+
+    console.log(data);
+    setWatchlist(data);
+  };
+
+  useEffect(() => {
+    getWatchlist();
+  }, [user]);
 
   useEffect(() => {
     setCurrentValue([
@@ -176,17 +194,28 @@ const Dashboard = ({ setSelectedStock, handleLogin, refs }) => {
 
               <Modal show={modalOpen} onHide={closeModal}>
                 {modalOpen === true ? (
-                  <AddWatchlist closeModal={closeModal} />
+                  <AddWatchlist
+                    closeModal={closeModal}
+                    setWatchlist={setWatchlist}
+                  />
                 ) : null}
               </Modal>
             </Card.Header>
             <ListGroup variant='flush'>
-              <ListGroup.Item action>
-                <Link to='/stock/AAPL' className='d-flex'>
-                  <div className='font-weight-bold'>AAPL</div>
-                  <div className='stock-right ml-auto'> $130</div>
-                </Link>
-              </ListGroup.Item>
+              {watchlist ? (
+                watchlist.map((item) => {
+                  return (
+                    <ListGroup.Item action>
+                      <Link to={`/stock/${item.symbol}`} className='d-flex'>
+                        <div className='font-weight-bold'>{item.symbol}</div>
+                        <div className='stock-right ml-auto'> Price</div>
+                      </Link>
+                    </ListGroup.Item>
+                  );
+                })
+              ) : (
+                <ListGroup.Item>Create watchlist</ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </div>

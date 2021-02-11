@@ -1,22 +1,28 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Modal, Form, Button, ListGroup, FormControl } from 'react-bootstrap';
 import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
+import { UserContext } from '../../context/UserContext';
 
-const AddWatchlist = ({ closeModal }) => {
+const AddWatchlist = ({ closeModal, setWatchlist }) => {
   const { searchInput, setSearchInput } = useOptions();
   const [stocks, setStocks] = useState([]);
   const { options, setOptions } = useOptionsUpdate();
   const [errorMsg, setErrorMsg] = useState('');
+  const { user } = useContext(UserContext);
 
   const inputRef = useRef();
   const ulRef = useRef();
 
+  //console.log(searchInput);
+  //console.log(user);
+
   const handleAdd = async (symbol) => {
     // e.preventDefault();
-
+    //console.log(user.id);
     try {
       const data = {
         symbol,
+        userid: user.id,
       };
 
       const config = {
@@ -39,6 +45,8 @@ const AddWatchlist = ({ closeModal }) => {
 
   useEffect(() => {
     //filter and update options
+    setErrorMsg('');
+
     if (searchInput.length === 0) {
       setSearchInput('');
       setOptions([]);
@@ -104,17 +112,22 @@ const AddWatchlist = ({ closeModal }) => {
             ref={inputRef}
           />
         </Form>
-        <ListGroup id='results' className='option-container' ref={ulRef}>
-          {errorMsg
-            ? errorMsg.map((err) => (
-                <div className='text-danger'>{err.message}</div>
-              ))
-            : null}
+        {errorMsg
+          ? errorMsg.map((err) => (
+              <div className='text-danger'>{err.message}</div>
+            ))
+          : null}
+        <ListGroup
+          id='results-watchlist'
+          className='option-container ml-0'
+          ref={ulRef}
+        >
           {options.length > 0
             ? options.map((option) => {
-                console.log(option);
+                // console.log(option);
                 return (
                   <ListGroup.Item
+                    className='ul-watchlist'
                     action
                     onClick={() => handleAdd(option.symbol)}
                   >

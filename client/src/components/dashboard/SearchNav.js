@@ -13,11 +13,13 @@ import {
 import { Link } from 'react-router-dom';
 import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import './SearchNav.css';
+import { UserContext } from '../../context/UserContext';
 
-const SearchNav = ({ setSelectedStock, handleLogin, user }) => {
+const SearchNav = ({ setSelectedStock, handleLogin }) => {
   const { searchInput, setSearchInput } = useOptions();
   const [stocks, setStocks] = useState([]);
   const { options, setOptions } = useOptionsUpdate();
+  const { user } = useContext(UserContext);
 
   const inputRef = useRef();
   const ulRef = useRef();

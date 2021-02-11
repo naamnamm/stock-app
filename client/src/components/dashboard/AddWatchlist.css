@@ -1,0 +1,8 @@
+#result-watchlist {
+  position: absolute;
+  z-index: 2;
+}
+#results {
+  position: absolute;
+  z-index: 2;
+}

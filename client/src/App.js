@@ -15,6 +15,7 @@ import Signup from './components/login-signup/Signup';
 import SearchNav from './components/dashboard/SearchNav';
 
 import { OptionsProvider } from './context/optionsContext';
+import { UserContext } from './context/UserContext';
 
 //need to usecontext with login usernameRef, ulRef, inputRef, selectedstock
 //export const optionContext = React.createContext();
@@ -59,83 +60,29 @@ export default function App() {
   return (
     <div className='App'>
       <Router>
-        <Switch>
-          <Route
-            exact
-            path='/'
-            render={(props) =>
-              !isAuthenticated ? (
-                <LandingPage {...props} />
-              ) : (
-                <Redirect to='/dashboard' />
-              )
-            }
-          />
-
-          <Route
-            exact
-            path='/login'
-            render={(props) =>
-              !isAuthenticated ? (
-                <Login
-                  {...props}
-                  setUser={setUser}
-                  handleLogin={setIsAuthenticated}
-                />
-              ) : (
-                <Redirect to='/dashboard' />
-              )
-            }
-          />
-
-          <Route
-            exact
-            path='/signup'
-            render={(props) =>
-              isSignedUp === false ? (
-                <Signup
-                  {...props}
-                  //user={user.toString()}
-                  handleSignup={setIsSignedUp}
-                />
-              ) : (
-                <Redirect to='/login' />
-              )
-            }
-          />
-          <OptionsProvider>
-            {isAuthenticated ? (
-              <SearchNav
-                setSelectedStock={setSelectedStock}
-                handleLogin={setIsAuthenticated}
-                user={user}
-              />
-            ) : null}
+        <UserContext.Provider value={{ user, setUser }}>
+          <Switch>
             <Route
               exact
-              path='/dashboard'
+              path='/'
               render={(props) =>
-                isAuthenticated ? (
-                  <Dashboard
-                    {...props}
-                    handleLogin={setIsAuthenticated}
-                    setSelectedStock={setSelectedStock}
-                  />
+                !isAuthenticated ? (
+                  <LandingPage {...props} />
                 ) : (
-                  <Redirect to='/' />
+                  <Redirect to='/dashboard' />
                 )
               }
             />
 
             <Route
-              path='/stock'
+              exact
+              path='/login'
               render={(props) =>
-                selectedStock ? (
-                  <Stocks
+                !isAuthenticated ? (
+                  <Login
                     {...props}
+                    // setUser={setUser}
                     handleLogin={setIsAuthenticated}
-                    setSelectedStock={setSelectedStock}
-                    selectedStock={selectedStock}
                   />
                 ) : (
                   <Redirect to='/dashboard' />
@@ -145,22 +92,75 @@ export default function App() {
 
             <Route
               exact
-              path='/balance'
-              render={(props) => (
-                <Balance
-                  {...props}
-                  handleLogin={setIsAuthenticated}
-                  setSelectedStock={setSelectedStock}
-                  user={user}
-                  handleBalance={setBalance}
-                />
-              )}
+              path='/signup'
+              render={(props) =>
+                isSignedUp === false ? (
+                  <Signup
+                    {...props}
+                    //user={user.toString()}
+                    handleSignup={setIsSignedUp}
+                  />
+                ) : (
+                  <Redirect to='/login' />
+                )
+              }
             />
-            {/* </useRefContext.Provider> */}
-            {/* </OptionsUpdateContext.Provider>
-          </OptionsContext.Provider> */}
-          </OptionsProvider>
-        </Switch>
+            <OptionsProvider>
+              {isAuthenticated ? (
+                <SearchNav
+                  setSelectedStock={setSelectedStock}
+                  handleLogin={setIsAuthenticated}
+                  // user={user}
+                />
+              ) : null}
+              <Route
+                exact
+                path='/dashboard'
+                render={(props) =>
+                  isAuthenticated ? (
+                    <Dashboard
+                      {...props}
+                      handleLogin={setIsAuthenticated}
+                      setSelectedStock={setSelectedStock}
+                    />
+                  ) : (
+                    <Redirect to='/' />
+                  )
+                }
+              />
+
+              <Route
+                path='/stock'
+                render={(props) =>
+                  selectedStock ? (
+                    <Stocks
+                      {...props}
+                      handleLogin={setIsAuthenticated}
+                      setSelectedStock={setSelectedStock}
+                      selectedStock={selectedStock}
+                    />
+                  ) : (
+                    <Redirect to='/dashboard' />
+                  )
+                }
+              />
+
+              <Route
+                exact
+                path='/balance'
+                render={(props) => (
+                  <Balance
+                    {...props}
+                    handleLogin={setIsAuthenticated}
+                    setSelectedStock={setSelectedStock}
+                    // user={user}
+                    handleBalance={setBalance}
+                  />
+                )}
+              />
+            </OptionsProvider>
+          </Switch>
+        </UserContext.Provider>
       </Router>
     </div>
   );

@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import './Balance.css';
 import { Form, Col, Row, Button, Card } from 'react-bootstrap';
+import { UserContext } from '../../context/UserContext';
 
-const Balance = ({ user }) => {
+const Balance = () => {
   const transferRef = useRef();
   const [transferHistory, setTransferHistory] = useState([]);
+  const { user } = useContext(UserContext);
+
   console.log(user);
 
   const handleTransfer = async (e) => {
@@ -41,12 +44,14 @@ const Balance = ({ user }) => {
         .reduce((acc, cur) => acc + cur, 0)
     : null;
   console.log(currentBalance);
+
   //when refreshing the page i want to pull the data from database and display it
   useEffect(() => {
     const userid = user.id;
 
     fetch(`/transfer/:${userid}`)
       .then((res) => res.json())
+
       .then((data) => {
         console.log(data);
         setTransferHistory(data);
