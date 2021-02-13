@@ -164,12 +164,16 @@ app.post('/watchlist', async (req, res) => {
   if (error.length > 0) {
     return res.status(401).send(error);
   } else {
-    const watchlists = await pool.query(
-      'INSERT INTO watchlists (symbol, user_id) VALUES ($1, $2) RETURNING *',
+    await pool.query(
+      'INSERT INTO watchlists (symbol, user_id) VALUES ($1, $2)',
       [symbol, userid]
     );
-
-    res.send(watchlists);
+    const watchlists = await pool.query(
+      'SELECT * FROM watchlists WHERE user_id::text = $1',
+      [userid]
+    );
+    //console.log(watchlists);
+    res.send(JSON.stringify(watchlists.rows));
   }
 });
 
@@ -182,6 +186,8 @@ app.get('/watchlist/:userid', async (req, res) => {
     'SELECT * FROM watchlists WHERE user_id::text = $1',
     [userid]
   );
+  console.log(`watchlsit = ${watchlist.rows}`);
+  console.log(watchlist.rows);
 
   if (watchlist) {
     res.send(JSON.stringify(watchlist.rows));

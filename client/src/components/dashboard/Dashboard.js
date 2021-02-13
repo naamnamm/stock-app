@@ -1,5 +1,3 @@
-//functionality 1
-
 import React, { useState, useEffect, useContext } from 'react';
 import {
   ListGroup,
@@ -8,12 +6,14 @@ import {
   Card,
   DropdownButton,
   Dropdown,
+  Form,
 } from 'react-bootstrap';
 import './Dashboard.css';
 import { Link } from 'react-router-dom';
 import { Chart } from 'react-google-charts';
 import SearchNav from './SearchNav';
 import { FaPlus, FaEdit } from 'react-icons/fa';
+
 import AddWatchlist from './AddWatchlist';
 import { UserContext } from '../../context/UserContext';
 
@@ -22,8 +22,10 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { user } = useContext(UserContext);
   const [watchlist, setWatchlist] = useState([]);
+  const [isEditClicked, setIsEditClicked] = useState(false);
 
-  console.log(user);
+  console.log(watchlist);
+
   const displayChart = currentValue ? (
     <Chart
       width={'600px'}
@@ -62,22 +64,54 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
   const closeModal = () => {
     setModalOpen(false);
   };
-
   const getWatchlist = async () => {
     const userid = user.id;
     console.log(userid);
     const response = await fetch(`/watchlist/:${userid}`);
     const data = await response.json();
 
-    console.log(data);
+    //console.log(data);
     setWatchlist(data);
   };
+
+  const displayWatchlist =
+    !isEditClicked && watchlist ? (
+      watchlist.map((item, index) => {
+        return (
+          <ListGroup.Item action key={index}>
+            <Link to={`/stock/${item.symbol}`} className='d-flex'>
+              <div className='font-weight-bold'>{item.symbol}</div>
+              <div className='stock-right ml-auto'> Price</div>
+            </Link>
+          </ListGroup.Item>
+        );
+      })
+    ) : isEditClicked && watchlist ? (
+      watchlist.map((item, index) => {
+        return (
+          <ListGroup.Item action key={index + 50}>
+            <Link to={`/stock/${item.symbol}`} className='d-flex'>
+              <div>
+                <Form.Group controlId='formBasicCheckbox'>
+                  <Form.Check type='checkbox' />
+                </Form.Group>
+              </div>
+              <div className='font-weight-bold'>{item.symbol}</div>
+              <div className='stock-right ml-auto'> Price</div>
+            </Link>
+          </ListGroup.Item>
+        );
+      })
+    ) : (
+      <ListGroup.Item>Create watchlist</ListGroup.Item>
+    );
 
   useEffect(() => {
     getWatchlist();
   }, [user]);
 
   useEffect(() => {
+    //console.log('render');
     setCurrentValue([
       ['x', 'dogs'],
       [0, 0],
@@ -184,9 +218,9 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
                   <FaPlus />
                 </Button>
                 <Button
-                  className='add-button'
+                  className='add-button edit-button'
                   variant='outline-dark'
-                  // onClick={(e) => handleTransfer(e)}
+                  onClick={() => setIsEditClicked(!isEditClicked)}
                 >
                   <FaEdit />
                 </Button>
@@ -201,22 +235,7 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
                 ) : null}
               </Modal>
             </Card.Header>
-            <ListGroup variant='flush'>
-              {watchlist ? (
-                watchlist.map((item) => {
-                  return (
-                    <ListGroup.Item action>
-                      <Link to={`/stock/${item.symbol}`} className='d-flex'>
-                        <div className='font-weight-bold'>{item.symbol}</div>
-                        <div className='stock-right ml-auto'> Price</div>
-                      </Link>
-                    </ListGroup.Item>
-                  );
-                })
-              ) : (
-                <ListGroup.Item>Create watchlist</ListGroup.Item>
-              )}
-            </ListGroup>
+            <ListGroup variant='flush'>{displayWatchlist}</ListGroup>
           </Card>
         </div>
       </div>
@@ -242,4 +261,31 @@ export default Dashboard;
 //   }
 
 //   setSearchInput('');
+// };
+
+// const handleEdit = (e) => {
+//   console.log('clicked');
+//   // if this is clicked
+//   setIsEditClicked(true);
+//   debugger;
+//   // if (isEditClicked === true) {
+//   if (watchlist) {
+//     watchlist.map((item, index) => {
+//       return (
+//         <ListGroup.Item action key={index + 50}>
+//           <Link to={`/stock/${item.symbol}`} className='d-flex'>
+//             <div>
+//               <Form.Group controlId='formBasicCheckbox'>
+//                 <Form.Check type='checkbox' />
+//               </Form.Group>
+//             </div>
+//             <div className='font-weight-bold'>{item.symbol}</div>
+//             <div className='stock-right ml-auto'> Price</div>
+//           </Link>
+//         </ListGroup.Item>
+//       );
+//     });
+//     // }
+//   }
+//   //---And if watchlist add checkbox to the front of the symbol
 // };

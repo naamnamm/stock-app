@@ -131,10 +131,12 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
       </Navbar>
       <ListGroup id='results' className='option-container' ref={ulRef}>
         {options.length > 0
-          ? options.map((option) => {
+          ? options.map((option, index) => {
               console.log(option);
+              //Q: this is still being triggered how to fix this?
               return (
                 <ListGroup.Item
+                  key={index + 100}
                   action
                   onClick={() => setSelectedStock(option.symbol)}
                 >

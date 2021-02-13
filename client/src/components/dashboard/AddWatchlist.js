@@ -36,8 +36,13 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
       const response = await fetch('/watchlist', config);
       const watchlistData = await response.json();
 
-      !response.ok ? setErrorMsg(watchlistData) : closeModal();
-      console.log(watchlistData);
+      if (!response.ok) {
+        setErrorMsg(watchlistData);
+      } else {
+        closeModal();
+        console.log(watchlistData);
+        setWatchlist(watchlistData);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -123,10 +128,11 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
           ref={ulRef}
         >
           {options.length > 0
-            ? options.map((option) => {
-                // console.log(option);
+            ? options.map((option, index) => {
+                console.log(option);
                 return (
                   <ListGroup.Item
+                    key={index + 1000}
                     className='ul-watchlist'
                     action
                     onClick={() => handleAdd(option.symbol)}
