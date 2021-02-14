@@ -88,17 +88,23 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
       })
     ) : isEditClicked && watchlist ? (
       watchlist.map((item, index) => {
+        Object.assign(item, { isChecked: false });
+        console.log(item);
         return (
-          <ListGroup.Item action key={index + 50}>
-            <Link to={`/stock/${item.symbol}`} className='d-flex'>
-              <div>
-                <Form.Group controlId='formBasicCheckbox'>
-                  <Form.Check type='checkbox' />
-                </Form.Group>
-              </div>
-              <div className='font-weight-bold'>{item.symbol}</div>
-              <div className='stock-right ml-auto'> Price</div>
-            </Link>
+          <ListGroup.Item action key={index + 50} className='d-flex'>
+            {/* <Link to={`/stock/${item.symbol}`} className='d-flex'> */}
+            <div>
+              <Form.Group id='formBasicCheckbox' className='m-0'>
+                <Form.Check
+                  type='checkbox'
+                  label={item.symbol}
+                  onChange={(e) => console.log(e)}
+                />
+              </Form.Group>
+            </div>
+            {/* <div className='font-weight-bold'>{item.symbol}</div> */}
+            <div className='stock-right ml-auto'> Price</div>
+            {/* </Link> */}
           </ListGroup.Item>
         );
       })
