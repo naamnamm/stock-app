@@ -180,7 +180,7 @@ app.post('/watchlist', async (req, res) => {
 app.get('/watchlist/:userid', async (req, res) => {
   const userid = req.params.userid.slice(1);
 
-  console.log('userid' + userid);
+  //console.log('userid' + userid);
 
   const watchlist = await pool.query(
     'SELECT * FROM watchlists WHERE user_id::text = $1',
@@ -192,6 +192,37 @@ app.get('/watchlist/:userid', async (req, res) => {
   if (watchlist) {
     res.send(JSON.stringify(watchlist.rows));
   }
+});
+
+app.delete('/watchlist/delete/:stockid/:userid', async (req, res) => {
+  //console.log(req.params.userid);
+  console.log(req.params.stockid);
+  console.log(req.params.userid);
+
+  //const userid = req.params.userid.slice(1);
+  const stockid = req.params.stockid.slice(1);
+  const userid = req.params.userid.slice(1);
+  //console.log('userid' + userid);
+  console.log(req.user);
+
+  const deleteItem = await pool.query(
+    'DELETE FROM watchlists WHERE id::text = $1 AND user_id::text = $2 RETURNING *',
+    [stockid, userid]
+  );
+
+  const updatedWatchlist = await pool.query(
+    'SELECT * FROM watchlists WHERE user_id::text = $1',
+    [userid]
+  );
+
+  // );
+  // console.log(`watchlsit = ${watchlist.rows}`);
+  // console.log(watchlist.rows);
+
+  // if (watchlist) {
+  //   res.send(JSON.stringify(watchlist.rows));
+  // }
+  res.send({ updatedWatchlist: updatedWatchlist.rows });
 });
 
 app.get('/verify-token', authToken, (req, res) => {

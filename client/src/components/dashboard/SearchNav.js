@@ -132,8 +132,7 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
       <ListGroup id='results' className='option-container' ref={ulRef}>
         {options.length > 0
           ? options.map((option, index) => {
-              console.log(option);
-              //Q: this is still being triggered how to fix this?
+              //console.log(option);
               return (
                 <ListGroup.Item
                   key={index + 100}

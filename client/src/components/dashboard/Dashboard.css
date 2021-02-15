@@ -42,3 +42,16 @@
   color: royalblue;
   background-color: transparent;
 }
+
+.delete-button.btn-outline-danger {
+  padding: 0;
+  border: 0;
+  border-width: 0px;
+  border: none;
+  background-color: none;
+}
+
+.delete-button.btn-outline-danger:hover {
+  color: black;
+  background-color: transparent;
+}

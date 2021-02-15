@@ -4,9 +4,9 @@ import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import { UserContext } from '../../context/UserContext';
 
 const AddWatchlist = ({ closeModal, setWatchlist }) => {
-  const { searchInput, setSearchInput } = useOptions();
+  const [searchInput, setSearchInput] = useState('');
   const [stocks, setStocks] = useState([]);
-  const { options, setOptions } = useOptionsUpdate();
+  const [options, setOptions] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const { user } = useContext(UserContext);
 
@@ -38,9 +38,10 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
 
       if (!response.ok) {
         setErrorMsg(watchlistData);
+        setOptions([]);
       } else {
         closeModal();
-        console.log(watchlistData);
+        //console.log(watchlistData);
         setWatchlist(watchlistData);
       }
     } catch (error) {
@@ -57,33 +58,22 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
       setOptions([]);
     } else {
       //console.log(searchInput);
-      const filterSearch = stocks
+      const filterSymbol = stocks
         .filter((s) => s.symbol.includes(searchInput.toUpperCase()))
-        .slice(0, 6);
+        .slice(0, 3);
 
-      setOptions(filterSearch);
+      const filterName = stocks
+        .filter((s) => s.name.includes(searchInput.toUpperCase()))
+        .slice(0, 3);
+
+      const mergeArr = [...filterSymbol, ...filterName];
+
+      setOptions(mergeArr);
     }
     //handleSearch();
   }, [searchInput]);
 
   useEffect(() => {
-    inputRef.current.addEventListener('click', (e) => {
-      if (inputRef) {
-        e.stopPropagation();
-        ulRef.current.style.display = 'flex';
-      }
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!ulRef.current) {
-        return;
-      }
-
-      if (ulRef) {
-        ulRef.current.style.display = 'none';
-      }
-    });
-
     const getStocksList = async () => {
       try {
         const response = await fetch(
@@ -129,15 +119,17 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
         >
           {options.length > 0
             ? options.map((option, index) => {
-                console.log(option);
+                //console.log(option);
                 return (
                   <ListGroup.Item
                     key={index + 1000}
-                    className='ul-watchlist'
+                    className='ul-watchlist d-flex'
                     action
                     onClick={() => handleAdd(option.symbol)}
                   >
-                    {option.symbol} {option.name}
+                    <div>{option.symbol}</div>
+                    <div className='ml-2'>-</div>
+                    <div className='ml-2'>{option.name}</div>
                   </ListGroup.Item>
                 );
               })

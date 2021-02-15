@@ -12,7 +12,7 @@ import './Dashboard.css';
 import { Link } from 'react-router-dom';
 import { Chart } from 'react-google-charts';
 import SearchNav from './SearchNav';
-import { FaPlus, FaEdit } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 
 import AddWatchlist from './AddWatchlist';
 import { UserContext } from '../../context/UserContext';
@@ -24,7 +24,7 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
   const [watchlist, setWatchlist] = useState([]);
   const [isEditClicked, setIsEditClicked] = useState(false);
 
-  console.log(watchlist);
+  //console.log(watchlist);
 
   const displayChart = currentValue ? (
     <Chart
@@ -64,6 +64,7 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
   const closeModal = () => {
     setModalOpen(false);
   };
+
   const getWatchlist = async () => {
     const userid = user.id;
     console.log(userid);
@@ -72,6 +73,22 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
 
     //console.log(data);
     setWatchlist(data);
+  };
+
+  const handleAdd = () => {
+    setIsEditClicked(false);
+    setModalOpen(true);
+  };
+
+  const handleDelete = async (stockid) => {
+    console.log(stockid);
+    const userid = user.id;
+    const response = await fetch(`/watchlist/delete/:${stockid}/:${userid}`, {
+      method: 'DELETE',
+    });
+    const data = await response.json();
+    console.log(data);
+    setWatchlist(data.updatedWatchlist);
   };
 
   const displayWatchlist =
@@ -88,20 +105,31 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
       })
     ) : isEditClicked && watchlist ? (
       watchlist.map((item, index) => {
-        Object.assign(item, { isChecked: false });
-        console.log(item);
+        // Object.assign(item, { isChecked: false });
+        // console.log(item);
         return (
           <ListGroup.Item action key={index + 50} className='d-flex'>
             {/* <Link to={`/stock/${item.symbol}`} className='d-flex'> */}
             <div>
               <Form.Group id='formBasicCheckbox' className='m-0'>
-                <Form.Check
+                <Button
+                  className='delete-button mb-1'
+                  variant='outline-danger'
+                  onClick={() => handleDelete(item.id)}
+                  //value={item.id}
+                >
+                  <FaMinusCircle />
+                </Button>
+
+                {/* <Form.Check
                   type='checkbox'
                   label={item.symbol}
-                  onChange={(e) => console.log(e)}
-                />
+                  onClick={(e) => handleDelete(e.target.value)}
+                  value={item.id}
+                /> */}
               </Form.Group>
             </div>
+            <div className='font-weight-bold ml-2'>{item.symbol}</div>
             {/* <div className='font-weight-bold'>{item.symbol}</div> */}
             <div className='stock-right ml-auto'> Price</div>
             {/* </Link> */}
@@ -219,7 +247,7 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
                 <Button
                   className='add-button mr-2'
                   variant='outline-dark'
-                  onClick={() => setModalOpen(true)}
+                  onClick={() => handleAdd()}
                 >
                   <FaPlus />
                 </Button>
