@@ -116,17 +116,9 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
                   className='delete-button mb-1'
                   variant='outline-danger'
                   onClick={() => handleDelete(item.id)}
-                  //value={item.id}
                 >
                   <FaMinusCircle />
                 </Button>
-
-                {/* <Form.Check
-                  type='checkbox'
-                  label={item.symbol}
-                  onClick={(e) => handleDelete(e.target.value)}
-                  value={item.id}
-                /> */}
               </Form.Group>
             </div>
             <div className='font-weight-bold ml-2'>{item.symbol}</div>

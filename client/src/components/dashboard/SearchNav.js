@@ -113,8 +113,13 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
         </Form>
 
         <Nav className='ml-auto'>
-          <Nav.Link href='/dashboard'>Portfolio</Nav.Link>
-          <Nav.Link href='/balance'>Balance</Nav.Link>
+          <Link to='/dashboard' className='mr-3'>
+            Portfolio
+          </Link>
+          <Link to='/balance' className='mr-3'>
+            Balance
+          </Link>
+          <Link to='/order'>Order</Link>
           <DropdownButton
             title='Account'
             variant='outline-secondary'

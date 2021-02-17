@@ -13,6 +13,7 @@ import LandingPage from './components/landing-page/LandingPage';
 import Login from './components/login-signup/Login';
 import Signup from './components/login-signup/Signup';
 import SearchNav from './components/dashboard/SearchNav';
+import Order from './components/dashboard/Order';
 
 import { OptionsProvider } from './context/optionsContext';
 import { UserContext } from './context/UserContext';
@@ -79,11 +80,7 @@ export default function App() {
               path='/login'
               render={(props) =>
                 !isAuthenticated ? (
-                  <Login
-                    {...props}
-                    // setUser={setUser}
-                    handleLogin={setIsAuthenticated}
-                  />
+                  <Login {...props} handleLogin={setIsAuthenticated} />
                 ) : (
                   <Redirect to='/dashboard' />
                 )
@@ -110,7 +107,6 @@ export default function App() {
                 <SearchNav
                   setSelectedStock={setSelectedStock}
                   handleLogin={setIsAuthenticated}
-                  // user={user}
                 />
               ) : null}
               <Route
@@ -148,15 +144,35 @@ export default function App() {
               <Route
                 exact
                 path='/balance'
-                render={(props) => (
-                  <Balance
-                    {...props}
-                    handleLogin={setIsAuthenticated}
-                    setSelectedStock={setSelectedStock}
-                    // user={user}
-                    handleBalance={setBalance}
-                  />
-                )}
+                render={(props) =>
+                  isAuthenticated ? (
+                    <Balance
+                      {...props}
+                      handleLogin={setIsAuthenticated}
+                      setSelectedStock={setSelectedStock}
+                      handleBalance={setBalance}
+                    />
+                  ) : (
+                    <Redirect to='/' />
+                  )
+                }
+              />
+
+              <Route
+                exact
+                path='/order'
+                render={(props) =>
+                  isAuthenticated ? (
+                    <Order
+                      {...props}
+                      handleLogin={setIsAuthenticated}
+                      setSelectedStock={setSelectedStock}
+                      handleBalance={setBalance}
+                    />
+                  ) : (
+                    <Redirect to='/' />
+                  )
+                }
               />
             </OptionsProvider>
           </Switch>
