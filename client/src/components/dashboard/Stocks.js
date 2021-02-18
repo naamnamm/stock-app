@@ -13,51 +13,27 @@ import {
   ButtonToolbar,
 } from 'react-bootstrap';
 
-const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
+const Stocks = ({ setSelectedStock, selectedStock, handleLogin }) => {
   const [stock, setStock] = useState('');
   const [chart, setChart] = useState([]);
   const [company, setCompany] = useState('');
   const [quote, setQuote] = useState('');
 
-  //console.log(selectedStock);
+  console.log(selectedStock);
 
-  const getStock = async () => {
-    //const url = `https://sandbox.iexapis.com/stable/stock/${selectedStock.toLowerCase()}/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
-    // const url = `https://sandbox.iexapis.com/stable/stock/AAPL/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
-    // const response = await fetch(url);
-    const response = await fetch('/stock/data');
-    const data = await response.json();
+  //send a get request to the backend
 
-    setStock(data);
-    console.log(data.quote.latestPrice);
+  useEffect(() => {
+    const fetchStock = async () => {
+      const response = await fetch(`/stocks/search/:${selectedStock}`);
+      const data = await response.json();
+      console.log(data);
+      setStock(data.quoteData);
+      setChart(data.chartData);
+    };
 
-    const mappedArr = data.chart.map((item) => [
-      // moment(item.date).format('MMM'),
-      new Date(item.date),
-      item.open,
-    ]);
-    mappedArr.unshift(['date', 'price']);
-
-    console.log(mappedArr);
-    console.log(moment('2020-12-07').format('ll'));
-    setChart(mappedArr);
-  };
-
-  const getCompany = async () => {
-    const response = await fetch('/stock/company');
-    const data = await response.json();
-    console.log(data);
-    setCompany(data);
-  };
-
-  const getQuote = async () => {
-    const response = await fetch('/stock/quote');
-    const data = await response.json();
-    console.log(data);
-    setQuote(data);
-  };
-
-  const displayCompanyName = company ? company.company.companyName : null;
+    fetchStock();
+  }, []);
 
   const displayChart = chart ? (
     <Chart
@@ -103,21 +79,15 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
     />
   ) : null;
 
-  useEffect(() => {
-    getStock();
-    getCompany();
-    getQuote();
-  }, []);
-
   return (
     <>
       <div className='stock-main-container d-flex mx-auto mt-3'>
         <div>
           <div className='text-left header-graph-container'>
-            {company ? company.company.companyName : null}
+            {stock ? stock.quote.companyName : null}
           </div>
           <div className='text-left header-graph-container'>
-            $ {stock ? stock.quote.latestPrice : null}
+            {stock ? stock.quote.latestPrice : null}
           </div>
           {displayChart}
           <ButtonToolbar aria-label='Toolbar with button groups'>
@@ -236,3 +206,47 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin, refs }) => {
 };
 
 export default Stocks;
+
+// const getStock = async () => {
+//   //const url = `https://sandbox.iexapis.com/stable/stock/${selectedStock.toLowerCase()}/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
+//   // const url = `https://sandbox.iexapis.com/stable/stock/AAPL/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
+//   // const response = await fetch(url);
+//   const response = await fetch('/stock/data');
+//   const data = await response.json();
+
+//   setStock(data);
+//   console.log(data.quote.latestPrice);
+
+//   const mappedArr = data.chart.map((item) => [
+//     // moment(item.date).format('MMM'),
+//     new Date(item.date),
+//     item.open,
+//   ]);
+//   mappedArr.unshift(['date', 'price']);
+
+//   console.log(mappedArr);
+//   console.log(moment('2020-12-07').format('ll'));
+//   setChart(mappedArr);
+// };
+
+// const getCompany = async () => {
+//   const response = await fetch('/stock/company');
+//   const data = await response.json();
+//   console.log(data);
+//   setCompany(data);
+// };
+
+// const getQuote = async () => {
+//   const response = await fetch('/stock/quote');
+//   const data = await response.json();
+//   console.log(data);
+//   setQuote(data);
+// };
+
+// const displayCompanyName = company ? company.company.companyName : null;
+
+// useEffect(() => {
+//   getStock();
+//   getCompany();
+//   getQuote();
+// }, []);

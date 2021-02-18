@@ -4,7 +4,7 @@ const pool = require('../database/db');
 
 router.post('/', async (req, res) => {
   const { symbol, userid } = req.body;
-  console.log(userid);
+  //console.log(userid);
   const error = [];
 
   const useridAndSymbolMatch = await pool.query(
@@ -41,8 +41,8 @@ router.get('/:userid', async (req, res) => {
     'SELECT * FROM watchlists WHERE user_id::text = $1',
     [userid]
   );
-  console.log(`watchlsit = ${watchlist.rows}`);
-  console.log(watchlist.rows);
+  //console.log(`watchlsit = ${watchlist.rows}`);
+  //console.log(watchlist.rows);
 
   if (watchlist) {
     res.send(JSON.stringify(watchlist.rows));
@@ -51,14 +51,14 @@ router.get('/:userid', async (req, res) => {
 
 router.delete('/delete/:stockid/:userid', async (req, res) => {
   //console.log(req.params.userid);
-  console.log(req.params.stockid);
-  console.log(req.params.userid);
+  //console.log(req.params.stockid);
+  //console.log(req.params.userid);
 
   //const userid = req.params.userid.slice(1);
   const stockid = req.params.stockid.slice(1);
   const userid = req.params.userid.slice(1);
   //console.log('userid' + userid);
-  console.log(req.user);
+  //console.log(req.user);
 
   const deleteItem = await pool.query(
     'DELETE FROM watchlists WHERE id::text = $1 AND user_id::text = $2 RETURNING *',

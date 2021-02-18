@@ -132,6 +132,31 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
       <ListGroup.Item>Create watchlist</ListGroup.Item>
     );
 
+  const currentHolding = [
+    { symbol: 'AAPL', shares: 10, price: 130 },
+    { symbol: 'TSLA', shares: 10, price: 500 },
+    { symbol: 'AAL', shares: 10, price: 15 },
+  ];
+
+  const displayCurrentHolding = currentHolding
+    ? currentHolding.map((item) => {
+        //debugger;
+        return (
+          <ListGroup.Item action onClick={() => setSelectedStock(item.symbol)}>
+            <Link to={`/stock/${item.symbol}`} className='d-flex'>
+              <div className='stock-left text-left'>
+                <div className='font-weight-bold'>{item.symbol}</div>
+                <div className='text-muted'>{item.shares} Share</div>
+              </div>
+              <div className='stock-right ml-auto'>
+                <div className=''> ${item.price} </div>
+              </div>
+            </Link>
+          </ListGroup.Item>
+        );
+      })
+    : null;
+
   useEffect(() => {
     getWatchlist();
   }, [user]);
@@ -199,37 +224,8 @@ const Dashboard = ({ setSelectedStock, handleLogin }) => {
                 <Dropdown.Item href='/stock'>Sell</Dropdown.Item>
               </DropdownButton>
             </Card.Header>
-            <ListGroup variant='flush'>
-              <ListGroup.Item action>
-                <Link to='/stock/AAPL' className='d-flex'>
-                  <div className='stock-left text-left'>
-                    <div className='font-weight-bold'>AAPL</div>
-                    <div className='text-muted'>1 Share</div>
-                  </div>
-                  <div className='stock-right ml-auto'>
-                    <div className=''> $130 </div>
-                  </div>
-                </Link>
-              </ListGroup.Item>
-              <ListGroup.Item action href='/stocks/TSLA' className='d-flex'>
-                <div className='stock-left text-left'>
-                  <div className='font-weight-bold'>TSLA</div>
-                  <div className='text-muted'>1 Share</div>
-                </div>
-                <div className='stock-right ml-auto'>
-                  <div className=''> $130 </div>
-                </div>
-              </ListGroup.Item>
-              <ListGroup.Item action href='/stocks/AAL' className='d-flex'>
-                <div className='stock-left text-left'>
-                  <div className='font-weight-bold'>AAL</div>
-                  <div className='text-muted'>1 Share</div>
-                </div>
-                <div className='stock-right ml-auto'>
-                  <div className=''> $130 </div>
-                </div>
-              </ListGroup.Item>
-            </ListGroup>
+
+            <ListGroup variant='flush'>{displayCurrentHolding}</ListGroup>
           </Card>
 
           <Card className='mt-2'>
