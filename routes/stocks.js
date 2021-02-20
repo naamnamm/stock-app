@@ -22,7 +22,7 @@ router.get('/search/:selectedStock', async (req, res) => {
   // const chartData = await fetchChart.json();
   //console.log(data);
 
-  res.send({ quoteData });
+  res.send({ quoteData, chartData });
 });
 
 module.exports = router;

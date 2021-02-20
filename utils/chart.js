@@ -1,50 +1,44 @@
+const moment = require('moment');
+
+Array.prototype.move = function (from, to) {
+  this.splice(to, 0, this.splice(from, 1)[0]);
+};
+
 function formatChart(fetchObject) {
-  //console.log(fetchObject.chart);
-  const filterKey = ['date', 'close'];
+  const labelXandY = ['date', 'close'];
   const output = fetchObject.chart.map((obj) => {
-    // const filterObjectByKey = () => {
-    // return Object.entries(obj).reduce((item) => {
-    //   if (item[0] === 'close') {
-    //     return item;
-    //   }
-    // });
     return Object.entries(obj)
       .filter((item) => {
-        if (filterKey.includes(item[0])) {
+        //console.log(item);
+        if (labelXandY.includes(item[0])) {
+          // item.move(0, 1);
+          // console.log(item);
           return item;
         }
       })
       .flat()
-      .slice(1, 4);
+      .filter((item, index) => {
+        //console.log(item);
+        return index % 2 != 0;
+      })
+      .map((item) => {
+        //console.log(item);
+        if (item.length === 10) {
+          return moment(item).format('MMM DD');
+        }
+        return item;
+      });
   });
-  console.log(output);
+
+  output.map((item) => {
+    item.move(0, 1);
+    return item;
+  });
+
+  output.unshift(labelXandY);
+  return output;
+  //console.log(array);
 }
-//});
-//});
-// }
-// return Object.entries(obj).reduce((r, e) => {
-//   if (filterKey.includes(obj[e])) {
-//     r[e] = obj[e];
-//   }
-//   return r;
-// });
-
-//return Object.entries(obj).filter((key) => key === 'close');
-//return filterKey.includes(key);
-//});
-//Object.entries(obj).filter((key) => filterKey.includes(key));
-//});
-
-//const outout =
-
-// const chartData = fetchObject.chart.map(item => {
-//   return {item.date, item.chose}
-
-// })
-// return {
-//   chartData
-// };
-//}
 
 module.exports = formatChart;
 
