@@ -13,13 +13,13 @@ import {
 import { Link } from 'react-router-dom';
 import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import './SearchNav.css';
-import { UserContext } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthContext';
 
 const SearchNav = ({ setSelectedStock, handleLogin }) => {
   const { searchInput, setSearchInput } = useOptions();
   const [stocks, setStocks] = useState([]);
   const { options, setOptions } = useOptionsUpdate();
-  const { user } = useContext(UserContext);
+  const { user, setUser, isAuth, setIsAuth } = useAuth();
 
   const inputRef = useRef();
   const ulRef = useRef();
@@ -37,7 +37,7 @@ const SearchNav = ({ setSelectedStock, handleLogin }) => {
       const response = await fetch('/logout', config);
 
       if (response.ok) {
-        handleLogin(false);
+        setIsAuth(false);
         localStorage.removeItem('accessToken');
       }
     } catch (error) {

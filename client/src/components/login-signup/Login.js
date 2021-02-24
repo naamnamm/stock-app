@@ -1,13 +1,14 @@
 import React, { useState, useRef, useContext } from 'react';
 import { Form, Button, Navbar, Nav, Col, Row } from 'react-bootstrap';
-import { UserContext } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthContext';
 import './Login-Signup.css';
 
 const Login = ({ handleLogin }) => {
   const [errorMsg, setErrorMsg] = useState('');
   const usernameRef = useRef();
   const passwordRef = useRef();
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, isAuth, setIsAuth } = useAuth();
+  //const { user, setUser } = useContext(UserContext);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +36,7 @@ const Login = ({ handleLogin }) => {
         setErrorMsg(loginData.error.message);
       } else {
         localStorage.setItem('accessToken', JSON.stringify(loginData.token));
-        handleLogin(true);
+        setIsAuth(true);
         setUser(loginData);
         //setAuth(true);
       }

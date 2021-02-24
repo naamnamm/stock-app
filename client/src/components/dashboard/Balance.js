@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import './Balance.css';
 import { Form, Col, Row, Button, Card } from 'react-bootstrap';
-import { UserContext } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthContext';
 
 const Balance = () => {
   const transferRef = useRef();
   const [transferHistory, setTransferHistory] = useState([]);
-  const { user } = useContext(UserContext);
+  const { user, setUser, isAuth, setIsAuth } = useAuth();
 
   console.log(user);
 

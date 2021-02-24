@@ -33,16 +33,17 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/:userid', async (req, res) => {
-  const userid = req.params.userid.slice(1);
+  //const userid = req.params.userid.slice(1);
+  //e0183565-a2fd-4168-bb23-bc7ad78010bc
 
-  //console.log('userid' + userid);
+  const { userid } = req.params;
+  //:e0183565-a2fd-4168-bb23-bc7ad78010bc
+  console.log(userid);
 
   const watchlist = await pool.query(
     'SELECT * FROM watchlists WHERE user_id::text = $1',
     [userid]
   );
-  //console.log(`watchlsit = ${watchlist.rows}`);
-  //console.log(watchlist.rows);
 
   if (watchlist) {
     res.send(JSON.stringify(watchlist.rows));

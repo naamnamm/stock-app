@@ -5,9 +5,10 @@ const fetch = require('node-fetch');
 const formatChart = require('../utils/chart');
 
 router.get('/search/:selectedStock', async (req, res) => {
-  console.log(req.params.selectedStock);
-  const selectedStock = req.params.selectedStock.substring(1);
+  //console.log(req.params.selectedStock);
+  //const selectedStock = req.params.selectedStock.substring(1);
   //console.log('search =' + search);
+  const { selectedStock } = req.params;
 
   const fetchQuote = await fetch(
     `https://sandbox.iexapis.com/stable/stock/${selectedStock}/batch?types=quote,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`
@@ -15,12 +16,6 @@ router.get('/search/:selectedStock', async (req, res) => {
   const quoteData = await fetchQuote.json();
 
   const chartData = formatChart(quoteData);
-
-  // const fetchChart = await fetch(
-  //   `https://sandbox.iexapis.com/stable/stock/${selectedStock}/chart/dynamic?token=Tsk_66820f5895ad4695ba96beee7925717b`
-  // );
-  // const chartData = await fetchChart.json();
-  //console.log(data);
 
   res.send({ quoteData, chartData });
 });

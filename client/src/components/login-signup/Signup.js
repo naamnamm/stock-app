@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { Form, Button, Col, Navbar, Nav } from 'react-bootstrap';
 import './Login-Signup.css';
+import { useHistory } from 'react-router-dom';
 
-const Signup = ({ handleSignup }) => {
+const Signup = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const [errorMsg, setErrorMsg] = useState('');
+  const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +31,7 @@ const Signup = ({ handleSignup }) => {
       const signupData = await response.json();
       console.log(signupData);
 
-      !response.ok ? setErrorMsg(signupData) : handleSignup(true);
+      !response.ok ? setErrorMsg(signupData) : history.push('/login');
     } catch (error) {
       console.log(error);
     }
@@ -74,36 +76,6 @@ const Signup = ({ handleSignup }) => {
                 <div className='text-danger'>{err.message}</div>
               ))
             : null}
-
-          <Form.Group controlId='formGridAddress1'>
-            <Form.Label>Address</Form.Label>
-            <Form.Control placeholder='1234 Main St' />
-          </Form.Group>
-
-          <Form.Group controlId='formGridAddress2'>
-            <Form.Label>Address 2</Form.Label>
-            <Form.Control placeholder='Apartment, studio, or floor' />
-          </Form.Group>
-
-          <Form.Row>
-            <Form.Group as={Col} controlId='formGridCity'>
-              <Form.Label>City</Form.Label>
-              <Form.Control />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId='formGridState'>
-              <Form.Label>State</Form.Label>
-              <Form.Control as='select' defaultValue='Choose...'>
-                <option>Choose...</option>
-                <option>...</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group as={Col} controlId='formGridZip'>
-              <Form.Label>Zip</Form.Label>
-              <Form.Control />
-            </Form.Group>
-          </Form.Row>
 
           <Form.Group id='formGridCheckbox'>
             <Form.Check type='checkbox' label='Agree to our terms' />

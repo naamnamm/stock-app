@@ -9,21 +9,17 @@ function formatChart(fetchObject) {
   const output = fetchObject.chart.map((obj) => {
     return Object.entries(obj)
       .filter((item) => {
-        //console.log(item);
         if (labelXandY.includes(item[0])) {
-          // item.move(0, 1);
-          // console.log(item);
           return item;
         }
       })
       .flat()
       .filter((item, index) => {
-        //console.log(item);
         return index % 2 != 0;
       })
       .map((item) => {
-        //console.log(item);
-        if (item.length === 10) {
+        debugger;
+        if (item.length === 10 && moment(item, 'YYYY/MM/DD').isValid()) {
           return moment(item).format('MMM DD');
         }
         return item;
@@ -37,9 +33,9 @@ function formatChart(fetchObject) {
 
   output.unshift(labelXandY);
   return output;
-  //console.log(array);
 }
 
 module.exports = formatChart;
 
+//&& moment(item, 'YYYY/MM/DD', true).isValid()
 //https://stackoverflow.com/questions/22477612/converting-array-of-objects-into-array-of-arrays

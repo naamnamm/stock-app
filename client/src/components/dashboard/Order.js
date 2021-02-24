@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
-import { UserContext } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthContext';
 
 const Order = () => {
   return (

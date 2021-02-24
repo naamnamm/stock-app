@@ -15,12 +15,12 @@ import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 
 import AddWatchlist from './AddWatchlist';
-import { UserContext } from '../../context/UserContext';
+import { useAuth } from '../../context/AuthContext';
 
-const Dashboard = ({ setSelectedStock, handleLogin }) => {
+const Dashboard = ({ setSelectedStock }) => {
   const [currentValue, setCurrentValue] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const { user } = useContext(UserContext);
+  const { user, setUser, isAuth, setIsAuth } = useAuth();
   const [watchlist, setWatchlist] = useState([]);
   const [isEditClicked, setIsEditClicked] = useState(false);
 
