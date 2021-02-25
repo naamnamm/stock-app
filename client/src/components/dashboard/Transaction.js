@@ -1,20 +1,24 @@
-import React from 'react';
-import {
-  ListGroup,
-  FormControl,
-  Nav,
-  Form,
-  Button,
-  Navbar,
-  Card,
-  DropdownButton,
-  Dropdown,
-  Col,
-  Row,
-} from 'react-bootstrap';
+import React, { useEffect, useRef, useState, useContext } from 'react';
+import { Form, Button, Col, Row } from 'react-bootstrap';
 import './Transaction.css';
 
-const Transaction = () => {
+const Transaction = ({ type }) => {
+  console.log(type);
+  const amountRef = useRef();
+  const priceRef = useRef();
+
+  useEffect(() => {
+    const fetchStock = async () => {
+      const response = await fetch(`/stocks/search/${selectedStock}`);
+      const data = await response.json();
+      console.log(data);
+      setStock(data.quoteData);
+      setChart(data.chartData);
+    };
+
+    fetchStock();
+  }, []);
+
   return (
     <div>
       <Form className='my-2'>
@@ -28,7 +32,7 @@ const Transaction = () => {
           </Form.Label>
 
           <Col sm={8} className='pl-3 pr-0'>
-            <Form.Control type='number' placeholder='0.00' />
+            <Form.Control type='number' placeholder='0.00' ref={amountRef} />
           </Col>
         </Form.Group>
 
@@ -46,6 +50,7 @@ const Transaction = () => {
               type='number'
               placeholder='$0.00'
               className='number-input'
+              ref={priceRef}
             />
           </Col>
         </Form.Group>
@@ -72,7 +77,7 @@ const Transaction = () => {
         </Form.Group>
 
         <Button variant='success' type='submit' className='my-3'>
-          Review Order
+          Place an Order
         </Button>
       </Form>
 

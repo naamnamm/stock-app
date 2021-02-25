@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
+import { AuthContext } from './context/AuthContext';
 
 export default function PrivateRoute({ component: Component, ...rest }) {
-  const { user, isAuth } = useAuth();
+  const { user, isAuth } = useContext(AuthContext);
 
   return (
     <Route
       {...rest}
       render={(props) => {
-        return isAuth ? <Component {...props} /> : <Redirect to='/login' />;
+        return user ? <Component {...props} /> : <Redirect to='/login' />;
       }}
     ></Route>
   );

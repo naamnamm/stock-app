@@ -1,13 +1,15 @@
 import React, { useState, useRef, useContext } from 'react';
 import { Form, Button, Navbar, Nav, Col, Row } from 'react-bootstrap';
-import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import './Login-Signup.css';
+import { useHistory } from 'react-router-dom';
 
 const Login = ({ handleLogin }) => {
   const [errorMsg, setErrorMsg] = useState('');
   const usernameRef = useRef();
   const passwordRef = useRef();
-  const { user, setUser, isAuth, setIsAuth } = useAuth();
+  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const history = useHistory();
   //const { user, setUser } = useContext(UserContext);
 
   const handleLoginSubmit = async (e) => {
@@ -38,6 +40,7 @@ const Login = ({ handleLogin }) => {
         localStorage.setItem('accessToken', JSON.stringify(loginData.token));
         setIsAuth(true);
         setUser(loginData);
+        history.push('/dashboard');
         //setAuth(true);
       }
     } catch (error) {

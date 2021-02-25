@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SearchNav from './SearchNav';
 import Transaction from './Transaction';
+import ControlledTabs from './ControlledTabs';
 import { Chart } from 'react-google-charts';
 import './Stocks.css';
 import moment from 'moment';
@@ -12,12 +13,14 @@ import {
   Tab,
   ButtonToolbar,
 } from 'react-bootstrap';
+import { useStock } from '../../context/SelectedStockContext';
 
-const Stocks = ({ setSelectedStock, selectedStock, handleLogin }) => {
+const Stocks = () => {
   const [stock, setStock] = useState('');
   const [chart, setChart] = useState([]);
   const [company, setCompany] = useState('');
   const [quote, setQuote] = useState('');
+  const { selectedStock, setSelectedStock } = useStock();
 
   console.log(selectedStock);
 
@@ -25,7 +28,7 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin }) => {
 
   useEffect(() => {
     const fetchStock = async () => {
-      const response = await fetch(`/stocks/search/:${selectedStock}`);
+      const response = await fetch(`/stocks/search/${selectedStock}`);
       const data = await response.json();
       console.log(data);
       setStock(data.quoteData);
@@ -115,14 +118,15 @@ const Stocks = ({ setSelectedStock, selectedStock, handleLogin }) => {
                 <Dropdown.Item href='/stocks'>Sell</Dropdown.Item>
               </DropdownButton>
             </Card.Header> */}
-            <Tabs defaultActiveKey='profile' id='uncontrolled-tab-example'>
+            {/* <Tabs defaultActiveKey='profile' id='uncontrolled-tab-example'>
               <Tab eventKey='home' title='Buy'>
                 <Transaction />
               </Tab>
               <Tab eventKey='profile' title='Sell'>
                 <Transaction />
               </Tab>
-            </Tabs>
+            </Tabs> */}
+            <ControlledTabs />
           </Card>
         </div>
       </div>

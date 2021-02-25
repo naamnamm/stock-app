@@ -6,65 +6,38 @@ import React, {
   useEffect,
 } from 'react';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+//export const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState();
-  const [loading, setLoading] = useState(false);
-  const [isAuth, setIsAuth] = useState(false);
+// export function useAuth() {
+//   return useContext(AuthContext);
+// }
 
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged(user => {
-  //     setCurrentUser(user)
-  //     setLoading(false)
-  //   })
+// export function AuthProvider({ children }) {
+//   const [user, setUser] = useState();
+//   const [loading, setLoading] = useState(false);
+//   const [isAuth, setIsAuth] = useState(false);
 
-  //   return unsubscribe
-  // }, [])
+//   // useEffect(() => {
+//   //   const unsubscribe = auth.onAuthStateChanged(user => {
+//   //     setCurrentUser(user)
+//   //     setLoading(false)
+//   //   })
 
-  const verifyToken = async () => {
-    try {
-      const response = await fetch('/verify-token', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem('accessToken')
-          )}`,
-        },
-      });
+//   //   return unsubscribe
+//   // }, [])
 
-      const data = await response.json();
+//   const value = {
+//     user,
+//     setUser,
+//     isAuth,
+//     setIsAuth,
+//   };
 
-      if (data.isVerified === true) {
-        setIsAuth(true);
-        setUser(data);
-        setLoading(false);
-      } else {
-        setIsAuth(false);
-      }
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  useEffect(() => {
-    JSON.parse(localStorage.getItem('accessToken')) ? verifyToken() : null;
-  }, []);
-
-  const value = {
-    user,
-    setUser,
-    isAuth,
-    setIsAuth,
-  };
-
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
-}
+//   return (
+//     <AuthContext.Provider value={value}>
+//       {!loading && children}
+//     </AuthContext.Provider>
+//   );
+// }

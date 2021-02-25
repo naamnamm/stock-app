@@ -13,14 +13,16 @@ import { Link } from 'react-router-dom';
 import { Chart } from 'react-google-charts';
 import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
+import { useStock } from '../../context/SelectedStockContext';
 
 import AddWatchlist from './AddWatchlist';
-import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
-const Dashboard = ({ setSelectedStock }) => {
+const Dashboard = () => {
   const [currentValue, setCurrentValue] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const { user, setUser, isAuth, setIsAuth } = useAuth();
+  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const { selectedStock, setSelectedStock } = useStock();
   const [watchlist, setWatchlist] = useState([]);
   const [isEditClicked, setIsEditClicked] = useState(false);
 
@@ -68,7 +70,7 @@ const Dashboard = ({ setSelectedStock }) => {
   const getWatchlist = async () => {
     const userid = user.id;
     console.log(userid);
-    const response = await fetch(`/watchlist/:${userid}`);
+    const response = await fetch(`/watchlist/${userid}`);
     const data = await response.json();
 
     //console.log(data);

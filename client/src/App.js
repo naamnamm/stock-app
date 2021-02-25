@@ -17,32 +17,75 @@ import Order from './components/dashboard/Order';
 import PrivateRoute from './PrivateRoute';
 
 import { OptionsProvider } from './context/optionsContext';
-import { AuthProvider } from './context/AuthContext';
+import { SelectedStockProvider } from './context/SelectedStockContext';
+import { AuthContext } from './context/AuthContext';
 
 export default function App() {
-  // const [user, setUser] = useState([]);
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState([]);
+  const [isAuth, setIsAuth] = useState(false);
   const [selectedStock, setSelectedStock] = useState([]);
   const [balance, setBalance] = useState('');
-  //const { user, isAuth } = useAuth();
+  //const { user, setUser, isAuth, setIsAuth } = useAuth();
 
   console.log(selectedStock);
+
+  const value = {
+    user,
+    setUser,
+    isAuth,
+    setIsAuth,
+  };
+  //debugger;
+  const verifyToken = async () => {
+    try {
+      const response = await fetch('/verify-token', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem('accessToken')
+          )}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.isVerified === true) {
+        setIsAuth(true);
+        setUser(data);
+        setLoading(false);
+      } else {
+        setIsAuth(false);
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    //JSON.parse(localStorage.getItem('accessToken')) ? verifyToken() : null;
+    verifyToken();
+  }, []);
 
   return (
     <div className='App'>
       <Router>
-        <AuthProvider>
+        <AuthContext.Provider value={value}>
+          {/* <AuthProvider> */}
           <Switch>
             <Route exact path='/' component={LandingPage} />
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
-            <OptionsProvider>
-              <PrivateRoute path='/dashboard' component={Dashboard} />
-              <PrivateRoute path='/stock' component={Stocks} />
-              <PrivateRoute path='/balance' component={Balance} />
-            </OptionsProvider>
+            <SelectedStockProvider>
+              <OptionsProvider>
+                {isAuth && <SearchNav setSelectedStock={setSelectedStock} />}
+                <PrivateRoute path='/dashboard' component={Dashboard} />
+                <PrivateRoute path='/stock' component={Stocks} />
+                <PrivateRoute path='/balance' component={Balance} />
+              </OptionsProvider>
+            </SelectedStockProvider>
           </Switch>
-        </AuthProvider>
+          {/* </AuthProvider> */}
+        </AuthContext.Provider>
       </Router>
     </div>
   );
