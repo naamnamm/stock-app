@@ -28,6 +28,7 @@ export default function App() {
   //const { user, setUser, isAuth, setIsAuth } = useAuth();
 
   console.log(selectedStock);
+  console.log(user, isAuth);
 
   const value = {
     user,
@@ -37,6 +38,7 @@ export default function App() {
   };
   //debugger;
   const verifyToken = async () => {
+    //debugger;
     try {
       const response = await fetch('/verify-token', {
         headers: {
@@ -55,16 +57,39 @@ export default function App() {
         setLoading(false);
       } else {
         setIsAuth(false);
+        setUser('');
       }
     } catch (err) {
       console.error(err.message);
     }
   };
 
+  const getBalance = async () => {
+    const userid = user.id;
+    console.log(userid);
+    const response = await fetch(`/api/transfer/${userid}`);
+    const data = await response.json();
+    console.log(data);
+
+    const currentBalance = data
+      ? data
+          .map((t) => {
+            //console.log(t);
+            return Number(t.amount);
+          })
+          .reduce((acc, cur) => acc + cur, 0)
+      : null;
+    console.log(currentBalance);
+    setBalance(currentBalance);
+  };
+
   useEffect(() => {
-    //JSON.parse(localStorage.getItem('accessToken')) ? verifyToken() : null;
     verifyToken();
   }, []);
+
+  useEffect(() => {
+    getBalance();
+  }, [user]);
 
   return (
     <div className='App'>
@@ -81,6 +106,7 @@ export default function App() {
                 <PrivateRoute path='/dashboard' component={Dashboard} />
                 <PrivateRoute path='/stock' component={Stocks} />
                 <PrivateRoute path='/balance' component={Balance} />
+                <PrivateRoute path='/order' component={Order} />
               </OptionsProvider>
             </SelectedStockProvider>
           </Switch>

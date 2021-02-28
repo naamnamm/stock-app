@@ -4,14 +4,13 @@ import Transaction from './Transaction';
 import ControlledTabs from './ControlledTabs';
 import { Chart } from 'react-google-charts';
 import './Stocks.css';
-import moment from 'moment';
+import { Link } from 'react-router-dom';
 import {
   ButtonGroup,
   Button,
   Card,
-  Tabs,
-  Tab,
   ButtonToolbar,
+  Alert,
 } from 'react-bootstrap';
 import { useStock } from '../../context/SelectedStockContext';
 
@@ -21,14 +20,14 @@ const Stocks = () => {
   const [company, setCompany] = useState('');
   const [quote, setQuote] = useState('');
   const { selectedStock, setSelectedStock } = useStock();
+  const [orderMsg, setOrderMsg] = useState('');
 
   console.log(selectedStock);
-
-  //send a get request to the backend
+  console.log(orderMsg);
 
   useEffect(() => {
     const fetchStock = async () => {
-      const response = await fetch(`/stocks/search/${selectedStock}`);
+      const response = await fetch(`/api/stocks/search/${selectedStock}`);
       const data = await response.json();
       console.log(data);
       setStock(data.quoteData);
@@ -84,6 +83,12 @@ const Stocks = () => {
 
   return (
     <>
+      {orderMsg.successMsg ? (
+        <Alert variant='success' className='w-75 mx-auto'>
+          {orderMsg.successMsg}{' '}
+          <Link to='/order'>Check all your orders here!</Link>
+        </Alert>
+      ) : null}
       <div className='stock-main-container d-flex mx-auto mt-3'>
         <div>
           <div className='text-left header-graph-container'>
@@ -106,27 +111,10 @@ const Stocks = () => {
         </div>
         <div className='right-container'>
           <Card className=''>
-            {/* <Card.Header className='d-flex'>
-              <Card.Title className='text-left mb-0'>My Stocks</Card.Title>
-              <DropdownButton
-                id='dropdown-basic-button'
-                title=''
-                className='ml-auto pt-0'
-                variant='outline-dark'
-              >
-                <Dropdown.Item href='/stocks'>Buy</Dropdown.Item>
-                <Dropdown.Item href='/stocks'>Sell</Dropdown.Item>
-              </DropdownButton>
-            </Card.Header> */}
-            {/* <Tabs defaultActiveKey='profile' id='uncontrolled-tab-example'>
-              <Tab eventKey='home' title='Buy'>
-                <Transaction />
-              </Tab>
-              <Tab eventKey='profile' title='Sell'>
-                <Transaction />
-              </Tab>
-            </Tabs> */}
-            <ControlledTabs />
+            <ControlledTabs
+              currentPrice={stock ? stock.quote.latestPrice : null}
+              setOrderMsg={setOrderMsg}
+            />
           </Card>
         </div>
       </div>

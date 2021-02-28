@@ -47,6 +47,25 @@ CREATE TABLE watchlists (
   user_id uuid REFERENCES users(id)
 );
 
+
+CREATE TABLE orders (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  symbol TEXT NOT NULL,
+  type TEXT NOT NULL,
+  quantity NUMERIC(8,2) NOT NULL,
+  price NUMERIC(8,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  user_id uuid REFERENCES users(id)
+);
+
+CREATE TABLE currentHoldings (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  symbol TEXT NOT NULL,
+  quantity NUMERIC(8,2) NOT NULL,
+  purchasePrice NUMERIC(8,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  user_id uuid REFERENCES users(id)
+);
 --\c into the database
 
 --CREATE TABLE 

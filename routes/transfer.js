@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../database/db');
 
 router.get('/:userid', async (req, res) => {
-  const userid = req.params.userid.slice(1);
+  const { userid } = req.params;
   //console.log(userid);
 
   const transferHistory = await pool.query(

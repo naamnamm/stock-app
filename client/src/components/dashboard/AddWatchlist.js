@@ -33,7 +33,7 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
         body: JSON.stringify(data),
       };
 
-      const response = await fetch('/watchlist', config);
+      const response = await fetch('/api/watchlist', config);
       const watchlistData = await response.json();
 
       if (!response.ok) {

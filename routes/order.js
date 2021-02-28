@@ -1,23 +1,50 @@
-// const express = require('express');
-// const router = express.Router();
-// // const pool = require('../database/db');
-// const fetch = require('node-fetch');
+const express = require('express');
+const router = express.Router();
+const pool = require('../database/db');
+const fetch = require('node-fetch');
 
-// router.post('/order', async (req, res) => {
-//   const { amount, price, userid, symbol, type } = req.body;
-//   await pool.query(
-//     'INSERT INTO orders (symbol, amount) VALUES ($1, $2)',
-//     [symbol, userid]
-//   );
+router.post('/', async (req, res) => {
+  const { symbol, type, quantity, price, userid } = req.body;
 
-//   const fetchQuote = await fetch(
-//     `https://sandbox.iexapis.com/stable/stock/${selectedStock}/batch?types=quote,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`
-//   );
-//   const quoteData = await fetchQuote.json();
+  console.log(symbol);
 
-//   const chartData = formatChart(quoteData);
+  try {
+    const orderFilled = await pool.query(
+      'INSERT INTO orders (symbol, type, quantity, price, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [symbol, type, quantity, price, userid]
+    );
 
-//   res.send({ quoteData, chartData });
-// });
+    if (orderFilled) {
+      await pool.query(
+        'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4)',
+        [symbol, quantity, price, userid]
+      );
+    }
 
-// module.exports = router;
+    res.send({
+      successMsg: `Your ${type}ing order has been filled`,
+    });
+  } catch (error) {
+    res.send({ errorMsg: 'Failed to place order, please try again' });
+    console.log(error);
+  }
+});
+
+router.get('/:userid', async (req, res) => {
+  const { userid } = req.params;
+
+  console.log(userid);
+
+  try {
+    const allOrders = await pool.query(
+      'SELECT * FROM orders WHERE user_id::text = $1',
+      [userid]
+    );
+    //console.log(allOrders);
+    res.send(allOrders.rows);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+module.exports = router;

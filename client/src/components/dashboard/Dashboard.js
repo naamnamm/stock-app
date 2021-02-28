@@ -18,15 +18,17 @@ import { useStock } from '../../context/SelectedStockContext';
 import AddWatchlist from './AddWatchlist';
 import { AuthContext } from '../../context/AuthContext';
 
-const Dashboard = () => {
+const Dashboard = ({ data, balance }) => {
   const [currentValue, setCurrentValue] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
   const { selectedStock, setSelectedStock } = useStock();
   const [watchlist, setWatchlist] = useState([]);
   const [isEditClicked, setIsEditClicked] = useState(false);
+  const [currentBalance, setCurrentBalance] = useState('');
+  const [currentHoldings, setCurrentHoldings] = useState([]);
 
-  //console.log(watchlist);
+  const userid = user ? user.id : null;
 
   const displayChart = currentValue ? (
     <Chart
@@ -67,16 +69,6 @@ const Dashboard = () => {
     setModalOpen(false);
   };
 
-  const getWatchlist = async () => {
-    const userid = user.id;
-    console.log(userid);
-    const response = await fetch(`/watchlist/${userid}`);
-    const data = await response.json();
-
-    //console.log(data);
-    setWatchlist(data);
-  };
-
   const handleAdd = () => {
     setIsEditClicked(false);
     setModalOpen(true);
@@ -85,9 +77,12 @@ const Dashboard = () => {
   const handleDelete = async (stockid) => {
     console.log(stockid);
     const userid = user.id;
-    const response = await fetch(`/watchlist/delete/:${stockid}/:${userid}`, {
-      method: 'DELETE',
-    });
+    const response = await fetch(
+      `/api/watchlist/delete/:${stockid}/:${userid}`,
+      {
+        method: 'DELETE',
+      }
+    );
     const data = await response.json();
     console.log(data);
     setWatchlist(data.updatedWatchlist);
@@ -134,24 +129,18 @@ const Dashboard = () => {
       <ListGroup.Item>Create watchlist</ListGroup.Item>
     );
 
-  const currentHolding = [
-    { symbol: 'AAPL', shares: 10, price: 130 },
-    { symbol: 'TSLA', shares: 10, price: 500 },
-    { symbol: 'AAL', shares: 10, price: 15 },
-  ];
-
-  const displayCurrentHolding = currentHolding
-    ? currentHolding.map((item) => {
+  const displayCurrentHolding = currentHoldings
+    ? currentHoldings.map((item) => {
         //debugger;
         return (
           <ListGroup.Item action onClick={() => setSelectedStock(item.symbol)}>
             <Link to={`/stock/${item.symbol}`} className='d-flex'>
               <div className='stock-left text-left'>
                 <div className='font-weight-bold'>{item.symbol}</div>
-                <div className='text-muted'>{item.shares} Share</div>
+                <div className='text-muted'>{item.quantity} Shares</div>
               </div>
               <div className='stock-right ml-auto'>
-                <div className=''> ${item.price} </div>
+                <div className=''> $Price </div>
               </div>
             </Link>
           </ListGroup.Item>
@@ -159,8 +148,46 @@ const Dashboard = () => {
       })
     : null;
 
+  const getCurrentHoldings = async () => {
+    console.log(userid);
+    const response = await fetch(`/api/currentHoldings/${userid}`);
+    const data = await response.json();
+    console.log(data);
+    setCurrentHoldings(data);
+  };
+
+  const getWatchlist = async () => {
+    //    const userid = user.id;
+    console.log(userid);
+    const response = await fetch(`/api/watchlist/${userid}`);
+    const data = await response.json();
+
+    setWatchlist(data);
+  };
+
+  const getBalance = async () => {
+    //const userid = user.id;
+    console.log(userid);
+    const response = await fetch(`/api/transfer/${userid}`);
+    const data = await response.json();
+    console.log(data);
+
+    const currentBalance = data
+      ? data
+          .map((t) => {
+            //console.log(t);
+            return Number(t.amount);
+          })
+          .reduce((acc, cur) => acc + cur, 0)
+      : null;
+    console.log(currentBalance);
+    setCurrentBalance(currentBalance);
+  };
+
   useEffect(() => {
     getWatchlist();
+    getBalance();
+    getCurrentHoldings();
   }, [user]);
 
   useEffect(() => {
@@ -208,14 +235,16 @@ const Dashboard = () => {
           <Card>
             <h2>Portfolio Details</h2>
             <p>Buying Power</p>
-            <p>$40</p>
+            <p>{currentBalance}</p>
           </Card>
         </div>
 
         <div className='right-container mr-2'>
           <Card>
             <Card.Header className='d-flex'>
-              <Card.Title className='text-left mb-0'>Stocks</Card.Title>
+              <Card.Title className='text-left mb-0'>
+                Current Holding
+              </Card.Title>
               <DropdownButton
                 id='dropdown-basic-button'
                 title=''

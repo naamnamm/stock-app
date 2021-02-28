@@ -4,7 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 import './Login-Signup.css';
 import { useHistory } from 'react-router-dom';
 
-const Login = ({ handleLogin }) => {
+const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const usernameRef = useRef();
   const passwordRef = useRef();

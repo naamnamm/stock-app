@@ -12,9 +12,11 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
-app.use('/transfer', require('./routes/transfer'));
-app.use('/watchlist', require('./routes/watchlist'));
-app.use('/stocks', require('./routes/stocks'));
+app.use('/api/transfer', require('./routes/transfer'));
+app.use('/api/watchlist', require('./routes/watchlist'));
+app.use('/api/stocks', require('./routes/stocks'));
+app.use('/api/orders', require('./routes/order'));
+app.use('/api/currentHoldings', require('./routes/currentHoldings'));
 
 app.post('/signup', async (req, res) => {
   try {

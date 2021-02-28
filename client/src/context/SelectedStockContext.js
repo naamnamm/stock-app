@@ -14,6 +14,7 @@ export function useStock() {
 
 export const SelectedStockProvider = ({ children }) => {
   const [selectedStock, setSelectedStock] = useState('');
+  //const [currentPrice, setCurrentPrice] = useState('');
 
   const value = useMemo(() => ({ selectedStock, setSelectedStock }), [
     selectedStock,

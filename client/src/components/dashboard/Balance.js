@@ -49,7 +49,7 @@ const Balance = () => {
   useEffect(() => {
     const userid = user.id;
 
-    fetch(`/transfer/:${userid}`)
+    fetch(`/api/transfer/${userid}`)
       .then((res) => res.json())
 
       .then((data) => {

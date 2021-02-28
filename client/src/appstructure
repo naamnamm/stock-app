@@ -1,0 +1,20 @@
+App
+
+<useContext={user, selectedStock}>
+-Dashboard
+1. Display balance, watchlist, currentHolding
+
+
+-Stock
+1. Display selectedStock
+2. Need balance, currentHolding
+--ControlledTab
+---Transaction 
+> User make buy/sell tra
+
+-Balance
+1. Display balance
+
+
+-Order
+1. Display all order
