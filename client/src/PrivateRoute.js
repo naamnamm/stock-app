@@ -14,3 +14,5 @@ export default function PrivateRoute({ component: Component, ...rest }) {
     ></Route>
   );
 }
+
+//isAuth === true - doesn't work

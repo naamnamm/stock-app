@@ -15,6 +15,7 @@ import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { useStock } from '../../context/SelectedStockContext';
 
+import { calculateHoldingValue } from '../../utils/helperFunction';
 import AddWatchlist from './AddWatchlist';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -152,7 +153,8 @@ const Dashboard = ({ data, balance }) => {
     console.log(userid);
     const response = await fetch(`/api/currentHoldings/${userid}`);
     const data = await response.json();
-    console.log(data);
+    console.log('current holding', data);
+    calculateHoldingValue(data);
     setCurrentHoldings(data);
   };
 
