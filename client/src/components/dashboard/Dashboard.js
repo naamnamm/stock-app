@@ -15,7 +15,7 @@ import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { useStock } from '../../context/SelectedStockContext';
 
-import { calculateHoldingValue } from '../../utils/helperFunction';
+import { calculateValue } from '../../utils/helperFunction';
 import AddWatchlist from './AddWatchlist';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -28,6 +28,7 @@ const Dashboard = ({ data, balance }) => {
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [currentBalance, setCurrentBalance] = useState('');
   const [currentHoldings, setCurrentHoldings] = useState([]);
+  const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
 
   const userid = user ? user.id : null;
 
@@ -141,7 +142,7 @@ const Dashboard = ({ data, balance }) => {
                 <div className='text-muted'>{item.quantity} Shares</div>
               </div>
               <div className='stock-right ml-auto'>
-                <div className=''> $Price </div>
+                <div className=''> ${item.latestPrice} </div>
               </div>
             </Link>
           </ListGroup.Item>
@@ -150,11 +151,11 @@ const Dashboard = ({ data, balance }) => {
     : null;
 
   const getCurrentHoldings = async () => {
-    console.log(userid);
+    //console.log(userid);
     const response = await fetch(`/api/currentHoldings/${userid}`);
     const data = await response.json();
-    console.log('current holding', data);
-    calculateHoldingValue(data);
+    //console.log('current holding', data);
+    setCurrentHoldingValue(calculateValue(data));
     setCurrentHoldings(data);
   };
 
@@ -218,7 +219,9 @@ const Dashboard = ({ data, balance }) => {
           <div className='holder-summary d-flex'>
             <Card className='w-50'>
               <Card.Body>
-                <Card.Title> $3,917.88</Card.Title>
+                <Card.Title>
+                  ${currentHoldingValue && currentHoldingValue.totalValue}
+                </Card.Title>
                 <Card.Subtitle className='mb-2 text-muted'>
                   Current Value
                 </Card.Subtitle>
@@ -226,7 +229,9 @@ const Dashboard = ({ data, balance }) => {
             </Card>
             <Card className='w-50'>
               <Card.Body>
-                <Card.Title> +$3,917.88</Card.Title>
+                <Card.Title>
+                  ${currentHoldingValue && currentHoldingValue.gainLoss}
+                </Card.Title>
                 <Card.Subtitle className='mb-2 text-muted'>
                   Gain/Loss
                 </Card.Subtitle>

@@ -1,20 +1,42 @@
 App
 
+-SearchNav
+
 <useContext={user, selectedStock}>
 -Dashboard
 1. Display balance, watchlist, currentHolding
+--AddWatchlist
+**//display current portfolio value
+get requset query database
+- to get number of share and cost
+Show current value
+- number of stock * current price
+Show gain lost
+- current value (number of stock * cost)
 
-
+--------------------------------------------------------------
 -Stock
 1. Display selectedStock
 2. Need balance, currentHolding
---ControlledTab
----Transaction 
-> User make buy/sell tra
 
+--ControlledTab
+> Pass down type (either buy or sell)
+
+---Transaction 
+> User make buy/sell transaction header
+> need balance to calculate max quantity
+> once user click Button
+Done
+**//send the post request to the back end
+**//back end query the database
+**//return if the order is success or fail 
+**//then display message on the front with alert component 
+
+----------------------------------------------------------------
 -Balance
 1. Display balance
 
 
 -Order
 1. Display all order
+

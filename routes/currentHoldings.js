@@ -2,11 +2,10 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../database/db');
 const axios = require('axios');
+const calculateCurrentHoldingValue = require('../utils/helperFunctions');
 
 router.get('/:userid', async (req, res) => {
   const { userid } = req.params;
-
-  console.log('currentholding:', userid);
 
   try {
     const currentHoldings = await pool.query(
@@ -14,7 +13,7 @@ router.get('/:userid', async (req, res) => {
       [userid]
     );
     if (currentHoldings) {
-      const mappedPromises = currentHoldings.rows.map((item) =>
+      const getLatestPrices = currentHoldings.rows.map((item) =>
         axios
           .get(
             `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`
@@ -22,19 +21,18 @@ router.get('/:userid', async (req, res) => {
           .then((data) => data.data)
       );
 
-      //console.log(mappedPromises);
+      const latestPrices = await Promise.all(getLatestPrices).then(
+        (response) => {
+          return response.map((item) => item.quote.latestPrice);
+        }
+      );
 
-      const quoteData = await Promise.all(mappedPromises).then((response) => {
-        console.log('response,', response);
-
-        return response.map((item) => item.quote.latestPrice);
-      });
-      console.log('quoteData', quoteData);
-      //map data to get list of symbols > map with axios
-      //
+      currentHoldings.rows.map((item, i) =>
+        Object.assign(item, { latestPrice: `${latestPrices[i]}` })
+      );
     }
-    console.log(currentHoldings.rows);
-    //console.log(allOrders);
+    //console.log(currentHoldings.rows);
+
     res.send(currentHoldings.rows);
   } catch (error) {
     console.log(error);
