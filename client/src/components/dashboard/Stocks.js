@@ -5,6 +5,8 @@ import ControlledTabs from './ControlledTabs';
 import { Chart } from 'react-google-charts';
 import './Stocks.css';
 import { Link } from 'react-router-dom';
+import { useStock } from '../../context/SelectedStockContext';
+
 import {
   ButtonGroup,
   Button,
@@ -12,7 +14,6 @@ import {
   ButtonToolbar,
   Alert,
 } from 'react-bootstrap';
-import { useStock } from '../../context/SelectedStockContext';
 
 const Stocks = () => {
   const [stock, setStock] = useState('');
@@ -83,6 +84,7 @@ const Stocks = () => {
 
   return (
     <>
+      <SearchNav setSelectedStock={setSelectedStock} />
       {orderMsg.successMsg ? (
         <Alert variant='success' className='w-75 mx-auto'>
           {orderMsg.successMsg}{' '}

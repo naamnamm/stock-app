@@ -14,11 +14,15 @@ import {
 import { Link } from 'react-router-dom';
 import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import { AuthContext } from '../../context/AuthContext';
+import SearchNav from './SearchNav';
+import { useStock } from '../../context/SelectedStockContext';
+
 const moment = require('moment');
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
   const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const { selectedStock, setSelectedStock } = useStock();
 
   function calculateValue(quantity, price) {
     return (quantity * price).toLocaleString(undefined, {
@@ -74,6 +78,7 @@ const Order = () => {
 
   return (
     <>
+      <SearchNav setSelectedStock={setSelectedStock} />
       <div className='cash-main-container mt-3 mx-3'>
         <h3 className='text-left'>Open Orders</h3>
         <div>

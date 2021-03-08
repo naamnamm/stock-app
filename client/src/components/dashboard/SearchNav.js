@@ -15,7 +15,7 @@ import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import './SearchNav.css';
 import { AuthContext } from '../../context/AuthContext';
 
-const SearchNav = ({ setSelectedStock, handleLogin }) => {
+const SearchNav = ({ setSelectedStock }) => {
   const { searchInput, setSearchInput } = useOptions();
   const [stocks, setStocks] = useState([]);
   const { options, setOptions } = useOptionsUpdate();

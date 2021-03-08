@@ -2,22 +2,6 @@ CREATE DATABASE stock_app;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE OR REPLACE FUNCTION generate_uuid(size INT) RETURNS TEXT AS $$
-DECLARE
-  characters TEXT := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  bytes BYTEA := gen_random_bytes(size);
-  l INT := length(characters);
-  i INT := 0;
-  output TEXT := '';
-BEGIN
-  WHILE i < size LOOP
-    output := output || substr(characters, get_byte(bytes, i) % l + 1, 1);
-    i := i + 1;
-  END LOOP;
-  RETURN output;
-END;
-$$ LANGUAGE plpgsql VOLATILE;
-
 CREATE TABLE users (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(255) NOT NULL,
@@ -66,7 +50,13 @@ CREATE TABLE currentHoldings (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id uuid REFERENCES users(id)
 );
+
+CREATE UNIQUE INDEX currentHoldings_user_id ON currentHoldings (user_id, symbol);
+-- ALTER TABLE currentHoldings 
+-- ADD CONSTRAINT currentHoldings_user_id
 --\c into the database
 
 --CREATE TABLE 
 --https://www.youtube.com/watch?v=_Mun4eOOf2Q
+--https://stackoverflow.com/questions/8917065/how-to-add-a-conditional-unique-index-on-postgresql/8918141#8918141
+--https://stackoverflow.com/questions/34495479/add-constraint-to-make-column-unique-per-group-of-rows

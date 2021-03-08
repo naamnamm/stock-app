@@ -1,21 +1,14 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Dashboard from './components/dashboard/Dashboard';
 import Stocks from './components/dashboard/Stocks';
 import Balance from './components/dashboard/Balance';
 import LandingPage from './components/landing-page/LandingPage';
 import Login from './components/login-signup/Login';
 import Signup from './components/login-signup/Signup';
-import SearchNav from './components/dashboard/SearchNav';
 import Order from './components/dashboard/Order';
 import PrivateRoute from './PrivateRoute';
-
 import { OptionsProvider } from './context/optionsContext';
 import { SelectedStockProvider } from './context/SelectedStockContext';
 import { AuthContext } from './context/AuthContext';
@@ -23,11 +16,9 @@ import { AuthContext } from './context/AuthContext';
 export default function App() {
   const [user, setUser] = useState([]);
   const [isAuth, setIsAuth] = useState(false);
-  const [selectedStock, setSelectedStock] = useState([]);
   const [balance, setBalance] = useState('');
   //const { user, setUser, isAuth, setIsAuth } = useAuth();
 
-  console.log(selectedStock);
   console.log(user, isAuth);
 
   const value = {
@@ -36,7 +27,7 @@ export default function App() {
     isAuth,
     setIsAuth,
   };
-  //debugger;
+
   const verifyToken = async () => {
     //debugger;
     try {
@@ -64,32 +55,9 @@ export default function App() {
     }
   };
 
-  const getBalance = async () => {
-    const userid = user.id;
-    console.log(userid);
-    const response = await fetch(`/api/transfer/${userid}`);
-    const data = await response.json();
-    console.log(data);
-
-    const currentBalance = data
-      ? data
-          .map((t) => {
-            //console.log(t);
-            return Number(t.amount);
-          })
-          .reduce((acc, cur) => acc + cur, 0)
-      : null;
-    console.log(currentBalance);
-    setBalance(currentBalance);
-  };
-
   useEffect(() => {
     verifyToken();
   }, []);
-
-  useEffect(() => {
-    getBalance();
-  }, [user]);
 
   return (
     <div className='App'>
@@ -102,7 +70,6 @@ export default function App() {
             <Route path='/signup' component={Signup} />
             <SelectedStockProvider>
               <OptionsProvider>
-                {isAuth && <SearchNav setSelectedStock={setSelectedStock} />}
                 <PrivateRoute path='/dashboard' component={Dashboard} />
                 <PrivateRoute path='/stock' component={Stocks} />
                 <PrivateRoute path='/balance' component={Balance} />

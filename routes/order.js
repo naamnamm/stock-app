@@ -6,8 +6,6 @@ const fetch = require('node-fetch');
 router.post('/', async (req, res) => {
   const { symbol, type, quantity, price, userid } = req.body;
 
-  console.log(symbol);
-
   try {
     const orderFilled = await pool.query(
       'INSERT INTO orders (symbol, type, quantity, price, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
@@ -25,8 +23,13 @@ router.post('/', async (req, res) => {
       successMsg: `Your ${type}ing order has been filled`,
     });
   } catch (error) {
-    res.send({ errorMsg: 'Failed to place order, please try again' });
     console.log(error);
+    const updateHolding = await pool.query(
+      'UPDATE currentHoldings SET quantity = quantity + $1, purchaseprice = (purchaseprice + $2)/quantity WHERE user_id::text = $3 AND symbol = $4',
+      [quantity, price, userid, symbol]
+    );
+    console.log(updateHolding.rows);
+    res.send(updateHolding.rows);
   }
 });
 
@@ -48,3 +51,9 @@ router.get('/:userid', async (req, res) => {
 });
 
 module.exports = router;
+
+//res.send({ errorMsg: 'Failed to place order, please try again' });
+// const existingHolding = await pool.query(
+//   'SELECT * FROM currentHoldings WHERE user_id::text = $1 AND symbol = $2',
+//   [userid, symbol]
+// );

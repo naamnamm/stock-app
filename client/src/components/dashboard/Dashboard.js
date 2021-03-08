@@ -14,12 +14,19 @@ import { Chart } from 'react-google-charts';
 import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { useStock } from '../../context/SelectedStockContext';
+const moment = require('moment');
 
-import { calculateValue } from '../../utils/helperFunction';
+import {
+  calculateValue,
+  getDates,
+  getStartDate,
+  formatNumber,
+} from '../../utils/helperFunction';
 import AddWatchlist from './AddWatchlist';
 import { AuthContext } from '../../context/AuthContext';
+import { Bar, Line, Pie } from 'react-chartjs-2';
 
-const Dashboard = ({ data, balance }) => {
+const Dashboard = () => {
   const [currentValue, setCurrentValue] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
@@ -31,6 +38,23 @@ const Dashboard = ({ data, balance }) => {
   const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
 
   const userid = user ? user.id : null;
+
+  console.log();
+
+  const chartdata = {
+    labels: ['January', 'February', 'March', 'April', 'May'],
+    datasets: [
+      {
+        label: 'Rainfall',
+        fill: false,
+        lineTension: 0.5,
+        backgroundColor: 'rgba(75,192,192,1)',
+        borderColor: 'rgba(0,0,0,1)',
+        borderWidth: 2,
+        data: [65, 59, 80, 81, 56],
+      },
+    ],
+  };
 
   const displayChart = currentValue ? (
     <Chart
@@ -142,7 +166,10 @@ const Dashboard = ({ data, balance }) => {
                 <div className='text-muted'>{item.quantity} Shares</div>
               </div>
               <div className='stock-right ml-auto'>
-                <div className=''> ${item.latestPrice} </div>
+                <div className=''> ${formatNumber(item.holdingValue)} </div>
+                <div className='text-right'>
+                  ${formatNumber(item.gainLoss)}{' '}
+                </div>
               </div>
             </Link>
           </ListGroup.Item>
@@ -151,9 +178,9 @@ const Dashboard = ({ data, balance }) => {
     : null;
 
   const getCurrentHoldings = async () => {
-    //console.log(userid);
     const response = await fetch(`/api/currentHoldings/${userid}`);
     const data = await response.json();
+
     //console.log('current holding', data);
     setCurrentHoldingValue(calculateValue(data));
     setCurrentHoldings(data);
@@ -214,6 +241,7 @@ const Dashboard = ({ data, balance }) => {
 
   return (
     <>
+      <SearchNav setSelectedStock={setSelectedStock} />
       <div className='main-container d-flex mx-auto mt-3'>
         <div className='left-container mx-2'>
           <div className='holder-summary d-flex'>
@@ -244,6 +272,20 @@ const Dashboard = ({ data, balance }) => {
             <p>Buying Power</p>
             <p>{currentBalance}</p>
           </Card>
+          <Line
+            data={chartdata}
+            options={{
+              title: {
+                display: true,
+                text: 'Current Portfolio value',
+                fontSize: 25,
+              },
+              legend: {
+                display: true,
+                position: 'right',
+              },
+            }}
+          />
         </div>
 
         <div className='right-container mr-2'>

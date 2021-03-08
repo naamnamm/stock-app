@@ -2,11 +2,14 @@ import React, { useEffect, useRef, useState, useContext } from 'react';
 import './Balance.css';
 import { Form, Col, Row, Button, Card } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext';
+import SearchNav from './SearchNav';
+import { useStock } from '../../context/SelectedStockContext';
 
 const Balance = () => {
   const transferRef = useRef();
   const [transferHistory, setTransferHistory] = useState([]);
   const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const { selectedStock, setSelectedStock } = useStock();
 
   console.log(user);
 
@@ -60,6 +63,7 @@ const Balance = () => {
 
   return (
     <>
+      <SearchNav setSelectedStock={setSelectedStock} />
       <div className='cash-main-container d-flex mx-auto mt-3'>
         <div className='left-container balance-summary mr-3'>
           <h3 className='text-left'>Current balance</h3>
