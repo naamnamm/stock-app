@@ -39,8 +39,6 @@ const Dashboard = () => {
 
   const userid = user ? user.id : null;
 
-  console.log();
-
   const chartdata = {
     labels: ['January', 'February', 'March', 'April', 'May'],
     datasets: [

@@ -14,9 +14,18 @@ router.post('/', async (req, res) => {
 
     if (orderFilled) {
       await pool.query(
-        'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4)',
+        'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (symbol, user_id) DO UPDATE SET quantity = currentHoldings.quantity + EXCLUDED.quantity RETURNING *',
         [symbol, quantity, price, userid]
       );
+
+      // await pool.query(
+      //   'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4)',
+      //   [symbol, quantity, price, userid]
+      // );
+      // await pool.query(
+      //   'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4)',
+      //   [symbol, quantity, price, userid]
+      // );
     }
 
     res.send({
@@ -24,12 +33,13 @@ router.post('/', async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    const updateHolding = await pool.query(
-      'UPDATE currentHoldings SET quantity = quantity + $1, purchaseprice = (purchaseprice + $2)/quantity WHERE user_id::text = $3 AND symbol = $4',
-      [quantity, price, userid, symbol]
-    );
-    console.log(updateHolding.rows);
-    res.send(updateHolding.rows);
+    // console.log(symbol, type, quantity, price, userid);
+    // const updateHolding = await pool.query(
+    //   'INSERT INTO currentHoldings SET quantity = quantity + $1, purchaseprice = (purchaseprice + $2)/quantity WHERE user_id::text = $3 AND symbol = $4',
+    //   [quantity, price, userid, symbol]
+    // );
+    // console.log(updateHolding.rows);
+    // res.send(updateHolding.rows);
   }
 });
 
@@ -57,3 +67,5 @@ module.exports = router;
 //   'SELECT * FROM currentHoldings WHERE user_id::text = $1 AND symbol = $2',
 //   [userid, symbol]
 // );
+
+//https://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql
