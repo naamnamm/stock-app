@@ -6,7 +6,21 @@ const fetch = require('node-fetch');
 router.post('/', async (req, res) => {
   const { symbol, type, quantity, price, userid } = req.body;
 
+  console.log(type);
+
   try {
+    //get total cash balance from cash balance table
+    const cashAvailable = await pool.query(
+      'INSERT INTO orders (symbol, type, quantity, price, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [symbol, type, quantity, price, userid]
+    );
+    //if (quantity * price) > cash available {
+    // res.send({errorMsg: 'cash balance not enough please add more cash to your account'})
+    //} else {
+    // (orderfilled)
+    //}
+    //
+
     const orderFilled = await pool.query(
       'INSERT INTO orders (symbol, type, quantity, price, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [symbol, type, quantity, price, userid]
@@ -14,7 +28,7 @@ router.post('/', async (req, res) => {
 
     if (orderFilled) {
       await pool.query(
-        'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (symbol, user_id) DO UPDATE SET quantity = currentHoldings.quantity + EXCLUDED.quantity RETURNING *',
+        'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (symbol, user_id) DO UPDATE SET quantity = currentHoldings.quantity + EXCLUDED.quantity, purchaseprice = (currentHoldings.purchaseprice + EXCLUDED.purchaseprice)/(currentHoldings.quantity + EXCLUDED.quantity) RETURNING *',
         [symbol, quantity, price, userid]
       );
 
@@ -69,3 +83,7 @@ module.exports = router;
 // );
 
 //https://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql
+//https://www.javatpoint.com/postgresql-upsert
+
+// work with transaction
+// https://www.wlaurance.com/2016/09/nodejs-postgresql-transactions-and-query-examples

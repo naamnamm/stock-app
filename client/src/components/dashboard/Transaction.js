@@ -4,36 +4,45 @@ import './Transaction.css';
 import { useStock } from '../../context/SelectedStockContext';
 import { AuthContext } from '../../context/AuthContext';
 
+function formatNum(num) {
+  return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
+}
+
 const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   console.log(type);
   const quantityRef = useRef();
   const { selectedStock, setSelectedStock } = useStock();
-  //const [msg, setMsg] = useState('');
   const [currentBalance, setCurrentBalance] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [total, setTotal] = useState('');
   const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+
+  const maxQuantity =
+    currentBalance && currentPrice ? currentBalance / currentPrice : '0';
 
   const getBalance = async () => {
     const userid = user.id;
     console.log(userid);
     const response = await fetch(`/api/transfer/${userid}`);
     const data = await response.json();
-    console.log(data);
+    //console.log(data);
 
     const currentBalance = data
-      ? data
-          .map((t) => {
-            //console.log(t);
-            return Number(t.amount);
-          })
-          .reduce((acc, cur) => acc + cur, 0)
+      ? data.map((t) => Number(t.amount)).reduce((acc, cur) => acc + cur, 0)
       : null;
-    console.log(currentBalance);
+    //console.log(currentBalance);
     setCurrentBalance(currentBalance);
   };
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
-    //const price = currentPrice
+    //question 1 -
+    //  do i calculate total and max quantity in here?
+    //  should i handle if quantity > maxquantity in here?
+
+    if (quantity > maxQuantity) {
+      return;
+    }
 
     try {
       const data = {
@@ -59,6 +68,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
 
       if (!response.ok) {
         setOrderMsg(orderData);
+        setQuantity('');
       } else {
         setOrderMsg(orderData);
       }
@@ -66,6 +76,13 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    //if quantity change
+    //recalculate total
+    const totalTransactionValue = quantity * currentPrice;
+    setTotal(totalTransactionValue);
+  }, [quantity]);
 
   useEffect(() => {
     getBalance();
@@ -84,7 +101,13 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
           </Form.Label>
 
           <Col sm={8} className='pl-3 pr-0'>
-            <Form.Control type='number' placeholder='0.00' ref={quantityRef} />
+            <Form.Control
+              type='number'
+              onChange={(e) => setQuantity(e.target.value)}
+              value={quantity}
+              placeholder='0.00'
+              ref={quantityRef}
+            />
           </Col>
         </Form.Group>
 
@@ -121,6 +144,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
               plaintext
               readOnly
               defaultValue='0'
+              value={maxQuantity ? formatNum(maxQuantity) : '0'}
               className='text-right'
             />
           </Col>
@@ -142,6 +166,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
               plaintext
               readOnly
               defaultValue='0'
+              value={total ? formatNum(total) : '0'}
               className='text-right font-weight-bold'
             />
           </Col>
@@ -154,7 +179,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
 
       <hr />
       <Form.Label className='label-alert mb-3'>
-        $3,766.19 Available - Sell All
+        ${currentBalance} available to trade
       </Form.Label>
     </div>
   );

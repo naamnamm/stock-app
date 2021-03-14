@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import SearchNav from './SearchNav';
 import Transaction from './Transaction';
 import ControlledTabs from './ControlledTabs';
@@ -6,6 +6,7 @@ import { Chart } from 'react-google-charts';
 import './Stocks.css';
 import { Link } from 'react-router-dom';
 import { useStock } from '../../context/SelectedStockContext';
+import { AuthContext } from '../../context/AuthContext';
 
 import {
   ButtonGroup,
@@ -22,6 +23,8 @@ const Stocks = () => {
   const [quote, setQuote] = useState('');
   const { selectedStock, setSelectedStock } = useStock();
   const [orderMsg, setOrderMsg] = useState('');
+  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const [currentBalance, setCurrentBalance] = useState('');
 
   console.log(selectedStock);
   console.log(orderMsg);
@@ -57,16 +60,6 @@ const Stocks = () => {
           height: '100%',
         },
         legend: 'none',
-        // vAxis: {
-        //   gridlines: {
-        //     color: 'transparent',
-        //   },
-        // },
-        // hAxis: {
-        //   gridlines: {
-        //     color: 'transparent',
-        //   },
-        // },
         timeline: {
           groupByRowLabel: true,
         },

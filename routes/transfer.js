@@ -21,8 +21,15 @@ router.post('/', async (req, res) => {
   console.log(amount, user, type);
 
   try {
+    // first insert transaction into cash_transfer
     const transfer = await pool.query(
       'INSERT INTO cash_transfer (type, amount, user_id) VALUES ($1, $2, $3) RETURNING *',
+      [type, amount, user.id]
+    );
+
+    //then insert transaction into cash_balance
+    const updateCashBalance = await pool.query(
+      'INSERT INTO cash_balance (type, amount, user_id) VALUES ($1, $2, $3) RETURNING *',
       [type, amount, user.id]
     );
 

@@ -28,7 +28,7 @@ const Balance = () => {
         body: JSON.stringify({ amount, user, type: 'transfer-in' }),
       };
 
-      const response = await fetch('/transfer', config);
+      const response = await fetch('/api/transfer', config);
       const data = await response.json();
 
       console.log(data.transaction);

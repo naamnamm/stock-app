@@ -30,6 +30,8 @@ router.get('/:userid', async (req, res) => {
 
       currentHoldings.rows.map((item, i) => {
         Object.assign(item, { latestPrice: `${latestPrices[i]}` });
+        //Object.assign(item, { latestPrice: 10 });
+
         return functions.createStockModel(item);
       });
 

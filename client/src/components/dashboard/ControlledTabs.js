@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Transaction from './Transaction';
 import { Tabs, Tab } from 'react-bootstrap';
 
-const ControlledTabs = ({ currentPrice, setOrderMsg }) => {
+const ControlledTabs = ({ currentPrice, setOrderMsg, currentBalance }) => {
   const [type, setType] = useState('buy');
 
   return (
