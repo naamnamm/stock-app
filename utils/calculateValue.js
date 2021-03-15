@@ -32,11 +32,20 @@ const getDays = (startDate) => {
   return dayCount;
 };
 
+const calculateCashAvailable = (arr) => {
+  const cashAvailableToTrade = arr.rows
+    .map((t) => Number(t.amount))
+    .reduce((acc, cur) => acc + cur, 0);
+
+  return cashAvailableToTrade;
+};
+
 module.exports = {
   getDatesBetweenDates,
   getDays,
   formatNum,
   createStockModel,
+  calculateCashAvailable,
 };
 
 //https://sandbox.iexapis.com/stable/stock/twtr/chart/10d?token=Tsk_66820f5895ad4695ba96beee7925717b
