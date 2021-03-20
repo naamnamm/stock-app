@@ -17,6 +17,7 @@ app.use('/api/watchlist', require('./routes/watchlist'));
 app.use('/api/stocks', require('./routes/stocks'));
 app.use('/api/orders', require('./routes/order'));
 app.use('/api/currentHoldings', require('./routes/currentHoldings'));
+app.use('/api/cashBalance', require('./routes/cashBalance'));
 
 app.post('/signup', async (req, res) => {
   try {

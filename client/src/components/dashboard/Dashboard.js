@@ -208,7 +208,7 @@ const Dashboard = () => {
           })
           .reduce((acc, cur) => acc + cur, 0)
       : null;
-    console.log(currentBalance);
+    //console.log(currentBalance);
     setCurrentBalance(currentBalance);
   };
 

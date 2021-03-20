@@ -5,12 +5,29 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Nodemon",
+      "port": 9229,
+      "request": "attach",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "pwa-node",
+      "restart": true
+    },{
       "type": "chrome",
       "request": "launch",
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:5000/",
       "webRoot": "${workspaceFolder}/src",
       "trace": true
+    }, {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/server.js",
+      "cwd": "${workspaceFolder}",
+      "args": ["${env:USERNAME}"]
     }
+    //`launch program` works to debug the server/backend 
+    //but need to make sure `npm run dev` isn't running
+    //because both can't run on the same port
   ]
 }

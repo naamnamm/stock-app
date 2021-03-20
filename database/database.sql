@@ -20,6 +20,8 @@ CREATE TABLE cash_transfer (
   user_id uuid REFERENCES users(id)
 );
 
+-- to trencate cash_transfer 
+
 ALTER TABLE cash_transfer ALTER COLUMN id DROP DEFAULT, 
 ALTER COLUMN id SET DATA TYPE UUID USING (uuid_generate_v4()), 
 ALTER COLUMN id SET DEFAULT uuid_generate_v4();
@@ -52,6 +54,15 @@ CREATE TABLE currentHoldings (
 );
 
 CREATE UNIQUE INDEX currentHoldings_user_id ON currentHoldings (user_id, symbol);
+
+CREATE TABLE cash_balance (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  type TEXT NOT NULL,
+  amount NUMERIC(8,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  user_id uuid REFERENCES users(id)
+);
+
 -- ALTER TABLE currentHoldings 
 -- ADD CONSTRAINT currentHoldings_user_id
 --\c into the database

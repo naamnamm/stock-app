@@ -24,7 +24,8 @@ router.post('/', async (req, res) => {
         cashAvailable
       );
       const purchaseValue = quantity * price;
-      console.log('perchase vlaue', purchaseValue);
+      console.log('purchase vlaue', purchaseValue);
+      console.log('cash available', cashAvailableToTrade);
 
       //3. can proceed if you have enough cash to trade
       if (purchaseValue > cashAvailableToTrade) {
@@ -35,9 +36,10 @@ router.post('/', async (req, res) => {
         return;
       } else {
         // 3.1 insert into cash balance (update cash) to reflect buying transaction
+        console.log('user have enough cash to buy');
         await pool.query(
-          'INSERT INTO cash_balance (type, amount, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-          [type, purchaseValue, userid]
+          'INSERT INTO cash_balance (type, amount, user_id) VALUES ($1, $2, $3) RETURNING *',
+          [type, -Math.abs(purchaseValue), userid]
         );
       }
 
@@ -50,7 +52,7 @@ router.post('/', async (req, res) => {
       if (orderFilled) {
         // do update if symbol exist otherwise insert new row
         await pool.query(
-          'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (symbol, user_id) DO UPDATE SET quantity = currentHoldings.quantity + EXCLUDED.quantity, purchaseprice = (currentHoldings.purchaseprice + EXCLUDED.purchaseprice)/(currentHoldings.quantity + EXCLUDED.quantity) RETURNING *',
+          'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (symbol, user_id) DO UPDATE SET purchaseprice = ((currentHoldings.purchaseprice * currentHoldings.quantity) + (EXCLUDED.purchaseprice * EXCLUDED.quantity))/(currentHoldings.quantity + EXCLUDED.quantity), quantity = currentHoldings.quantity + EXCLUDED.quantity RETURNING *',
           [symbol, quantity, price, userid]
         );
       }
@@ -58,13 +60,48 @@ router.post('/', async (req, res) => {
 
     // if type = sell
     if (type === 'sell') {
+      debugger;
       //1. check if symbol in current holding exist
-      //--if yes
-      //  1.1 deduct from current holding
-      //--if no
-      //  1.2 symbol doesn't exist
+      const existingHolding = await pool.query(
+        'SELECT quantity FROM currentHoldings WHERE symbol = $1',
+        [symbol]
+      );
+      //--if no existing holding > return
+      console.log(existingHolding);
+      if (!existingHolding) {
+        res.send({ errorMsg: 'no existing holding found' });
+        return;
+      }
+
+      //--if yes - check to see if amount is valid
+      if (
+        existingHolding &&
+        Number(existingHolding.rows[0].quantity) < Number(quantity)
+      ) {
+        //can't sell because quantity in the database is less than quantity sell
+        res.send({ errorMsg: 'not enough amount to sell' });
+        return;
+      } else {
+        //update current holding - do update if existing else insert new row
+        await pool.query(
+          'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (symbol, user_id) DO UPDATE SET purchaseprice = ((currentHoldings.purchaseprice * currentHoldings.quantity) - (EXCLUDED.purchaseprice * EXCLUDED.quantity))/(currentHoldings.quantity - EXCLUDED.quantity), quantity = currentHoldings.quantity - EXCLUDED.quantity RETURNING *',
+          [symbol, quantity, price, userid]
+        );
+      }
+
+      const sellingValue = quantity * price;
+
       //2. insert into cash balance to reflect cash from selling stock
+      await pool.query(
+        'INSERT INTO cash_balance (type, amount, user_id) VALUES ($1, $2, $3) RETURNING *',
+        [type, sellingValue, userid]
+      );
+
       //3. insert into orders to reflect sell order
+      await pool.query(
+        'INSERT INTO orders (symbol, type, quantity, price, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        [symbol, type, quantity, price, userid]
+      );
     }
 
     res.send({

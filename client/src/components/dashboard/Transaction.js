@@ -16,23 +16,50 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   const [quantity, setQuantity] = useState('');
   const [total, setTotal] = useState('');
   const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const [maxQuantityToSell, setMaxQuantityToSell] = useState('');
 
-  const maxQuantity =
-    currentBalance && currentPrice ? currentBalance / currentPrice : '0';
+  //max quantity to sell
 
-  const getBalance = async () => {
+  //if type = sell
+  //max quantity = current holding amount
+  // need to get current holding from the database
+  const getCurrentHolding = async () => {
     const userid = user.id;
-    console.log(userid);
-    const response = await fetch(`/api/transfer/${userid}`);
+    const response = await fetch(`/api/currentHoldings/${userid}`);
+    const data = await response.json();
+    console.log(data);
+
+    //find selected stock in array of data
+    // if matched, display quantity
+    const result = data.find((stock) => stock.symbol === selectedStock);
+
+    console.log(result);
+    setMaxQuantityToSell(result.quantity);
+  };
+
+  //if type = buy
+  //max quantity = cashbalance / quantity
+  // need to get cash balance from the database
+  const getCashBalance = async () => {
+    const userid = user.id;
+    //console.log(userid);
+    const response = await fetch(`/api/cashBalance/${userid}`);
     const data = await response.json();
     //console.log(data);
 
-    const currentBalance = data
-      ? data.map((t) => Number(t.amount)).reduce((acc, cur) => acc + cur, 0)
-      : null;
-    //console.log(currentBalance);
-    setCurrentBalance(currentBalance);
+    setCurrentBalance(data.cashAvailableToTrade);
   };
+
+  //max quantity to buy
+  const maxQuantityToBuy =
+    currentBalance && currentPrice ? currentBalance / currentPrice : '0';
+
+  const maxQuantity =
+    type === 'buy'
+      ? maxQuantityToBuy
+      : type === 'sell'
+      ? maxQuantityToSell
+      : null;
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
@@ -85,8 +112,17 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   }, [quantity]);
 
   useEffect(() => {
-    getBalance();
+    getCashBalance();
   }, [user]);
+
+  useEffect(() => {
+    if (type === 'buy') {
+      getCashBalance();
+    }
+    if (type === 'sell') {
+      getCurrentHolding();
+    }
+  }, [type]);
 
   return (
     <div>
@@ -135,11 +171,11 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
           className='row-buy-sell px-3 py-2'
           controlId='formHorizontalPrice'
         >
-          <Form.Label column sm={6} className='px-0'>
-            Max quantity
+          <Form.Label column sm={8} className='px-0'>
+            Max quantity to {type}
           </Form.Label>
 
-          <Col sm={6} className='pl-3 pr-0'>
+          <Col sm={4} className='pl-3 pr-0'>
             <Form.Control
               plaintext
               readOnly

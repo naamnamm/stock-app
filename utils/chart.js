@@ -18,7 +18,7 @@ function formatChart(fetchObject) {
         return index % 2 != 0;
       })
       .map((item) => {
-        debugger;
+        //debugger;
         if (item.length === 10 && moment(item, 'YYYY/MM/DD').isValid()) {
           return moment(item).format('MMM DD');
         }
