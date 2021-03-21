@@ -92,12 +92,12 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
       const orderData = await response.json();
 
       console.log(orderData);
-
+      //debugger;
       if (!response.ok) {
         setOrderMsg(orderData);
-        setQuantity('');
       } else {
         setOrderMsg(orderData);
+        setQuantity('');
       }
     } catch (error) {
       console.log(error);

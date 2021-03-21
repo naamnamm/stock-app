@@ -7,17 +7,16 @@ import { useStock } from '../../context/SelectedStockContext';
 
 const Balance = () => {
   const transferRef = useRef();
-  const [transferHistory, setTransferHistory] = useState([]);
+  const [cashTransferHistory, setCashTransferHistory] = useState([]);
   const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
   const { selectedStock, setSelectedStock } = useStock();
-
-  console.log(user);
+  const [currentCashBalance, setCurrentCashBalance] = useState('');
 
   const handleTransfer = async (e) => {
     e.preventDefault();
     const amount = transferRef.current.value;
-    console.log(amount);
-    console.log(user);
+    // console.log(amount);
+    // console.log(user);
 
     try {
       const config = {
@@ -31,35 +30,43 @@ const Balance = () => {
       const response = await fetch('/api/transfer', config);
       const data = await response.json();
 
-      console.log(data.transaction);
-      setTransferHistory(data.transaction);
+      //console.log(data.transaction);
+      setCashTransferHistory(data.transaction);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const currentBalance = transferHistory
-    ? transferHistory
-        .map((t) => {
-          console.log(t);
-          return Number(t.amount);
-        })
-        .reduce((acc, cur) => acc + cur, 0)
-    : null;
-  console.log(currentBalance);
-
-  //when refreshing the page i want to pull the data from database and display it
-  useEffect(() => {
+  const getCashBalance = async () => {
     const userid = user.id;
+    const response = await fetch(`/api/cashBalance/${userid}`);
+    const data = await response.json();
+    setCurrentCashBalance(data.cashAvailableToTrade);
+  };
 
-    fetch(`/api/transfer/${userid}`)
-      .then((res) => res.json())
+  const getCashTransfer = async () => {
+    const userid = user.id;
+    const response = await fetch(`/api/transfer/${userid}`);
+    const data = await response.json();
+    setCashTransferHistory(data);
+  };
 
-      .then((data) => {
-        console.log(data);
-        setTransferHistory(data);
-      });
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    getCashBalance();
+    getCashTransfer();
   }, [user]);
+
+  useEffect(() => {
+    if (!cashTransferHistory) {
+      return;
+    }
+
+    getCashBalance();
+  }, [cashTransferHistory]);
 
   return (
     <>
@@ -70,14 +77,14 @@ const Balance = () => {
           <div>
             <hr />{' '}
           </div>
-          <p> You have ${currentBalance} to trade</p>
+          <p> You have ${currentCashBalance} to trade</p>
           <h3 className='text-left'>Transfer History</h3>
           <div>
             <hr />{' '}
           </div>
           <div>
-            {transferHistory
-              ? transferHistory.map((t) => {
+            {cashTransferHistory
+              ? cashTransferHistory.map((t) => {
                   return (
                     <div className='d-flex'>
                       <div> {t.type}</div>
@@ -163,3 +170,11 @@ const Balance = () => {
 };
 
 export default Balance;
+
+// const currentBalance = cashTransferHistory
+//   ? cashTransferHistory
+//       .map((t) => {
+//         return Number(t.amount);
+//       })
+//       .reduce((acc, cur) => acc + cur, 0)
+//   : null;
