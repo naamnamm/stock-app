@@ -57,6 +57,7 @@ export default function App() {
 
   useEffect(() => {
     verifyToken();
+    // console.log(selectedStock);
   }, []);
 
   return (

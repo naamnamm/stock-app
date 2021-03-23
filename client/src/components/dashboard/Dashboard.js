@@ -12,6 +12,7 @@ import './Dashboard.css';
 import { Link } from 'react-router-dom';
 import { Chart } from 'react-google-charts';
 import SearchNav from './SearchNav';
+import DoughnutChart from './DoughnutChart';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { useStock } from '../../context/SelectedStockContext';
 const moment = require('moment');
@@ -24,7 +25,7 @@ import {
 } from '../../utils/helperFunction';
 import AddWatchlist from './AddWatchlist';
 import { AuthContext } from '../../context/AuthContext';
-import { Bar, Line, Pie } from 'react-chartjs-2';
+import { Bar, Line, Pie, Doughnut } from 'react-chartjs-2';
 
 const Dashboard = () => {
   const [currentValue, setCurrentValue] = useState([]);
@@ -33,9 +34,12 @@ const Dashboard = () => {
   const { selectedStock, setSelectedStock } = useStock();
   const [watchlist, setWatchlist] = useState([]);
   const [isEditClicked, setIsEditClicked] = useState(false);
-  const [currentBalance, setCurrentBalance] = useState('');
+  const [currentCashBalance, setCurrentCashBalance] = useState('');
   const [currentHoldings, setCurrentHoldings] = useState([]);
   const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
+  const [doughnutLabel, setDoughnutLabel] = useState(['loading']);
+  const [doughnutData, setDoughnutData] = useState([0]);
+  const [chartData, setChartData] = useState('');
 
   const userid = user ? user.id : null;
 
@@ -53,41 +57,6 @@ const Dashboard = () => {
       },
     ],
   };
-
-  const displayChart = currentValue ? (
-    <Chart
-      width={'600px'}
-      height={'400px'}
-      chartType='LineChart'
-      loader={<div>Loading Chart</div>}
-      data={currentValue}
-      options={{
-        title: 'Value (in dollars)',
-        colors: ['#e0440e'],
-        chartArea: {
-          left: 50,
-          top: 40,
-          bottom: 40,
-          right: 60,
-          width: '80%',
-          height: '100%',
-        },
-        legend: 'none',
-        timeline: {
-          groupByRowLabel: true,
-        },
-        hAxis: {
-          format: 'M/d/yy',
-          // gridlines: { count: 15 },
-          gridlines: { color: 'none' },
-        },
-        vAxis: {
-          // gridlines: { color: 'none' },
-        },
-      }}
-      rootProps={{ 'data-testid': '1' }}
-    />
-  ) : null;
 
   const closeModal = () => {
     setModalOpen(false);
@@ -186,56 +155,91 @@ const Dashboard = () => {
 
   const getWatchlist = async () => {
     //    const userid = user.id;
-    console.log(userid);
+    //console.log(userid);
     const response = await fetch(`/api/watchlist/${userid}`);
     const data = await response.json();
 
     setWatchlist(data);
   };
 
-  const getBalance = async () => {
-    //const userid = user.id;
-    console.log(userid);
-    const response = await fetch(`/api/transfer/${userid}`);
+  const getCashBalance = async () => {
+    const userid = user.id;
+    //console.log(userid);
+    const response = await fetch(`/api/cashBalance/${userid}`);
     const data = await response.json();
-    console.log(data);
+    //console.log(data);
 
-    const currentBalance = data
-      ? data
-          .map((t) => {
-            //console.log(t);
-            return Number(t.amount);
-          })
-          .reduce((acc, cur) => acc + cur, 0)
-      : null;
-    //console.log(currentBalance);
-    setCurrentBalance(currentBalance);
+    setCurrentCashBalance(data.cashAvailableToTrade);
   };
 
+  //if label and data - display doughnut
+  //else label = [loading], data = [0]
+
+  const getDoughnutChart = () => {
+    if (currentCashBalance && currentHoldings) {
+      //map [] to display doughnut chart
+      //label = [TWTR, AAL, Cash]
+      const mappedData = currentHoldings.map((item) => item.holdingValue);
+      mappedData.push(currentCashBalance);
+      //console.log(mappedData);
+      setDoughnutData(mappedData);
+      const mappedLabel = currentHoldings.map((item) => item.symbol);
+      mappedLabel.push('cash');
+      //console.log(mappedLabel);
+      setDoughnutLabel(mappedLabel);
+
+      //data = [holdingValue TWTR, holdingValue AAL, cash]
+      console.log(currentCashBalance, currentHoldings);
+
+      setChartData({
+        labels: mappedLabel,
+        datasets: [
+          {
+            label: '# of Votes',
+            data: mappedData,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1,
+          },
+        ],
+      });
+    }
+    // const data = await response.json();
+
+    // setChartData(data);
+  };
+
+  //const displayChart = chartData ? <Doughnut data={chartData} /> : null;
+
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     getWatchlist();
-    getBalance();
+    getCashBalance();
     getCurrentHoldings();
   }, [user]);
 
   useEffect(() => {
-    //console.log('render');
-    setCurrentValue([
-      ['x', 'dogs'],
-      [0, 0],
-      [1, 10],
-      [2, 23],
-      [3, 17],
-      [4, 18],
-      [5, 9],
-      [6, 11],
-      [7, 27],
-      [8, 33],
-      [9, 40],
-      [10, 32],
-      [11, 35],
-    ]);
-  }, []);
+    getDoughnutChart();
+  }, [currentCashBalance, currentHoldings]);
+
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -264,11 +268,11 @@ const Dashboard = () => {
               </Card.Body>
             </Card>
           </div>
-          <Card>{displayChart}</Card>
+          <Card>{chartData ? <Doughnut data={chartData} /> : null}</Card>
           <Card>
             <h2>Portfolio Details</h2>
             <p>Buying Power</p>
-            <p>{currentBalance}</p>
+            <p>{currentCashBalance}</p>
           </Card>
           <Line
             data={chartdata}

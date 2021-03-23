@@ -29,17 +29,37 @@ const Stocks = () => {
   console.log(selectedStock);
   console.log(orderMsg);
 
-  useEffect(() => {
-    const fetchStock = async () => {
-      const response = await fetch(`/api/stocks/search/${selectedStock}`);
-      const data = await response.json();
-      console.log(data);
-      setStock(data.quoteData);
-      setChart(data.chartData);
-    };
+  const fetchStock = async () => {
+    const response = await fetch(`/api/stocks/search/${selectedStock}`);
+    const data = await response.json();
+    console.log(data);
+    setStock(data.quoteData);
+    setChart(data.chartData);
+  };
 
+  const getCurrentHoldings = async () => {
+    const userid = user.id;
+    const response = await fetch(`/api/currentHoldings/${userid}`);
+    const data = await response.json();
+    console.log(data);
+    //console.log('current holding', data);
+    // setCurrentHoldingValue(calculateValue(data));
+    // setCurrentHoldings(data);
+  };
+
+  //if selected stock === current holding
+  //--show postion
+  //<Card> Position</Card>
+
+  useEffect(() => {
     fetchStock();
+    getCurrentHoldings();
   }, []);
+
+  useEffect(() => {
+    if (!selectedStock) return;
+    fetchStock();
+  }, [selectedStock]);
 
   const displayChart = chart ? (
     <Chart
