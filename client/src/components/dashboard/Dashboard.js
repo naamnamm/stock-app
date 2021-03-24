@@ -10,9 +10,7 @@ import {
 } from 'react-bootstrap';
 import './Dashboard.css';
 import { Link } from 'react-router-dom';
-import { Chart } from 'react-google-charts';
 import SearchNav from './SearchNav';
-import DoughnutChart from './DoughnutChart';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { useStock } from '../../context/SelectedStockContext';
 const moment = require('moment');
@@ -37,26 +35,9 @@ const Dashboard = () => {
   const [currentCashBalance, setCurrentCashBalance] = useState('');
   const [currentHoldings, setCurrentHoldings] = useState([]);
   const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
-  const [doughnutLabel, setDoughnutLabel] = useState(['loading']);
-  const [doughnutData, setDoughnutData] = useState([0]);
   const [chartData, setChartData] = useState('');
 
   const userid = user ? user.id : null;
-
-  const chartdata = {
-    labels: ['January', 'February', 'March', 'April', 'May'],
-    datasets: [
-      {
-        label: 'Rainfall',
-        fill: false,
-        lineTension: 0.5,
-        backgroundColor: 'rgba(75,192,192,1)',
-        borderColor: 'rgba(0,0,0,1)',
-        borderWidth: 2,
-        data: [65, 59, 80, 81, 56],
-      },
-    ],
-  };
 
   const closeModal = () => {
     setModalOpen(false);
@@ -172,24 +153,13 @@ const Dashboard = () => {
     setCurrentCashBalance(data.cashAvailableToTrade);
   };
 
-  //if label and data - display doughnut
-  //else label = [loading], data = [0]
-
   const getDoughnutChart = () => {
     if (currentCashBalance && currentHoldings) {
-      //map [] to display doughnut chart
-      //label = [TWTR, AAL, Cash]
       const mappedData = currentHoldings.map((item) => item.holdingValue);
       mappedData.push(currentCashBalance);
-      //console.log(mappedData);
-      setDoughnutData(mappedData);
+
       const mappedLabel = currentHoldings.map((item) => item.symbol);
       mappedLabel.push('cash');
-      //console.log(mappedLabel);
-      setDoughnutLabel(mappedLabel);
-
-      //data = [holdingValue TWTR, holdingValue AAL, cash]
-      console.log(currentCashBalance, currentHoldings);
 
       setChartData({
         labels: mappedLabel,
@@ -223,8 +193,6 @@ const Dashboard = () => {
     // setChartData(data);
   };
 
-  //const displayChart = chartData ? <Doughnut data={chartData} /> : null;
-
   useEffect(() => {
     if (!user) {
       return;
@@ -246,48 +214,32 @@ const Dashboard = () => {
       <SearchNav setSelectedStock={setSelectedStock} />
       <div className='main-container d-flex mx-auto mt-3'>
         <div className='left-container mx-2'>
-          <div className='holder-summary d-flex'>
-            <Card className='w-50'>
-              <Card.Body>
+          <Card>
+            <Card.Header>Account Summary</Card.Header>
+            <Card.Body className='d-flex account-summary border-bottom-0'>
+              <Card className='w-50'>
+                <Card.Subtitle className='my-2 text-muted'>
+                  Current Holding Value
+                </Card.Subtitle>
                 <Card.Title>
                   ${currentHoldingValue && currentHoldingValue.totalValue}
                 </Card.Title>
                 <Card.Subtitle className='mb-2 text-muted'>
-                  Current Value
+                  Gain/Loss
                 </Card.Subtitle>
-              </Card.Body>
-            </Card>
-            <Card className='w-50'>
-              <Card.Body>
                 <Card.Title>
                   ${currentHoldingValue && currentHoldingValue.gainLoss}
                 </Card.Title>
-                <Card.Subtitle className='mb-2 text-muted'>
-                  Gain/Loss
+              </Card>
+              <Card className='w-50'>
+                <Card.Subtitle className='my-2 text-muted'>
+                  Cash and sweep funds
                 </Card.Subtitle>
-              </Card.Body>
-            </Card>
-          </div>
-          <Card>{chartData ? <Doughnut data={chartData} /> : null}</Card>
-          <Card>
-            <h2>Portfolio Details</h2>
-            <p>Buying Power</p>
-            <p>{currentCashBalance}</p>
+                <Card.Title>${currentCashBalance}</Card.Title>
+              </Card>
+            </Card.Body>
           </Card>
-          <Line
-            data={chartdata}
-            options={{
-              title: {
-                display: true,
-                text: 'Current Portfolio value',
-                fontSize: 25,
-              },
-              legend: {
-                display: true,
-                position: 'right',
-              },
-            }}
-          />
+          <Card>{chartData ? <Doughnut data={chartData} /> : null}</Card>
         </div>
 
         <div className='right-container mr-2'>
@@ -393,3 +345,19 @@ export default Dashboard;
 //   }
 //   //---And if watchlist add checkbox to the front of the symbol
 // };
+{
+  /* <Line
+            data={chartdata}
+            options={{
+              title: {
+                display: true,
+                text: 'Current Portfolio value',
+                fontSize: 25,
+              },
+              legend: {
+                display: true,
+                position: 'right',
+              },
+            }}
+          /> */
+}
