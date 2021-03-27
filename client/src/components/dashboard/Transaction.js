@@ -8,58 +8,22 @@ function formatNum(num) {
   return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
 }
 
-const Transaction = ({ type, currentPrice, setOrderMsg }) => {
-  console.log(type);
+const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
   const quantityRef = useRef();
-  const { selectedStock, setSelectedStock } = useStock();
+  const { selectedStock } = useStock();
   const [currentBalance, setCurrentBalance] = useState('');
   const [quantity, setQuantity] = useState('');
   const [total, setTotal] = useState('');
-  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
-  const [maxQuantityToSell, setMaxQuantityToSell] = useState('');
+  const { user } = useContext(AuthContext);
+  const [maxQuantity, setMaxQuantity] = useState('');
 
-  //max quantity to sell
-
-  //if type = sell
-  //max quantity = current holding amount
-  // need to get current holding from the database
-  const getCurrentHolding = async () => {
-    const userid = user.id;
-    const response = await fetch(`/api/currentHoldings/${userid}`);
-    const data = await response.json();
-    console.log(data);
-
-    //find selected stock in array of data
-    // if matched, display quantity
-    const result = data.find((stock) => stock.symbol === selectedStock);
-
-    console.log(result);
-    setMaxQuantityToSell(result.quantity);
-  };
-
-  //if type = buy
-  //max quantity = cashbalance / quantity
-  // need to get cash balance from the database
   const getCashBalance = async () => {
     const userid = user.id;
-    //console.log(userid);
     const response = await fetch(`/api/cashBalance/${userid}`);
     const data = await response.json();
-    //console.log(data);
 
     setCurrentBalance(data.cashAvailableToTrade);
   };
-
-  //max quantity to buy
-  const maxQuantityToBuy =
-    currentBalance && currentPrice ? currentBalance / currentPrice : '0';
-
-  const maxQuantity =
-    type === 'buy'
-      ? maxQuantityToBuy
-      : type === 'sell'
-      ? maxQuantityToSell
-      : null;
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
@@ -91,8 +55,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
       const response = await fetch('/api/orders', config);
       const orderData = await response.json();
 
-      console.log(orderData);
-      //debugger;
       if (!response.ok) {
         setOrderMsg(orderData);
       } else {
@@ -117,10 +79,16 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
 
   useEffect(() => {
     if (type === 'buy') {
-      getCashBalance();
+      const maxQuantityToBuy =
+        currentBalance && currentPrice ? currentBalance / currentPrice : '0';
+
+      setMaxQuantity(maxQuantityToBuy);
     }
+
     if (type === 'sell') {
-      getCurrentHolding();
+      const maxQuantityToSell = position ? position : null;
+
+      setMaxQuantity(maxQuantityToSell);
     }
   }, [type]);
 

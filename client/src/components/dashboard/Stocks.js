@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import SearchNav from './SearchNav';
-import Transaction from './Transaction';
 import ControlledTabs from './ControlledTabs';
 import { Chart } from 'react-google-charts';
 import './Stocks.css';
@@ -23,11 +22,8 @@ const Stocks = () => {
   const [quote, setQuote] = useState('');
   const { selectedStock, setSelectedStock } = useStock();
   const [orderMsg, setOrderMsg] = useState('');
-  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
-  const [currentBalance, setCurrentBalance] = useState('');
-
-  console.log(selectedStock);
-  console.log(orderMsg);
+  const { user } = useContext(AuthContext);
+  const [position, setPosition] = useState('');
 
   const fetchStock = async () => {
     const response = await fetch(`/api/stocks/search/${selectedStock}`);
@@ -37,28 +33,34 @@ const Stocks = () => {
     setChart(data.chartData);
   };
 
-  const getCurrentHoldings = async () => {
+  const getPosition = async () => {
     const userid = user.id;
-    const response = await fetch(`/api/currentHoldings/${userid}`);
+    const response = await fetch(`/api/position/${userid}/${selectedStock}`);
     const data = await response.json();
+
     console.log(data);
-    //console.log('current holding', data);
-    // setCurrentHoldingValue(calculateValue(data));
-    // setCurrentHoldings(data);
+
+    if (!data.msg) {
+      setPosition(data);
+    } else {
+      setPosition('');
+    }
   };
 
-  //if selected stock === current holding
-  //--show postion
-  //<Card> Position</Card>
+  useEffect(() => {
+    if (!user) return;
+
+    getPosition();
+  }, [user]);
 
   useEffect(() => {
     fetchStock();
-    getCurrentHoldings();
   }, []);
 
   useEffect(() => {
     if (!selectedStock) return;
     fetchStock();
+    getPosition();
   }, [selectedStock]);
 
   const displayChart = chart ? (
@@ -124,11 +126,14 @@ const Stocks = () => {
             </ButtonGroup>
           </ButtonToolbar>
         </div>
+
         <div className='right-container'>
+          {position ? <Card>Position: {position} stocks</Card> : null}
           <Card className=''>
             <ControlledTabs
               currentPrice={stock ? stock.quote.latestPrice : null}
               setOrderMsg={setOrderMsg}
+              position={position}
             />
           </Card>
         </div>

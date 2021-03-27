@@ -13,23 +13,15 @@ import { Link } from 'react-router-dom';
 import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { useStock } from '../../context/SelectedStockContext';
-const moment = require('moment');
-
-import {
-  calculateValue,
-  getDates,
-  getStartDate,
-  formatNumber,
-} from '../../utils/helperFunction';
+import { calculateValue, formatNumber } from '../../utils/helperFunction';
 import AddWatchlist from './AddWatchlist';
 import { AuthContext } from '../../context/AuthContext';
-import { Bar, Line, Pie, Doughnut } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 
 const Dashboard = () => {
-  const [currentValue, setCurrentValue] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
-  const { selectedStock, setSelectedStock } = useStock();
+  const { user } = useContext(AuthContext);
+  const { setSelectedStock } = useStock();
   const [watchlist, setWatchlist] = useState([]);
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [currentCashBalance, setCurrentCashBalance] = useState('');
@@ -188,15 +180,10 @@ const Dashboard = () => {
         ],
       });
     }
-    // const data = await response.json();
-
-    // setChartData(data);
   };
 
   useEffect(() => {
-    if (!user) {
-      return;
-    }
+    if (!user) return;
 
     getWatchlist();
     getCashBalance();
@@ -206,8 +193,6 @@ const Dashboard = () => {
   useEffect(() => {
     getDoughnutChart();
   }, [currentCashBalance, currentHoldings]);
-
-  useEffect(() => {}, []);
 
   return (
     <>
