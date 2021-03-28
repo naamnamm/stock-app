@@ -28,7 +28,7 @@ const Stocks = () => {
   const fetchStock = async () => {
     const response = await fetch(`/api/stocks/search/${selectedStock}`);
     const data = await response.json();
-    console.log(data);
+    //console.log(data);
     setStock(data.quoteData);
     setChart(data.chartData);
   };
@@ -38,7 +38,7 @@ const Stocks = () => {
     const response = await fetch(`/api/position/${userid}/${selectedStock}`);
     const data = await response.json();
 
-    console.log(data);
+    //console.log(data);
 
     if (!data.msg) {
       setPosition(data);

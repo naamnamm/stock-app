@@ -50,7 +50,6 @@ const Dashboard = () => {
       }
     );
     const data = await response.json();
-    console.log(data);
     setWatchlist(data.updatedWatchlist);
   };
 
@@ -121,14 +120,13 @@ const Dashboard = () => {
     const response = await fetch(`/api/currentHoldings/${userid}`);
     const data = await response.json();
 
-    //console.log('current holding', data);
-    setCurrentHoldingValue(calculateValue(data));
-    setCurrentHoldings(data);
+    //console.log(data);
+
+    setCurrentHoldingValue(data.holdingsValue);
+    setCurrentHoldings(data.currentHoldings);
   };
 
   const getWatchlist = async () => {
-    //    const userid = user.id;
-    //console.log(userid);
     const response = await fetch(`/api/watchlist/${userid}`);
     const data = await response.json();
 
@@ -136,19 +134,20 @@ const Dashboard = () => {
   };
 
   const getCashBalance = async () => {
-    const userid = user.id;
-    //console.log(userid);
     const response = await fetch(`/api/cashBalance/${userid}`);
     const data = await response.json();
-    //console.log(data);
 
-    setCurrentCashBalance(data.cashAvailableToTrade);
+    setCurrentCashBalance(parseFloat(data.cashAvailableToTrade).toFixed(2));
   };
 
   const getDoughnutChart = () => {
     if (currentCashBalance && currentHoldings) {
+      console.log(currentCashBalance);
+
       const mappedData = currentHoldings.map((item) => item.holdingValue);
       mappedData.push(currentCashBalance);
+
+      console.log(mappedData);
 
       const mappedLabel = currentHoldings.map((item) => item.symbol);
       mappedLabel.push('cash');

@@ -18,7 +18,7 @@ router.get('/:userid', async (req, res) => {
 
   console.log(cashAvailableToTrade);
   if (cashAvailableToTrade) {
-    res.send({ cashAvailableToTrade });
+    res.send({cashAvailableToTrade});
   }
 });
 

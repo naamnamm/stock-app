@@ -35,14 +35,25 @@ router.get('/:userid', async (req, res) => {
         return functions.createStockModel(item);
       });
 
-      console.log(currentHoldings.rows);
+      //console.log(currentHoldings.rows);
     }
 
-    res.send(currentHoldings.rows);
+    const holdingsValue = functions.calculateHoldingsValue(
+      currentHoldings.rows
+    );
+
+    const chartData = 
+
+    //console.log('holdingsValue', holdingsValue);
+
+    //res.send(currentHoldings.rows);
+    res.send({ currentHoldings: currentHoldings.rows, holdingsValue });
   } catch (error) {
     console.log(error);
   }
 });
+
+
 
 module.exports = router;
 

@@ -8,28 +8,28 @@ const createStockModel = (stock) => {
   stock.gainLoss = stock.holdingValue - stock.holdingCost;
 };
 
-const getDatesBetweenDates = (startDate, endDate) => {
-  let dates = [];
-  //to avoid modifying the original date
-  const theDate = new Date(startDate);
-  while (theDate < endDate) {
-    dates = [...dates, new Date(theDate)];
-    theDate.setDate(theDate.getDate() + 1);
-  }
-  return dates;
-};
+const calculateHoldingsValue = (array) => {
+  const eachHoldingCost = array.map(
+    (item) => Number(item.quantity) * Number(item.purchaseprice)
+  );
+  const totalCost = eachHoldingCost.reduce((a, b) => {
+    return a + b;
+  }, 0);
 
-const getDays = (startDate) => {
-  const start = new Date(startDate); //clone
-  const end = new Date(); //clone
-  let dayCount = 0;
+  const eachHoldingValue = array.map(
+    (item) => Number(item.quantity) * Number(item.latestPrice)
+  );
+  const totalValue = eachHoldingValue.reduce((a, b) => {
+    return a + b;
+  }, 0);
 
-  while (end > start) {
-    dayCount++;
-    start.setDate(start.getDate() + 1);
-  }
+  const gainLoss = totalValue - totalCost;
+  //console.log(totalValue, gainLoss);
 
-  return dayCount;
+  return {
+    totalValue: formatNum(totalValue),
+    gainLoss: formatNum(gainLoss),
+  };
 };
 
 const calculateCashAvailable = (arr) => {
@@ -40,12 +40,37 @@ const calculateCashAvailable = (arr) => {
   return cashAvailableToTrade;
 };
 
+const generateChartData = () => {};
+
 module.exports = {
-  getDatesBetweenDates,
-  getDays,
   formatNum,
   createStockModel,
   calculateCashAvailable,
+  calculateHoldingsValue,
 };
 
 //https://sandbox.iexapis.com/stable/stock/twtr/chart/10d?token=Tsk_66820f5895ad4695ba96beee7925717b
+
+// const getDatesBetweenDates = (startDate, endDate) => {
+//   let dates = [];
+//   //to avoid modifying the original date
+//   const theDate = new Date(startDate);
+//   while (theDate < endDate) {
+//     dates = [...dates, new Date(theDate)];
+//     theDate.setDate(theDate.getDate() + 1);
+//   }
+//   return dates;
+// };
+
+// const getDays = (startDate) => {
+//   const start = new Date(startDate); //clone
+//   const end = new Date(); //clone
+//   let dayCount = 0;
+
+//   while (end > start) {
+//     dayCount++;
+//     start.setDate(start.getDate() + 1);
+//   }
+
+//   return dayCount;
+// };

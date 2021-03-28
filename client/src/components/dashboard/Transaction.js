@@ -66,18 +66,9 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
     }
   };
 
-  useEffect(() => {
-    //if quantity change
-    //recalculate total
-    const totalTransactionValue = quantity * currentPrice;
-    setTotal(totalTransactionValue);
-  }, [quantity]);
-
-  useEffect(() => {
-    getCashBalance();
-  }, [user]);
-
-  useEffect(() => {
+  const getMaxQuantity = () => {
+    console.log(type);
+    
     if (type === 'buy') {
       const maxQuantityToBuy =
         currentBalance && currentPrice ? currentBalance / currentPrice : '0';
@@ -90,6 +81,23 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
 
       setMaxQuantity(maxQuantityToSell);
     }
+  }
+
+  useEffect(() => {
+    //if quantity change
+    //recalculate total
+    const totalTransactionValue = quantity * currentPrice;
+    setTotal(totalTransactionValue);
+  }, [quantity]);
+
+  
+
+  useEffect(() => {
+    getCashBalance();
+  }, [user]);
+
+  useEffect(() => {
+    getMaxQuantity()
   }, [type]);
 
   return (
@@ -148,7 +156,8 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
               plaintext
               readOnly
               defaultValue='0'
-              value={maxQuantity ? formatNum(maxQuantity) : '0'}
+              //value={maxQuantity ? formatNum(maxQuantity) : '0'}
+              value={maxQuantity ? parseFloat(maxQuantity).toFixed(2) : '0'}
               className='text-right'
             />
           </Col>
