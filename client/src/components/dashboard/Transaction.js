@@ -67,11 +67,13 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
   };
 
   const getMaxQuantity = () => {
-    console.log(type);
-    
     if (type === 'buy') {
-      const maxQuantityToBuy =
-        currentBalance && currentPrice ? currentBalance / currentPrice : '0';
+      if (!(currentBalance && currentPrice)) {
+        return;
+      }
+      const maxQuantityToBuy = currentBalance / currentPrice;
+
+      console.log(maxQuantityToBuy);
 
       setMaxQuantity(maxQuantityToBuy);
     }
@@ -81,7 +83,14 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
 
       setMaxQuantity(maxQuantityToSell);
     }
-  }
+  };
+
+  useEffect(() => {
+    if (!currentPrice) return;
+
+    getMaxQuantity();
+    console.log('get max buy price');
+  }, [currentPrice]);
 
   useEffect(() => {
     //if quantity change
@@ -90,14 +99,13 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
     setTotal(totalTransactionValue);
   }, [quantity]);
 
-  
-
   useEffect(() => {
+    if (!user) return;
     getCashBalance();
   }, [user]);
 
   useEffect(() => {
-    getMaxQuantity()
+    getMaxQuantity();
   }, [type]);
 
   return (
