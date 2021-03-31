@@ -14,17 +14,20 @@ import { Link } from 'react-router-dom';
 import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import './SearchNav.css';
 import { AuthContext } from '../../context/AuthContext';
+import { useHistory } from 'react-router-dom';
 
 const SearchNav = ({ setSelectedStock }) => {
   const { searchInput, setSearchInput } = useOptions();
   const [stocks, setStocks] = useState([]);
   const { options, setOptions } = useOptionsUpdate();
   const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const history = useHistory();
 
   const inputRef = useRef();
   const ulRef = useRef();
 
   const setLoggedOut = async () => {
+    console.log('triiger');
     try {
       const config = {
         method: 'POST',
@@ -39,6 +42,7 @@ const SearchNav = ({ setSelectedStock }) => {
       if (response.ok) {
         setIsAuth(false);
         localStorage.removeItem('accessToken');
+        history.push('/');
       }
     } catch (error) {
       console.log(error);
@@ -113,13 +117,21 @@ const SearchNav = ({ setSelectedStock }) => {
         </Form>
 
         <Nav className='ml-auto'>
-          <Link to='/dashboard' className='mr-3'>
-            Portfolio
-          </Link>
-          <Link to='/balance' className='mr-3'>
-            Balance
-          </Link>
-          <Link to='/order'>Order</Link>
+          <Button className='navbar-link' variant='outline-secondary'>
+            <Link to='/dashboard' className='navbar-link'>
+              Portfolio
+            </Link>
+          </Button>
+          <Button className='navbar-link' variant='outline-secondary'>
+            <Link to='/balance' className='navbar-link'>
+              Balance
+            </Link>
+          </Button>
+          <Button className='navbar-link' variant='outline-secondary'>
+            <Link to='/order' className='navbar-link'>
+              Order
+            </Link>
+          </Button>
           <DropdownButton
             title='Account'
             variant='outline-secondary'

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { useStock } from '../../context/SelectedStockContext';
-import { calculateValue, formatNumber } from '../../utils/helperFunction';
+import { formatNumber } from '../../utils/helperFunction';
 import AddWatchlist from './AddWatchlist';
 import { AuthContext } from '../../context/AuthContext';
 import { Doughnut } from 'react-chartjs-2';
@@ -96,7 +96,6 @@ const Dashboard = () => {
 
   const displayCurrentHolding = currentHoldings
     ? currentHoldings.map((item) => {
-        //debugger;
         return (
           <ListGroup.Item action onClick={() => setSelectedStock(item.symbol)}>
             <Link to={`/stock/${item.symbol}`} className='d-flex'>
@@ -142,12 +141,8 @@ const Dashboard = () => {
 
   const getDoughnutChart = () => {
     if (currentCashBalance && currentHoldings) {
-      console.log(currentCashBalance);
-
       const mappedData = currentHoldings.map((item) => item.holdingValue);
       mappedData.push(currentCashBalance);
-
-      console.log(mappedData);
 
       const mappedLabel = currentHoldings.map((item) => item.symbol);
       mappedLabel.push('cash');

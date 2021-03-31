@@ -2,3 +2,15 @@
   position: absolute;
   z-index: 2;
 }
+
+.navbar-link.btn-outline-secondary {
+  border: none;
+  color: grey;
+}
+
+.navbar-link {
+  color: grey;
+}
+.navbar-link:hover {
+  color: white;
+}
