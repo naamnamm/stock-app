@@ -7,7 +7,7 @@ import { useStock } from '../../context/SelectedStockContext';
 
 const Balance = () => {
   const transferRef = useRef();
-  const [cashTransferHistory, setCashTransferHistory] = useState([]);
+  const [cashTransferHistory, setCashTransferHistory] = useState('');
   const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
   const { selectedStock, setSelectedStock } = useStock();
   const [currentCashBalance, setCurrentCashBalance] = useState('');
@@ -48,7 +48,10 @@ const Balance = () => {
     const userid = user.id;
     const response = await fetch(`/api/transfer/${userid}`);
     const data = await response.json();
-    setCashTransferHistory(data);
+
+    if (data.length > 0) {
+      setCashTransferHistory(data);
+    }
   };
 
   useEffect(() => {
@@ -77,22 +80,27 @@ const Balance = () => {
           <div>
             <hr />{' '}
           </div>
-          <p> You have ${currentCashBalance} to trade</p>
+          <p>
+            {' '}
+            You have ${currentCashBalance ? currentCashBalance : 0} to trade
+          </p>
           <h3 className='text-left'>Transfer History</h3>
           <div>
             <hr />{' '}
           </div>
           <div>
-            {cashTransferHistory
-              ? cashTransferHistory.map((t) => {
-                  return (
-                    <div className='d-flex'>
-                      <div> {t.type}</div>
-                      <div className='ml-auto'> {t.amount}</div>
-                    </div>
-                  );
-                })
-              : null}
+            {cashTransferHistory ? (
+              cashTransferHistory.map((t) => {
+                return (
+                  <div className='d-flex'>
+                    <div> {t.type}</div>
+                    <div className='ml-auto'> {t.amount}</div>
+                  </div>
+                );
+              })
+            ) : (
+              <div> No cash transfer history </div>
+            )}
           </div>
         </div>
         <div className='right-container'>

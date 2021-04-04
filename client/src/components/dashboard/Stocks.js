@@ -38,8 +38,6 @@ const Stocks = () => {
     const response = await fetch(`/api/position/${userid}/${selectedStock}`);
     const data = await response.json();
 
-    //console.log(data);
-
     if (!data.msg) {
       setPosition(data);
     } else {

@@ -17,15 +17,16 @@ import { formatNumber } from '../../utils/helperFunction';
 import AddWatchlist from './AddWatchlist';
 import { AuthContext } from '../../context/AuthContext';
 import { Doughnut } from 'react-chartjs-2';
+import Tutorial from './Tutorial';
 
 const Dashboard = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const { user } = useContext(AuthContext);
   const { setSelectedStock } = useStock();
-  const [watchlist, setWatchlist] = useState([]);
+  const [watchlist, setWatchlist] = useState('');
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [currentCashBalance, setCurrentCashBalance] = useState('');
-  const [currentHoldings, setCurrentHoldings] = useState([]);
+  const [currentHoldings, setCurrentHoldings] = useState('');
   const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
   const [chartData, setChartData] = useState('');
 
@@ -94,42 +95,44 @@ const Dashboard = () => {
       <ListGroup.Item>Create watchlist</ListGroup.Item>
     );
 
-  const displayCurrentHolding = currentHoldings
-    ? currentHoldings.map((item) => {
-        return (
-          <ListGroup.Item action onClick={() => setSelectedStock(item.symbol)}>
-            <Link to={`/stock/${item.symbol}`} className='d-flex'>
-              <div className='stock-left text-left'>
-                <div className='font-weight-bold'>{item.symbol}</div>
-                <div className='text-muted'>{item.quantity} Shares</div>
-              </div>
-              <div className='stock-right ml-auto'>
-                <div className=''> ${formatNumber(item.holdingValue)} </div>
-                <div className='text-right'>
-                  ${formatNumber(item.gainLoss)}{' '}
-                </div>
-              </div>
-            </Link>
-          </ListGroup.Item>
-        );
-      })
-    : null;
-
+  const displayCurrentHolding = currentHoldings ? (
+    currentHoldings.map((item) => {
+      return (
+        <ListGroup.Item action onClick={() => setSelectedStock(item.symbol)}>
+          <Link to={`/stock/${item.symbol}`} className='d-flex'>
+            <div className='stock-left text-left'>
+              <div className='font-weight-bold'>{item.symbol}</div>
+              <div className='text-muted'>{item.quantity} Shares</div>
+            </div>
+            <div className='stock-right ml-auto'>
+              <div className=''> ${formatNumber(item.holdingValue)} </div>
+              <div className='text-right'>${formatNumber(item.gainLoss)} </div>
+            </div>
+          </Link>
+        </ListGroup.Item>
+      );
+    })
+  ) : (
+    <ListGroup.Item>You have no current holdings</ListGroup.Item>
+  );
   const getCurrentHoldings = async () => {
     const response = await fetch(`/api/currentHoldings/${userid}`);
     const data = await response.json();
 
-    //console.log(data);
-
     setCurrentHoldingValue(data.holdingsValue);
-    setCurrentHoldings(data.currentHoldings);
+
+    if (data.currentHoldings.length > 0) {
+      setCurrentHoldings(data.currentHoldings);
+    }
   };
 
   const getWatchlist = async () => {
     const response = await fetch(`/api/watchlist/${userid}`);
     const data = await response.json();
 
-    setWatchlist(data);
+    if (data.length > 0) {
+      setWatchlist(data);
+    }
   };
 
   const getCashBalance = async () => {
@@ -191,6 +194,8 @@ const Dashboard = () => {
   return (
     <>
       <SearchNav setSelectedStock={setSelectedStock} />
+      {/* if first time login - display launch tutorial button */}
+      <Tutorial />
       <div className='main-container d-flex mx-auto mt-3'>
         <div className='left-container mx-2'>
           <Card>
@@ -214,7 +219,9 @@ const Dashboard = () => {
                 <Card.Subtitle className='my-2 text-muted'>
                   Cash and sweep funds
                 </Card.Subtitle>
-                <Card.Title>${currentCashBalance}</Card.Title>
+                <Card.Title>
+                  ${currentCashBalance ? currentCashBalance : 0}
+                </Card.Title>
               </Card>
             </Card.Body>
           </Card>

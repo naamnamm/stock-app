@@ -90,6 +90,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
 
     getMaxQuantity();
     console.log('get max buy price');
+    //why it ran 4 times?
   }, [currentPrice]);
 
   useEffect(() => {

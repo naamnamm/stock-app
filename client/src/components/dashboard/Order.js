@@ -1,16 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import {
-  ListGroup,
-  FormControl,
-  Nav,
-  Form,
-  Button,
-  Navbar,
-  Card,
-  DropdownButton,
-  Dropdown,
-  Table,
-} from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import { AuthContext } from '../../context/AuthContext';
@@ -20,15 +9,9 @@ import { useStock } from '../../context/SelectedStockContext';
 const moment = require('moment');
 
 const Order = () => {
-  const [orders, setOrders] = useState([]);
-  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const [orders, setOrders] = useState('');
+  const { user } = useContext(AuthContext);
   const { selectedStock, setSelectedStock } = useStock();
-
-  function calculateValue(quantity, price) {
-    return (quantity * price).toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-    });
-  }
 
   const displayFilledOrder = orders ? (
     <Table striped bordered hover>
@@ -44,7 +27,6 @@ const Order = () => {
       </thead>
       <tbody>
         {orders.map((item) => {
-          console.log(item);
           return (
             <tr>
               <td>{moment(item.created_at).format('MMM Do YY')}</td>
@@ -52,9 +34,7 @@ const Order = () => {
               <td>{item.type}</td>
               <td>{item.quantity}</td>
               <td>{item.price}</td>
-              <td>
-                {calculateValue(Number(item.quantity), Number(item.price))}
-              </td>
+              <td>{item.value}</td>
             </tr>
           );
         })}
@@ -69,8 +49,10 @@ const Order = () => {
     const fetchOrders = async () => {
       const response = await fetch(`/api/orders/${userid}`);
       const data = await response.json();
-      console.log(data);
-      setOrders(data);
+
+      if (data.length > 0) {
+        setOrders(data);
+      }
     };
 
     fetchOrders();

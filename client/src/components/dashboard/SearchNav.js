@@ -89,7 +89,7 @@ const SearchNav = ({ setSelectedStock }) => {
           'https://api.iextrading.com/1.0/ref-data/symbols'
         );
         const data = await response.json();
-        //console.log(data);
+
         setStocks(data);
       } catch (error) {
         console.log(error);

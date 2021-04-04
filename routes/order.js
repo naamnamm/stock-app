@@ -115,15 +115,17 @@ router.post('/', async (req, res) => {
 router.get('/:userid', async (req, res) => {
   const { userid } = req.params;
 
-  console.log(userid);
-
   try {
     const allOrders = await pool.query(
       'SELECT * FROM orders WHERE user_id::text = $1',
       [userid]
     );
-    //console.log(allOrders);
-    res.send(allOrders.rows);
+
+    const mappedOrders = allOrders.rows.map((item) => {
+      return functions.createOrderModel(item);
+    });
+
+    res.send(mappedOrders);
   } catch (error) {
     console.log(error);
   }

@@ -8,6 +8,13 @@ const createStockModel = (stock) => {
   stock.gainLoss = stock.holdingValue - stock.holdingCost;
 };
 
+const createOrderModel = (order) => {
+  //console.log(order);
+  order.value = Number(order.quantity) * Number(order.price);
+  console.log(order);
+  return order;
+};
+
 const calculateHoldingsValue = (array) => {
   const eachHoldingCost = array.map(
     (item) => Number(item.quantity) * Number(item.purchaseprice)
@@ -47,6 +54,7 @@ module.exports = {
   createStockModel,
   calculateCashAvailable,
   calculateHoldingsValue,
+  createOrderModel,
 };
 
 //https://sandbox.iexapis.com/stable/stock/twtr/chart/10d?token=Tsk_66820f5895ad4695ba96beee7925717b
