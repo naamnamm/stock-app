@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import { Form, Button, Col, Row } from 'react-bootstrap';
+import { Form, Button, Col, Row, Card } from 'react-bootstrap';
 import './Transaction.css';
 import { useStock } from '../../context/SelectedStockContext';
 import { AuthContext } from '../../context/AuthContext';
@@ -8,7 +8,7 @@ function formatNum(num) {
   return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
 }
 
-const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
+const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   const quantityRef = useRef();
   const { selectedStock } = useStock();
   const [currentBalance, setCurrentBalance] = useState('');
@@ -16,6 +16,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
   const [total, setTotal] = useState('');
   const { user } = useContext(AuthContext);
   const [maxQuantity, setMaxQuantity] = useState('');
+  const [position, setPosition] = useState('');
 
   const getCashBalance = async () => {
     const userid = user.id;
@@ -23,6 +24,18 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
     const data = await response.json();
 
     setCurrentBalance(data.cashAvailableToTrade);
+  };
+
+  const getPosition = async () => {
+    const userid = user.id;
+    const response = await fetch(`/api/position/${userid}/${selectedStock}`);
+    const data = await response.json();
+
+    if (!data.msg) {
+      setPosition(data);
+    } else {
+      setPosition('');
+    }
   };
 
   const handleOrderSubmit = async (e) => {
@@ -55,11 +68,17 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
       const response = await fetch('/api/orders', config);
       const orderData = await response.json();
 
+      console.log(orderData);
+
       if (!response.ok) {
         setOrderMsg(orderData);
       } else {
         setOrderMsg(orderData);
         setQuantity('');
+        await getCashBalance();
+        await getPosition();
+        // have to get max quantity to update
+        // await getMaxQuantity();
       }
     } catch (error) {
       console.log(error);
@@ -101,16 +120,28 @@ const Transaction = ({ type, currentPrice, setOrderMsg, position }) => {
   }, [quantity]);
 
   useEffect(() => {
+    if (!selectedStock) return;
+
+    getPosition();
+  }, [selectedStock]);
+
+  useEffect(() => {
     if (!user) return;
     getCashBalance();
+    getPosition();
   }, [user]);
 
   useEffect(() => {
     getMaxQuantity();
   }, [type]);
 
+  useEffect(() => {
+    getMaxQuantity();
+  }, [currentBalance]);
+
   return (
     <div>
+      {position ? <Card>Position: {position} stocks</Card> : null}
       <Form className='my-2' onSubmit={handleOrderSubmit}>
         <Form.Group
           as={Row}

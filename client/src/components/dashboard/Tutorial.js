@@ -1,15 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import React, { useState, useEffect, useRef } from 'react';
+import { Modal, Button, Overlay, Popover, Card } from 'react-bootstrap';
 
 const Tutorial = () => {
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClick = (event) => {
+    setShow(!show);
+  };
 
   return (
     <>
-      <Button variant='primary' onClick={handleShow}>
+      <div className='w-75 mx-auto'>
+        <Button onClick={handleClick} className='mt-2'>
+          Launch Tutorial
+        </Button>
+        {show && (
+          <Card className='mt-2'>
+            <Card.Title className='mt-2'>Steps</Card.Title>
+            <Card.Body className='pb-0'>
+              1. Go to Balance tab to transfer cash to your account
+            </Card.Body>
+            <Card.Body className='pb-0'>
+              2. Search stock using the Search bar on the top
+            </Card.Body>
+            <Card.Body>3. Have fun investing!</Card.Body>
+          </Card>
+        )}
+      </div>
+      {/* <Button variant='primary' onClick={handleShow}>
         Launch Tutorial
       </Button>
 
@@ -33,7 +51,7 @@ const Tutorial = () => {
             <Button variant='primary'>Save changes</Button>
           </Modal.Footer>
         </Modal.Dialog>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

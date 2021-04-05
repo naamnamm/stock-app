@@ -113,7 +113,7 @@ const Dashboard = () => {
       );
     })
   ) : (
-    <ListGroup.Item>You have no current holdings</ListGroup.Item>
+    <ListGroup.Item> No current holdings</ListGroup.Item>
   );
   const getCurrentHoldings = async () => {
     const response = await fetch(`/api/currentHoldings/${userid}`);

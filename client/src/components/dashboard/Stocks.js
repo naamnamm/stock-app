@@ -23,33 +23,14 @@ const Stocks = () => {
   const { selectedStock, setSelectedStock } = useStock();
   const [orderMsg, setOrderMsg] = useState('');
   const { user } = useContext(AuthContext);
-  const [position, setPosition] = useState('');
 
   const fetchStock = async () => {
     const response = await fetch(`/api/stocks/search/${selectedStock}`);
     const data = await response.json();
-    //console.log(data);
+
     setStock(data.quoteData);
     setChart(data.chartData);
   };
-
-  const getPosition = async () => {
-    const userid = user.id;
-    const response = await fetch(`/api/position/${userid}/${selectedStock}`);
-    const data = await response.json();
-
-    if (!data.msg) {
-      setPosition(data);
-    } else {
-      setPosition('');
-    }
-  };
-
-  useEffect(() => {
-    if (!user) return;
-
-    getPosition();
-  }, [user]);
 
   useEffect(() => {
     fetchStock();
@@ -58,7 +39,6 @@ const Stocks = () => {
   useEffect(() => {
     if (!selectedStock) return;
     fetchStock();
-    getPosition();
   }, [selectedStock]);
 
   const displayChart = chart ? (
@@ -126,12 +106,12 @@ const Stocks = () => {
         </div>
 
         <div className='right-container'>
-          {position ? <Card>Position: {position} stocks</Card> : null}
+          {/* {position ? <Card>Position: {position} stocks</Card> : null} */}
           <Card className=''>
             <ControlledTabs
               currentPrice={stock ? stock.quote.latestPrice : null}
               setOrderMsg={setOrderMsg}
-              position={position}
+              // position={position}
             />
           </Card>
         </div>
@@ -260,3 +240,21 @@ export default Stocks;
 //   getCompany();
 //   getQuote();
 // }, []);
+
+// const getPosition = async () => {
+//   const userid = user.id;
+//   const response = await fetch(`/api/position/${userid}/${selectedStock}`);
+//   const data = await response.json();
+
+//   if (!data.msg) {
+//     setPosition(data);
+//   } else {
+//     setPosition('');
+//   }
+// };
+
+// useEffect(() => {
+//   if (!user) return;
+
+//   getPosition();
+// }, [user]);
