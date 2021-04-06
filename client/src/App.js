@@ -29,9 +29,8 @@ export default function App() {
   };
 
   const verifyToken = async () => {
-    //debugger;
     try {
-      const response = await fetch('/verify-token', {
+      const response = await fetch('/api/auth/verify-token', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${JSON.parse(
@@ -57,7 +56,6 @@ export default function App() {
 
   useEffect(() => {
     verifyToken();
-    // console.log(selectedStock);
   }, []);
 
   return (

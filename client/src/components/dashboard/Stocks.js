@@ -6,6 +6,7 @@ import './Stocks.css';
 import { Link } from 'react-router-dom';
 import { useStock } from '../../context/SelectedStockContext';
 import { AuthContext } from '../../context/AuthContext';
+import { formatNumber } from '../../utils/helperFunction';
 
 import {
   ButtonGroup,
@@ -28,9 +29,19 @@ const Stocks = () => {
     const response = await fetch(`/api/stocks/search/${selectedStock}`);
     const data = await response.json();
 
+    console.log(data.companyData);
+    console.log(data.quoteData);
+
     setStock(data.quoteData);
     setChart(data.chartData);
+    setCompany(data.companyData);
   };
+
+  useEffect(() => {
+    if (!company) return;
+    console.log(company);
+    console.log(company.CEO);
+  }, [company]);
 
   useEffect(() => {
     fetchStock();
@@ -106,12 +117,10 @@ const Stocks = () => {
         </div>
 
         <div className='right-container'>
-          {/* {position ? <Card>Position: {position} stocks</Card> : null} */}
           <Card className=''>
             <ControlledTabs
               currentPrice={stock ? stock.quote.latestPrice : null}
               setOrderMsg={setOrderMsg}
-              // position={position}
             />
           </Card>
         </div>
@@ -121,40 +130,36 @@ const Stocks = () => {
         <Card>
           <Card.Header>About</Card.Header>
           <Card.Body>
-            <p className='text-left about-text'>
-              {company ? company.company.description : null}
-            </p>
+            <p className='text-left about-text'>Hello</p>
             <div className='upper-container d-flex mx-auto'>
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
                   <Card.Title>CEO</Card.Title>
-                  <Card.Text>{company ? company.company.CEO : null}</Card.Text>
+                  <Card.Text>{company ? company.CEO : null}</Card.Text>
                 </Card.Body>
               </Card>
 
               <Card style={{ width: '13rem' }} className='info-text'>
                 <Card.Body className='info-text text-left'>
                   <Card.Title>Headquarters</Card.Title>
-                  <Card.Text>{company ? company.company.city : null}</Card.Text>
+                  <Card.Text>
+                    {company
+                      ? `${company.city}, ${company.state} ${company.country}`
+                      : null}
+                  </Card.Text>
                 </Card.Body>
               </Card>
 
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
-                  <Card.Title>Card Title</Card.Title>
-                  <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </Card.Text>
+                  <Card.Title>Industry</Card.Title>
+                  <Card.Text>{company ? company.industry : null}</Card.Text>
                 </Card.Body>
               </Card>
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
-                  <Card.Title>Card Title</Card.Title>
-                  <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </Card.Text>
+                  <Card.Title>Exchange</Card.Title>
+                  <Card.Text>{company ? company.exchange : null}</Card.Text>
                 </Card.Body>
               </Card>
             </div>
@@ -163,28 +168,32 @@ const Stocks = () => {
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
                   <Card.Title>Market Cap</Card.Title>
-                  <Card.Text>{quote ? quote.marketCap : null}</Card.Text>
+                  <Card.Text>
+                    {stock ? formatNumber(stock.quote.marketCap) : null}
+                  </Card.Text>
                 </Card.Body>
               </Card>
 
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
                   <Card.Title>Price-Earnings Ratio</Card.Title>
-                  <Card.Text>{quote ? quote.peRatio : null}</Card.Text>
+                  <Card.Text>{stock ? stock.quote.peRatio : null}</Card.Text>
                 </Card.Body>
               </Card>
 
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
-                  <Card.Title>Dividend Yield</Card.Title>
-                  <Card.Text>{quote ? quote.open : null}</Card.Text>
+                  <Card.Title>Average Daily Trading Volume</Card.Title>
+                  <Card.Text>
+                    {stock ? formatNumber(stock.quote.avgTotalVolume) : null}
+                  </Card.Text>
                 </Card.Body>
               </Card>
 
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
-                  <Card.Title>Dividend Yield</Card.Title>
-                  <Card.Text>{quote ? quote.open : null}</Card.Text>
+                  <Card.Title>Website</Card.Title>
+                  <Card.Text>{company ? company.website : null}</Card.Text>
                 </Card.Body>
               </Card>
             </div>

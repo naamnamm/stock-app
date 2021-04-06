@@ -37,7 +37,7 @@ const SearchNav = ({ setSelectedStock }) => {
         body: JSON.stringify({ username: user.name }),
       };
 
-      const response = await fetch('/logout', config);
+      const response = await fetch('/api/auth/logout', config);
 
       if (response.ok) {
         setIsAuth(false);

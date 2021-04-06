@@ -29,7 +29,7 @@ const Login = () => {
         body: JSON.stringify(data),
       };
 
-      const response = await fetch('/login', config);
+      const response = await fetch('/api/auth/login', config);
       const loginData = await response.json();
 
       console.log(loginData);

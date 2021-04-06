@@ -32,6 +32,8 @@ const Dashboard = () => {
 
   const userid = user ? user.id : null;
 
+  console.log(!currentCashBalance && !currentHoldings);
+
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -61,7 +63,7 @@ const Dashboard = () => {
           <ListGroup.Item action key={index}>
             <Link to={`/stock/${item.symbol}`} className='d-flex'>
               <div className='font-weight-bold'>{item.symbol}</div>
-              <div className='stock-right ml-auto'> Price</div>
+              {/* <div className='stock-right ml-auto'> Price</div> */}
             </Link>
           </ListGroup.Item>
         );
@@ -86,7 +88,7 @@ const Dashboard = () => {
             </div>
             <div className='font-weight-bold ml-2'>{item.symbol}</div>
             {/* <div className='font-weight-bold'>{item.symbol}</div> */}
-            <div className='stock-right ml-auto'> Price</div>
+            {/* <div className='stock-right ml-auto'> Price</div> */}
             {/* </Link> */}
           </ListGroup.Item>
         );
@@ -143,6 +145,36 @@ const Dashboard = () => {
   };
 
   const getDoughnutChart = () => {
+    if (currentCashBalance && !currentHoldings) {
+      setChartData({
+        labels: ['cash'],
+        datasets: [
+          {
+            label: '# of Votes',
+            data: [currentCashBalance],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1,
+          },
+        ],
+      });
+      return;
+    }
+
     if (currentCashBalance && currentHoldings) {
       const mappedData = currentHoldings.map((item) => item.holdingValue);
       mappedData.push(currentCashBalance);
@@ -195,7 +227,7 @@ const Dashboard = () => {
     <>
       <SearchNav setSelectedStock={setSelectedStock} />
       {/* if first time login - display launch tutorial button */}
-      <Tutorial />
+      {!currentCashBalance && !currentHoldings && <Tutorial />}
       <div className='main-container d-flex mx-auto mt-3'>
         <div className='left-container mx-2'>
           <Card>

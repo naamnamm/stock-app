@@ -68,8 +68,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
       const response = await fetch('/api/orders', config);
       const orderData = await response.json();
 
-      console.log(orderData);
-
       if (!response.ok) {
         setOrderMsg(orderData);
       } else {
@@ -77,8 +75,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
         setQuantity('');
         await getCashBalance();
         await getPosition();
-        // have to get max quantity to update
-        // await getMaxQuantity();
       }
     } catch (error) {
       console.log(error);
@@ -159,6 +155,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
               value={quantity}
               placeholder='0.00'
               ref={quantityRef}
+              Required
             />
           </Col>
         </Form.Group>
