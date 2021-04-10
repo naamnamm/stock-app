@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Modal, Button, Overlay, Popover, Card } from 'react-bootstrap';
+import {
+  Modal,
+  Button,
+  Overlay,
+  Popover,
+  Card,
+  Carousel,
+} from 'react-bootstrap';
 
 const Tutorial = () => {
   const [show, setShow] = useState(false);
@@ -14,6 +21,7 @@ const Tutorial = () => {
         <Button onClick={handleClick} className='mt-2'>
           Launch Tutorial
         </Button>
+
         {show && (
           <Card className='mt-2'>
             <Card.Title className='mt-2'>Steps</Card.Title>

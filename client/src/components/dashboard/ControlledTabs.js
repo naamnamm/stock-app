@@ -16,7 +16,6 @@ const ControlledTabs = ({ currentPrice, setOrderMsg }) => {
           type={type}
           currentPrice={currentPrice}
           setOrderMsg={setOrderMsg}
-          // position={position}
         />
       </Tab>
       <Tab eventKey='sell' title='Sell'>
@@ -24,7 +23,6 @@ const ControlledTabs = ({ currentPrice, setOrderMsg }) => {
           type={type}
           currentPrice={currentPrice}
           setOrderMsg={setOrderMsg}
-          // position={position}
         />
       </Tab>
     </Tabs>

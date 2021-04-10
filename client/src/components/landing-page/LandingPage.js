@@ -1,12 +1,19 @@
 import React from 'react';
 import { Jumbotron, Nav, Form, Button, Navbar } from 'react-bootstrap';
 import stockimage from '../images/landingpage-image.png';
+import { Link } from 'react-router-dom';
+import { FaStarAndCrescent } from 'react-icons/fa';
 
 const LandingPage = () => {
   return (
     <>
       <Navbar bg='light' variant='light'>
-        <Navbar.Brand href='#home'>Infovest</Navbar.Brand>
+        <Navbar.Brand>
+          <Link to='/'>
+            {' '}
+            Galaxy Trading <FaStarAndCrescent />
+          </Link>
+        </Navbar.Brand>
         <Nav className='mr-auto'>
           <Nav.Link href='#home'>Home</Nav.Link>
           <Nav.Link href='#features'>Features</Nav.Link>
@@ -26,10 +33,8 @@ const LandingPage = () => {
         <div className='w-75 mx-auto d-flex'>
           <div className='text-left mr-5'>
             <h1>Investing for Everyone</h1>
-            <p>
-              Commission-free investing, plus the tools you need to put your
-              money in motion.
-            </p>
+            <p>Tools that put your money in motion.</p>
+            <p>Trade Till' your profit reach the moon and back</p>
             <p>
               <Button variant='primary'>Sign Up</Button>
             </p>

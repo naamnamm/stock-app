@@ -40,9 +40,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
-    //question 1 -
-    //  do i calculate total and max quantity in here?
-    //  should i handle if quantity > maxquantity in here?
 
     if (quantity > maxQuantity) {
       return;
@@ -82,6 +79,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   };
 
   const getMaxQuantity = () => {
+    //debugger;
     if (type === 'buy') {
       if (!(currentBalance && currentPrice)) {
         return;
@@ -109,8 +107,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   }, [currentPrice]);
 
   useEffect(() => {
-    //if quantity change
-    //recalculate total
     const totalTransactionValue = quantity * currentPrice;
     setTotal(totalTransactionValue);
   }, [quantity]);
@@ -129,6 +125,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
 
   useEffect(() => {
     getMaxQuantity();
+    getPosition();
   }, [type]);
 
   useEffect(() => {

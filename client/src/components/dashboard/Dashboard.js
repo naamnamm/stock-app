@@ -30,9 +30,9 @@ const Dashboard = () => {
   const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
   const [chartData, setChartData] = useState('');
 
-  const userid = user ? user.id : null;
+  console.log(user);
 
-  console.log(!currentCashBalance && !currentHoldings);
+  const userid = user ? user.id : null;
 
   const closeModal = () => {
     setModalOpen(false);
@@ -63,18 +63,14 @@ const Dashboard = () => {
           <ListGroup.Item action key={index}>
             <Link to={`/stock/${item.symbol}`} className='d-flex'>
               <div className='font-weight-bold'>{item.symbol}</div>
-              {/* <div className='stock-right ml-auto'> Price</div> */}
             </Link>
           </ListGroup.Item>
         );
       })
     ) : isEditClicked && watchlist ? (
       watchlist.map((item, index) => {
-        // Object.assign(item, { isChecked: false });
-        // console.log(item);
         return (
           <ListGroup.Item action key={index + 50} className='d-flex'>
-            {/* <Link to={`/stock/${item.symbol}`} className='d-flex'> */}
             <div>
               <Form.Group id='formBasicCheckbox' className='m-0'>
                 <Button
@@ -87,9 +83,6 @@ const Dashboard = () => {
               </Form.Group>
             </div>
             <div className='font-weight-bold ml-2'>{item.symbol}</div>
-            {/* <div className='font-weight-bold'>{item.symbol}</div> */}
-            {/* <div className='stock-right ml-auto'> Price</div> */}
-            {/* </Link> */}
           </ListGroup.Item>
         );
       })
@@ -226,7 +219,6 @@ const Dashboard = () => {
   return (
     <>
       <SearchNav setSelectedStock={setSelectedStock} />
-      {/* if first time login - display launch tutorial button */}
       {!currentCashBalance && !currentHoldings && <Tutorial />}
       <div className='main-container d-flex mx-auto mt-3'>
         <div className='left-container mx-2'>
@@ -318,64 +310,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-// const handleSearch = async () => {
-//   console.log(searchInput);
-//   if (!searchInput) return;
-
-//   try {
-//     const response = await fetch(`/stocks/search/:${searchInput}`);
-//     const msgData = await response.json();
-
-//     if (response.ok) {
-//       console.log('response from a server =', msgData);
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-
-//   setSearchInput('');
-// };
-
-// const handleEdit = (e) => {
-//   console.log('clicked');
-//   // if this is clicked
-//   setIsEditClicked(true);
-//   debugger;
-//   // if (isEditClicked === true) {
-//   if (watchlist) {
-//     watchlist.map((item, index) => {
-//       return (
-//         <ListGroup.Item action key={index + 50}>
-//           <Link to={`/stock/${item.symbol}`} className='d-flex'>
-//             <div>
-//               <Form.Group controlId='formBasicCheckbox'>
-//                 <Form.Check type='checkbox' />
-//               </Form.Group>
-//             </div>
-//             <div className='font-weight-bold'>{item.symbol}</div>
-//             <div className='stock-right ml-auto'> Price</div>
-//           </Link>
-//         </ListGroup.Item>
-//       );
-//     });
-//     // }
-//   }
-//   //---And if watchlist add checkbox to the front of the symbol
-// };
-{
-  /* <Line
-            data={chartdata}
-            options={{
-              title: {
-                display: true,
-                text: 'Current Portfolio value',
-                fontSize: 25,
-              },
-              legend: {
-                display: true,
-                position: 'right',
-              },
-            }}
-          /> */
-}

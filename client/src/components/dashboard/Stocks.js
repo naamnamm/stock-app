@@ -20,7 +20,6 @@ const Stocks = () => {
   const [stock, setStock] = useState('');
   const [chart, setChart] = useState([]);
   const [company, setCompany] = useState('');
-  const [quote, setQuote] = useState('');
   const { selectedStock, setSelectedStock } = useStock();
   const [orderMsg, setOrderMsg] = useState('');
   const { user } = useContext(AuthContext);
@@ -29,19 +28,10 @@ const Stocks = () => {
     const response = await fetch(`/api/stocks/search/${selectedStock}`);
     const data = await response.json();
 
-    console.log(data.companyData);
-    console.log(data.quoteData);
-
     setStock(data.quoteData);
     setChart(data.chartData);
     setCompany(data.companyData);
   };
-
-  useEffect(() => {
-    if (!company) return;
-    console.log(company);
-    console.log(company.CEO);
-  }, [company]);
 
   useEffect(() => {
     fetchStock();
@@ -130,7 +120,6 @@ const Stocks = () => {
         <Card>
           <Card.Header>About</Card.Header>
           <Card.Body>
-            <p className='text-left about-text'>Hello</p>
             <div className='upper-container d-flex mx-auto'>
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
