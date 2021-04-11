@@ -11,7 +11,6 @@ const createStockModel = (stock) => {
 const createOrderModel = (order) => {
   //console.log(order);
   order.value = Number(order.quantity) * Number(order.price);
-  console.log(order);
   return order;
 };
 

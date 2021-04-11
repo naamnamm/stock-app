@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Form, Button, Col, Navbar, Nav } from 'react-bootstrap';
+import { Form, Button, Navbar, Card } from 'react-bootstrap';
 import './Login-Signup.css';
 import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { FaStarAndCrescent } from 'react-icons/fa';
 
 const Signup = () => {
   const usernameRef = useRef();
@@ -38,36 +40,17 @@ const Signup = () => {
   return (
     <>
       <Navbar bg='light' variant='light'>
-        <Navbar.Brand href='/'>Infovest</Navbar.Brand>
-        <Nav className='mr-auto'>
-          <Nav.Link href='/'>Home</Nav.Link>
-          <Nav.Link href='#features'>Features</Nav.Link>
-          <Nav.Link href='#pricing'>Pricing</Nav.Link>
-        </Nav>
+        <Navbar.Brand>
+          <Link to='/'>
+            {' '}
+            Galaxy Trading <FaStarAndCrescent />
+          </Link>
+        </Navbar.Brand>
       </Navbar>
-      <div className='signup-container mx-auto'>
-        <Form onSubmit={handleSubmit}>
-          <Form.Row>
-            <Form.Group as={Col} controlId='formGridEmail'>
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                type='username'
-                placeholder='Enter Username'
-                ref={usernameRef}
-                required
-              />
-            </Form.Group>
 
-            <Form.Group as={Col} controlId='formGridPassword'>
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type='password'
-                placeholder='Password'
-                ref={passwordRef}
-                required
-              />
-            </Form.Group>
-          </Form.Row>
+      <Card className='signup-container mx-auto my-4'>
+        <Card.Body>
+          <h2 className='text-center mb-4'>Sign Up</h2>
 
           {errorMsg
             ? errorMsg.map((err) => (
@@ -75,14 +58,43 @@ const Signup = () => {
               ))
             : null}
 
-          <Form.Group id='formGridCheckbox'>
-            <Form.Check type='checkbox' label='Agree to our terms' />
-          </Form.Group>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group id='username' className='text-left text-muted'>
+              <Form.Label>
+                <h5>Username</h5>{' '}
+              </Form.Label>
+              <Form.Control
+                type='username'
+                placeholder='Enter Username'
+                ref={usernameRef}
+                required
+              />
+            </Form.Group>
+            <Form.Group id='password' className='text-left text-muted'>
+              <Form.Label>
+                <h5>Password</h5>
+              </Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Password'
+                ref={passwordRef}
+                required
+              />{' '}
+            </Form.Group>
 
-          <Button variant='primary' type='submit'>
-            Signup
-          </Button>
-        </Form>
+            <Form.Group id='formGridCheckbox'>
+              <Form.Check type='checkbox' label='Agree to our terms' />
+            </Form.Group>
+
+            <Button variant='primary' type='submit'>
+              Signup
+            </Button>
+          </Form>
+        </Card.Body>
+      </Card>
+
+      <div className='w-100 text-center mt-2'>
+        Already have an account? <Link to='/login'>Log In</Link>
       </div>
     </>
   );

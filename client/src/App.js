@@ -16,10 +16,6 @@ import { AuthContext } from './context/AuthContext';
 export default function App() {
   const [user, setUser] = useState([]);
   const [isAuth, setIsAuth] = useState(false);
-  const [balance, setBalance] = useState('');
-  //const { user, setUser, isAuth, setIsAuth } = useAuth();
-
-  console.log(user, isAuth);
 
   const value = {
     user,
@@ -81,32 +77,4 @@ export default function App() {
       </Router>
     </div>
   );
-}
-
-{
-  /* {isAuth ? (
-                <SearchNav
-                  setSelectedStock={setSelectedStock}
-                  //handleLogin={setIsAuthenticated}
-                />
-              ) : null} */
-}
-
-{
-  /* <Route
-                exact
-                path='/order'
-                render={(props) =>
-                  isAuth ? (
-                    <Order
-                      {...props}
-                      //handleLogin={setIsAuthenticated}
-                      setSelectedStock={setSelectedStock}
-                      handleBalance={setBalance}
-                    />
-                  ) : (
-                    <Redirect to='/' />
-                  )
-                }
-              /> */
 }

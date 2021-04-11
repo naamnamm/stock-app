@@ -15,8 +15,6 @@ const Balance = () => {
   const handleTransfer = async (e) => {
     e.preventDefault();
     const amount = transferRef.current.value;
-    // console.log(amount);
-    // console.log(user);
 
     try {
       const config = {
@@ -30,7 +28,6 @@ const Balance = () => {
       const response = await fetch('/api/transfer', config);
       const data = await response.json();
 
-      //console.log(data.transaction);
       setCashTransferHistory(data.transaction);
     } catch (error) {
       console.log(error);
@@ -178,11 +175,3 @@ const Balance = () => {
 };
 
 export default Balance;
-
-// const currentBalance = cashTransferHistory
-//   ? cashTransferHistory
-//       .map((t) => {
-//         return Number(t.amount);
-//       })
-//       .reduce((acc, cur) => acc + cur, 0)
-//   : null;

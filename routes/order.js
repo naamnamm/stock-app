@@ -7,8 +7,6 @@ const functions = require('../utils/calculateValue');
 router.post('/', async (req, res) => {
   const { symbol, type, quantity, price, userid } = req.body;
 
-  console.log(type);
-
   try {
     // if type = buy
     if (type === 'buy') {
@@ -17,15 +15,14 @@ router.post('/', async (req, res) => {
         'SELECT amount FROM cash_balance WHERE user_id::text = $1',
         [userid]
       );
-      console.log('cash', cashAvailable);
 
       //2. map + reduce cash available.rows
       const cashAvailableToTrade = functions.calculateCashAvailable(
         cashAvailable
       );
       const purchaseValue = quantity * price;
-      console.log('purchase vlaue', purchaseValue);
-      console.log('cash available', cashAvailableToTrade);
+      //console.log('purchase vlaue', purchaseValue);
+      //console.log('cash available', cashAvailableToTrade);
 
       //3. can proceed if you have enough cash to trade
       if (purchaseValue > cashAvailableToTrade) {
@@ -36,7 +33,7 @@ router.post('/', async (req, res) => {
         return;
       } else {
         // 3.1 insert into cash balance (update cash) to reflect buying transaction
-        console.log('user have enough cash to buy');
+        //console.log('user have enough cash to buy');
         await pool.query(
           'INSERT INTO cash_balance (type, amount, user_id) VALUES ($1, $2, $3) RETURNING *',
           [type, -Math.abs(purchaseValue), userid]
@@ -67,7 +64,6 @@ router.post('/', async (req, res) => {
         [symbol]
       );
       //--if no existing holding > return
-      console.log(existingHolding);
       if (!existingHolding) {
         res.send({ errorMsg: 'no existing holding found' });
         return;

@@ -30,8 +30,6 @@ const Dashboard = () => {
   const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
   const [chartData, setChartData] = useState('');
 
-  console.log(user);
-
   const userid = user ? user.id : null;
 
   const closeModal = () => {
@@ -44,7 +42,6 @@ const Dashboard = () => {
   };
 
   const handleDelete = async (stockid) => {
-    console.log(stockid);
     const userid = user.id;
     const response = await fetch(
       `/api/watchlist/delete/:${stockid}/:${userid}`,
@@ -219,7 +216,7 @@ const Dashboard = () => {
   return (
     <>
       <SearchNav setSelectedStock={setSelectedStock} />
-      {!currentCashBalance && !currentHoldings && <Tutorial />}
+      {(!currentCashBalance || !currentHoldings) && <Tutorial />}
       <div className='main-container d-flex mx-auto mt-3'>
         <div className='left-container mx-2'>
           <Card>

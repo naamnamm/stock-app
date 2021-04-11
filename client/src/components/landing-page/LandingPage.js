@@ -14,12 +14,7 @@ const LandingPage = () => {
             Galaxy Trading <FaStarAndCrescent />
           </Link>
         </Navbar.Brand>
-        <Nav className='mr-auto'>
-          <Nav.Link href='#home'>Home</Nav.Link>
-          <Nav.Link href='#features'>Features</Nav.Link>
-          <Nav.Link href='#pricing'>Pricing</Nav.Link>
-        </Nav>
-        <Form inline>
+        <Form inline className='ml-auto'>
           <Button variant='outline-primary' href='/login' className='mr-2'>
             Log In
           </Button>

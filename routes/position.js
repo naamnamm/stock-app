@@ -15,7 +15,7 @@ router.get('/:userid/:selectedStock', async (req, res) => {
       (stock) => stock.symbol === selectedStock
     );
 
-    console.log('position', position);
+    //console.log('position', position);
     if (position) {
       res.send(position.quantity);
     } else {

@@ -102,8 +102,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
     if (!currentPrice) return;
 
     getMaxQuantity();
-    console.log('get max buy price');
-    //why it ran 4 times?
   }, [currentPrice]);
 
   useEffect(() => {
@@ -190,7 +188,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
               plaintext
               readOnly
               defaultValue='0'
-              //value={maxQuantity ? formatNum(maxQuantity) : '0'}
               value={maxQuantity ? parseFloat(maxQuantity).toFixed(2) : '0'}
               className='text-right'
             />

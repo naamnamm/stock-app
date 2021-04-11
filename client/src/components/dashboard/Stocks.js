@@ -1,11 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchNav from './SearchNav';
 import ControlledTabs from './ControlledTabs';
 import { Chart } from 'react-google-charts';
 import './Stocks.css';
 import { Link } from 'react-router-dom';
 import { useStock } from '../../context/SelectedStockContext';
-import { AuthContext } from '../../context/AuthContext';
 import { formatNumber } from '../../utils/helperFunction';
 
 import {
@@ -22,7 +21,6 @@ const Stocks = () => {
   const [company, setCompany] = useState('');
   const { selectedStock, setSelectedStock } = useStock();
   const [orderMsg, setOrderMsg] = useState('');
-  const { user } = useContext(AuthContext);
 
   const fetchStock = async () => {
     const response = await fetch(`/api/stocks/search/${selectedStock}`);
@@ -49,7 +47,6 @@ const Stocks = () => {
       chartType='LineChart'
       loader={<div>Loading Chart</div>}
       data={chart}
-      //title={}
       options={{
         colors: ['#e0440e'],
         chartArea: {
@@ -66,7 +63,6 @@ const Stocks = () => {
         },
         hAxis: {
           format: 'M/d/yy',
-          // gridlines: { count: 15 },
         },
         vAxis: {
           gridlines: { color: 'none' },
@@ -194,65 +190,3 @@ const Stocks = () => {
 };
 
 export default Stocks;
-
-// const getStock = async () => {
-//   //const url = `https://sandbox.iexapis.com/stable/stock/${selectedStock.toLowerCase()}/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
-//   // const url = `https://sandbox.iexapis.com/stable/stock/AAPL/batch?types=quote,news,chart&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`;
-//   // const response = await fetch(url);
-//   const response = await fetch('/stock/data');
-//   const data = await response.json();
-
-//   setStock(data);
-//   console.log(data.quote.latestPrice);
-
-//   const mappedArr = data.chart.map((item) => [
-//     // moment(item.date).format('MMM'),
-//     new Date(item.date),
-//     item.open,
-//   ]);
-//   mappedArr.unshift(['date', 'price']);
-
-//   console.log(mappedArr);
-//   console.log(moment('2020-12-07').format('ll'));
-//   setChart(mappedArr);
-// };
-
-// const getCompany = async () => {
-//   const response = await fetch('/stock/company');
-//   const data = await response.json();
-//   console.log(data);
-//   setCompany(data);
-// };
-
-// const getQuote = async () => {
-//   const response = await fetch('/stock/quote');
-//   const data = await response.json();
-//   console.log(data);
-//   setQuote(data);
-// };
-
-// const displayCompanyName = company ? company.company.companyName : null;
-
-// useEffect(() => {
-//   getStock();
-//   getCompany();
-//   getQuote();
-// }, []);
-
-// const getPosition = async () => {
-//   const userid = user.id;
-//   const response = await fetch(`/api/position/${userid}/${selectedStock}`);
-//   const data = await response.json();
-
-//   if (!data.msg) {
-//     setPosition(data);
-//   } else {
-//     setPosition('');
-//   }
-// };
-
-// useEffect(() => {
-//   if (!user) return;
-
-//   getPosition();
-// }, [user]);

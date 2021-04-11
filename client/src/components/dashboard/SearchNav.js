@@ -27,7 +27,6 @@ const SearchNav = ({ setSelectedStock }) => {
   const ulRef = useRef();
 
   const setLoggedOut = async () => {
-    console.log('triiger');
     try {
       const config = {
         method: 'POST',

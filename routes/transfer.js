@@ -18,7 +18,6 @@ router.get('/:userid', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const { amount, user, type } = req.body;
-  console.log(amount, user, type);
 
   try {
     // first insert transaction into cash_transfer
@@ -38,7 +37,6 @@ router.post('/', async (req, res) => {
       [user.id]
     );
 
-    console.log('transfer', transfer.rows[0]);
     res.send({ msg: 'success', transaction: transferHistory.rows });
   } catch (error) {
     console.log(error);

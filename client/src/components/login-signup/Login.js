@@ -1,16 +1,17 @@
 import React, { useState, useRef, useContext } from 'react';
-import { Form, Button, Navbar, Nav, Col, Row } from 'react-bootstrap';
+import { Form, Button, Navbar, Card } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext';
 import './Login-Signup.css';
 import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { FaStarAndCrescent } from 'react-icons/fa';
 
 const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const usernameRef = useRef();
   const passwordRef = useRef();
-  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const { setUser, setIsAuth } = useContext(AuthContext);
   const history = useHistory();
-  //const { user, setUser } = useContext(UserContext);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -32,8 +33,6 @@ const Login = () => {
       const response = await fetch('/api/auth/login', config);
       const loginData = await response.json();
 
-      console.log(loginData);
-
       if (!response.ok) {
         setErrorMsg(loginData.error.message);
       } else {
@@ -41,7 +40,6 @@ const Login = () => {
         setIsAuth(true);
         setUser(loginData);
         history.push('/dashboard');
-        //setAuth(true);
       }
     } catch (error) {
       console.log(error);
@@ -51,49 +49,49 @@ const Login = () => {
   return (
     <>
       <Navbar bg='light' variant='light'>
-        <Navbar.Brand href='/'>Infovest</Navbar.Brand>
-        <Nav className='mr-auto'>
-          <Nav.Link href='/'>Home</Nav.Link>
-          <Nav.Link href='#features'>Features</Nav.Link>
-          <Nav.Link href='#pricing'>Pricing</Nav.Link>
-        </Nav>
+        <Navbar.Brand>
+          <Link to='/'>
+            {' '}
+            Galaxy Trading <FaStarAndCrescent />
+          </Link>
+        </Navbar.Brand>
       </Navbar>
-      <div className='login-container mx-auto mt-4'>
-        <Form onSubmit={handleLoginSubmit}>
-          <Form.Group as={Row} controlId='formHorizontalEmail'>
-            <Form.Label column sm={3} className='text-left'>
-              Username
-            </Form.Label>
-            <Col sm={9}>
+
+      <Card className='login-container mx-auto mt-4'>
+        <Card.Body>
+          <h2 className='text-center mb-4'>Log In</h2>
+          {errorMsg ? <div className='text-danger'>{errorMsg}</div> : null}
+          <Form onSubmit={handleLoginSubmit}>
+            <Form.Group id='username' className='text-left text-muted'>
+              <Form.Label>
+                <h5>Username</h5>{' '}
+              </Form.Label>
               <Form.Control
                 type='username'
                 placeholder='Username'
                 ref={usernameRef}
               />
-            </Col>
-          </Form.Group>
+            </Form.Group>
 
-          <Form.Group as={Row} controlId='formHorizontalPassword'>
-            <Form.Label column sm={3} className='text-left'>
-              Password
-            </Form.Label>
-            <Col sm={9}>
+            <Form.Group id='password' className='text-left text-muted'>
+              <Form.Label>
+                <h5>Password</h5>
+              </Form.Label>
               <Form.Control
                 type='password'
                 placeholder='Password'
                 ref={passwordRef}
-              />
-            </Col>
-          </Form.Group>
-          {errorMsg ? <div className='text-danger'>{errorMsg}</div> : null}
-          <Button type='submit'>Login</Button>
-          <Form.Text id='passwordHelpBlock' muted className='mt-3'>
-            Don't have an account
-          </Form.Text>
-          <div className='mt-3'>
-            <Button href='/signup'>Create an Account</Button>
-          </div>
-        </Form>
+                required
+              />{' '}
+            </Form.Group>
+
+            <Button type='submit'>Login</Button>
+          </Form>
+        </Card.Body>
+      </Card>
+
+      <div className='w-100 text-center mt-2'>
+        Don't have an account? <Link to='/signup'>Sign up</Link>
       </div>
     </>
   );
