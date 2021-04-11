@@ -28,10 +28,13 @@ const LandingPage = () => {
         <div className='w-75 mx-auto d-flex'>
           <div className='text-left mr-5'>
             <h1>Investing for Everyone</h1>
-            <p>Tools that put your money in motion.</p>
-            <p>Trade Till' your profit reach the moon and back</p>
+            <p className='my-4'>
+              Tools that move your money to the moon and back.
+            </p>
             <p>
-              <Button variant='primary'>Sign Up</Button>
+              <Button variant='primary' href='/signup'>
+                Sign up
+              </Button>
             </p>
           </div>
 
@@ -40,7 +43,6 @@ const LandingPage = () => {
           </div>
         </div>
       </Jumbotron>
-      <Jumbotron> new update</Jumbotron>
     </>
   );
 };
