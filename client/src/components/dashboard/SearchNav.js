@@ -6,7 +6,6 @@ import {
   Form,
   Button,
   Navbar,
-  Card,
   DropdownButton,
   Dropdown,
 } from 'react-bootstrap';
@@ -15,6 +14,7 @@ import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import './SearchNav.css';
 import { AuthContext } from '../../context/AuthContext';
 import { useHistory } from 'react-router-dom';
+import { FaStarAndCrescent } from 'react-icons/fa';
 
 const SearchNav = ({ setSelectedStock }) => {
   const { searchInput, setSearchInput } = useOptions();
@@ -49,19 +49,22 @@ const SearchNav = ({ setSelectedStock }) => {
   };
 
   useEffect(() => {
-    //filter and update options
     if (searchInput.length === 0) {
       setSearchInput('');
       setOptions([]);
     } else {
-      //console.log(searchInput);
-      const filterSearch = stocks
+      const filterSymbol = stocks
         .filter((s) => s.symbol.includes(searchInput.toUpperCase()))
-        .slice(0, 6);
+        .slice(0, 3);
 
-      setOptions(filterSearch);
+      const filterName = stocks
+        .filter((s) => s.name.includes(searchInput.toUpperCase()))
+        .slice(0, 3);
+
+      const mergeArr = [...filterSymbol, ...filterName];
+
+      setOptions(mergeArr);
     }
-    //handleSearch();
   }, [searchInput]);
 
   useEffect(() => {
@@ -102,7 +105,7 @@ const SearchNav = ({ setSelectedStock }) => {
     <div>
       <Navbar bg='light' variant='light'>
         <Navbar.Brand>
-          <Link to={'/dashboard'}>Infovest</Link>
+          Galaxy Trading <FaStarAndCrescent />
         </Navbar.Brand>
         <Form inline>
           <FormControl

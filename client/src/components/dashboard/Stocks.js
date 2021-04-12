@@ -5,7 +5,7 @@ import { Chart } from 'react-google-charts';
 import './Stocks.css';
 import { Link } from 'react-router-dom';
 import { useStock } from '../../context/SelectedStockContext';
-import { formatNumber } from '../../utils/helperFunction';
+import { formatNumber } from '../../utils/function';
 
 import {
   ButtonGroup,
@@ -90,16 +90,6 @@ const Stocks = () => {
             {stock ? stock.quote.latestPrice : null}
           </div>
           {displayChart}
-          <ButtonToolbar aria-label='Toolbar with button groups'>
-            <ButtonGroup className='range-container' aria-label='First group'>
-              <Button className='range-selection'>1D</Button>{' '}
-              <Button className='range-selection'>1W</Button>{' '}
-              <Button className='range-selection'>1M</Button>{' '}
-              <Button className='range-selection'>3M</Button>{' '}
-              <Button className='range-selection'>1Y</Button>{' '}
-              <Button className='range-selection'>5Y</Button>
-            </ButtonGroup>
-          </ButtonToolbar>
         </div>
 
         <div className='right-container'>

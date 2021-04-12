@@ -8,17 +8,12 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
   const [stocks, setStocks] = useState([]);
   const [options, setOptions] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
-  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const inputRef = useRef();
   const ulRef = useRef();
 
-  //console.log(searchInput);
-  //console.log(user);
-
   const handleAdd = async (symbol) => {
-    // e.preventDefault();
-    //console.log(user.id);
     try {
       const data = {
         symbol,
@@ -41,7 +36,6 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
         setOptions([]);
       } else {
         closeModal();
-        //console.log(watchlistData);
         setWatchlist(watchlistData);
       }
     } catch (error) {
@@ -50,14 +44,12 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
   };
 
   useEffect(() => {
-    //filter and update options
     setErrorMsg('');
 
     if (searchInput.length === 0) {
       setSearchInput('');
       setOptions([]);
     } else {
-      //console.log(searchInput);
       const filterSymbol = stocks
         .filter((s) => s.symbol.includes(searchInput.toUpperCase()))
         .slice(0, 3);
@@ -70,7 +62,6 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
 
       setOptions(mergeArr);
     }
-    //handleSearch();
   }, [searchInput]);
 
   useEffect(() => {
@@ -80,7 +71,6 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
           'https://api.iextrading.com/1.0/ref-data/symbols'
         );
         const data = await response.json();
-        //console.log(data);
         setStocks(data);
       } catch (error) {
         console.log(error);
@@ -89,9 +79,6 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
 
     getStocksList();
   }, []);
-
-  //onclick of the selected stock
-  //ins
 
   return (
     <>
@@ -119,7 +106,6 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
         >
           {options.length > 0
             ? options.map((option, index) => {
-                //console.log(option);
                 return (
                   <ListGroup.Item
                     key={index + 1000}

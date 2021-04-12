@@ -7,6 +7,8 @@ const functions = require('../utils/calculateValue');
 router.get('/:userid', async (req, res) => {
   const { userid } = req.params;
 
+  console.log(process.env.IEX_API_TOKEN);
+
   try {
     const currentHoldings = await pool.query(
       'SELECT * FROM currentHoldings WHERE user_id::text = $1',
@@ -17,7 +19,7 @@ router.get('/:userid', async (req, res) => {
       const getLatestPrices = currentHoldings.rows.map((item) =>
         axios
           .get(
-            `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=Tpk_46da5c418ebb4881aa02973b23cda9d8`
+            `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.SANDBOX_IEX_API_TOKEN}`
           )
           .then((data) => data.data)
       );
@@ -30,43 +32,18 @@ router.get('/:userid', async (req, res) => {
 
       currentHoldings.rows.map((item, i) => {
         Object.assign(item, { latestPrice: `${latestPrices[i]}` });
-        //Object.assign(item, { latestPrice: 10 });
-
         return functions.createStockModel(item);
       });
-
-      //console.log(currentHoldings.rows);
     }
 
     const holdingsValue = functions.calculateHoldingsValue(
       currentHoldings.rows
     );
 
-    const chartData = 
-
-    //console.log('holdingsValue', holdingsValue);
-
-    //res.send(currentHoldings.rows);
     res.send({ currentHoldings: currentHoldings.rows, holdingsValue });
   } catch (error) {
     console.log(error);
   }
 });
 
-
-
 module.exports = router;
-
-//https://sandbox.iexapis.com/stable/stock/market/batch?symbols=aapl,tsla&types=quote&token=Tpk_46da5c418ebb4881aa02973b23cda9d8
-
-// const days = await functions.getDays(currentHoldings.rows[0].created_at);
-
-//     if (days) {
-//       const response = await axios.get(
-//         `https://sandbox.iexapis.com/stable/stock/TSLA/chart/${days}d?token=Tsk_66820f5895ad4695ba96beee7925717b`
-//       );
-
-//       const mappedValue = response.data.map((item) => item.close * 10);
-//       const mappedDate = response.data.map((item) => item.date);
-//       console.log(mappedValue, mappedDate);
-//     }

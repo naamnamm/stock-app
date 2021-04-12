@@ -9,7 +9,6 @@ const createStockModel = (stock) => {
 };
 
 const createOrderModel = (order) => {
-  //console.log(order);
   order.value = Number(order.quantity) * Number(order.price);
   return order;
 };
@@ -30,7 +29,6 @@ const calculateHoldingsValue = (array) => {
   }, 0);
 
   const gainLoss = totalValue - totalCost;
-  //console.log(totalValue, gainLoss);
 
   return {
     totalValue: formatNum(totalValue),
@@ -55,29 +53,3 @@ module.exports = {
   calculateHoldingsValue,
   createOrderModel,
 };
-
-//https://sandbox.iexapis.com/stable/stock/twtr/chart/10d?token=Tsk_66820f5895ad4695ba96beee7925717b
-
-// const getDatesBetweenDates = (startDate, endDate) => {
-//   let dates = [];
-//   //to avoid modifying the original date
-//   const theDate = new Date(startDate);
-//   while (theDate < endDate) {
-//     dates = [...dates, new Date(theDate)];
-//     theDate.setDate(theDate.getDate() + 1);
-//   }
-//   return dates;
-// };
-
-// const getDays = (startDate) => {
-//   const start = new Date(startDate); //clone
-//   const end = new Date(); //clone
-//   let dayCount = 0;
-
-//   while (end > start) {
-//     dayCount++;
-//     start.setDate(start.getDate() + 1);
-//   }
-
-//   return dayCount;
-// };

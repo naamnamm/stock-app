@@ -79,14 +79,11 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   };
 
   const getMaxQuantity = () => {
-    //debugger;
     if (type === 'buy') {
       if (!(currentBalance && currentPrice)) {
         return;
       }
       const maxQuantityToBuy = currentBalance / currentPrice;
-
-      console.log(maxQuantityToBuy);
 
       setMaxQuantity(maxQuantityToBuy);
     }

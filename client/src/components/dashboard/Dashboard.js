@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { useStock } from '../../context/SelectedStockContext';
-import { formatNumber } from '../../utils/helperFunction';
+import { formatNumber } from '../../utils/function';
 import AddWatchlist from './AddWatchlist';
 import { AuthContext } from '../../context/AuthContext';
 import { Doughnut } from 'react-chartjs-2';
@@ -43,12 +43,9 @@ const Dashboard = () => {
 
   const handleDelete = async (stockid) => {
     const userid = user.id;
-    const response = await fetch(
-      `/api/watchlist/delete/:${stockid}/:${userid}`,
-      {
-        method: 'DELETE',
-      }
-    );
+    const response = await fetch(`/api/watchlist/delete/${stockid}/${userid}`, {
+      method: 'DELETE',
+    });
     const data = await response.json();
     setWatchlist(data.updatedWatchlist);
   };
