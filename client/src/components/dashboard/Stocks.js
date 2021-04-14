@@ -3,17 +3,11 @@ import SearchNav from './SearchNav';
 import ControlledTabs from './ControlledTabs';
 import { Chart } from 'react-google-charts';
 import './Stocks.css';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { useStock } from '../../context/SelectedStockContext';
 import { formatNumber } from '../../utils/function';
-
-import {
-  ButtonGroup,
-  Button,
-  Card,
-  ButtonToolbar,
-  Alert,
-} from 'react-bootstrap';
+import { Card, Alert } from 'react-bootstrap';
+import useQuery from '../../utils/Hooks/UseQuery';
 
 const Stocks = () => {
   const [stock, setStock] = useState('');
@@ -21,9 +15,13 @@ const Stocks = () => {
   const [company, setCompany] = useState('');
   const { selectedStock, setSelectedStock } = useStock();
   const [orderMsg, setOrderMsg] = useState('');
+  const params = useParams();
+  const location = useLocation();
+  const query = useQuery();
 
   const fetchStock = async () => {
-    const response = await fetch(`/api/stocks/search/${selectedStock}`);
+    const stockId = query.get('stock');
+    const response = await fetch(`/api/stocks/search/${stockId}`);
     const data = await response.json();
 
     setStock(data.quoteData);

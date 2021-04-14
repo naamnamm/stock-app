@@ -151,14 +151,13 @@ const SearchNav = ({ setSelectedStock }) => {
       <ListGroup id='results' className='option-container' ref={ulRef}>
         {options.length > 0
           ? options.map((option, index) => {
-              //console.log(option);
               return (
                 <ListGroup.Item
                   key={index + 100}
                   action
                   onClick={() => setSelectedStock(option.symbol)}
                 >
-                  <Link to={`/stock/${option.symbol}`}>
+                  <Link to={`/stock?stock=${option.symbol}`}>
                     {option.symbol} {option.name}
                   </Link>
                 </ListGroup.Item>

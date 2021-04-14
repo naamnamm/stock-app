@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+//import { Link, useParams, useLocation } from 'react-router-dom';
 import Dashboard from './components/dashboard/Dashboard';
 import Stocks from './components/dashboard/Stocks';
 import Balance from './components/dashboard/Balance';
@@ -65,10 +66,10 @@ export default function App() {
             <Route path='/signup' component={Signup} />
             <SelectedStockProvider>
               <OptionsProvider>
-                <PrivateRoute path='/dashboard' component={Dashboard} />
+                <PrivateRoute exact path='/dashboard' component={Dashboard} />
+                <PrivateRoute path='/balance' component={Balance} exact />
+                <PrivateRoute path='/order' component={Order} exact />
                 <PrivateRoute path='/stock' component={Stocks} />
-                <PrivateRoute path='/balance' component={Balance} />
-                <PrivateRoute path='/order' component={Order} />
               </OptionsProvider>
             </SelectedStockProvider>
           </Switch>

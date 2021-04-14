@@ -9,7 +9,7 @@ import {
   Form,
 } from 'react-bootstrap';
 import './Dashboard.css';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { useStock } from '../../context/SelectedStockContext';
@@ -29,6 +29,9 @@ const Dashboard = () => {
   const [currentHoldings, setCurrentHoldings] = useState('');
   const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
   const [chartData, setChartData] = useState('');
+  const location = useLocation();
+
+  console.log(location);
 
   const userid = user ? user.id : null;
 
