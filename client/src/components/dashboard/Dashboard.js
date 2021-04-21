@@ -12,17 +12,15 @@ import './Dashboard.css';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
-import { useStock } from '../../context/SelectedStockContext';
 import { formatNumber } from '../../utils/function';
 import AddWatchlist from './AddWatchlist';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { Doughnut } from 'react-chartjs-2';
 import Tutorial from './Tutorial';
 
 const Dashboard = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { user } = useContext(AuthContext);
-  const { setSelectedStock } = useStock();
+  const { user } = useAuth();
   const [watchlist, setWatchlist] = useState('');
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [currentCashBalance, setCurrentCashBalance] = useState('');
@@ -30,8 +28,6 @@ const Dashboard = () => {
   const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
   const [chartData, setChartData] = useState('');
   const location = useLocation();
-
-  console.log(location);
 
   const userid = user ? user.id : null;
 
@@ -58,7 +54,7 @@ const Dashboard = () => {
       watchlist.map((item, index) => {
         return (
           <ListGroup.Item action key={index}>
-            <Link to={`/stock/${item.symbol}`} className='d-flex'>
+            <Link to={`/stock?stock=${item.symbol}`} className='d-flex'>
               <div className='font-weight-bold'>{item.symbol}</div>
             </Link>
           </ListGroup.Item>
@@ -90,8 +86,8 @@ const Dashboard = () => {
   const displayCurrentHolding = currentHoldings ? (
     currentHoldings.map((item) => {
       return (
-        <ListGroup.Item action onClick={() => setSelectedStock(item.symbol)}>
-          <Link to={`/stock/${item.symbol}`} className='d-flex'>
+        <ListGroup.Item action>
+          <Link to={`/stock?stock=${item.symbol}`} className='d-flex'>
             <div className='stock-left text-left'>
               <div className='font-weight-bold'>{item.symbol}</div>
               <div className='text-muted'>{item.quantity} Shares</div>
@@ -215,7 +211,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <SearchNav setSelectedStock={setSelectedStock} />
+      <SearchNav />
       {(!currentCashBalance || !currentHoldings) && <Tutorial />}
       <div className='main-container d-flex mx-auto mt-3'>
         <div className='left-container mx-2'>

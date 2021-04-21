@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext } from 'react';
 import { Form, Button, Navbar, Card } from 'react-bootstrap';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import './Login-Signup.css';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const usernameRef = useRef();
   const passwordRef = useRef();
-  const { setUser, setIsAuth } = useContext(AuthContext);
+  const { setUser, setIsAuth } = useAuth();
   const history = useHistory();
 
   const handleLoginSubmit = async (e) => {

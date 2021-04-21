@@ -2,16 +2,14 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import SearchNav from './SearchNav';
-import { useStock } from '../../context/SelectedStockContext';
 
 const moment = require('moment');
 
 const Order = () => {
   const [orders, setOrders] = useState('');
-  const { user } = useContext(AuthContext);
-  const { selectedStock, setSelectedStock } = useStock();
+  const { user } = useAuth();
 
   const displayFilledOrder = orders ? (
     <Table striped bordered hover>
@@ -60,7 +58,7 @@ const Order = () => {
 
   return (
     <>
-      <SearchNav setSelectedStock={setSelectedStock} />
+      <SearchNav />
       <div className='cash-main-container mt-3 mx-3'>
         <h3 className='text-left'>Open Orders</h3>
         <div>

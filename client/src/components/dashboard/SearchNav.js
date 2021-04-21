@@ -12,15 +12,15 @@ import {
 import { Link } from 'react-router-dom';
 import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import './SearchNav.css';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { useHistory } from 'react-router-dom';
 import { FaStarAndCrescent } from 'react-icons/fa';
 
-const SearchNav = ({ setSelectedStock }) => {
+const SearchNav = () => {
   const { searchInput, setSearchInput } = useOptions();
   const [stocks, setStocks] = useState([]);
   const { options, setOptions } = useOptionsUpdate();
-  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const { user, setUser, isAuth, setIsAuth } = useAuth();
   const history = useHistory();
 
   const inputRef = useRef();
@@ -152,11 +152,7 @@ const SearchNav = ({ setSelectedStock }) => {
         {options.length > 0
           ? options.map((option, index) => {
               return (
-                <ListGroup.Item
-                  key={index + 100}
-                  action
-                  onClick={() => setSelectedStock(option.symbol)}
-                >
+                <ListGroup.Item key={index + 100} action>
                   <Link to={`/stock?stock=${option.symbol}`}>
                     {option.symbol} {option.name}
                   </Link>

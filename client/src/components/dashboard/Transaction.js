@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import { Form, Button, Col, Row, Card } from 'react-bootstrap';
 import './Transaction.css';
-import { useStock } from '../../context/SelectedStockContext';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
+import useQuery from '../../utils/Hooks/UseQuery';
 
 function formatNum(num) {
   return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
@@ -10,11 +10,12 @@ function formatNum(num) {
 
 const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   const quantityRef = useRef();
-  const { selectedStock } = useStock();
+  const query = useQuery();
+  const [selectedStock, setSelectedStock] = useState(query.get('stock'));
   const [currentBalance, setCurrentBalance] = useState('');
   const [quantity, setQuantity] = useState('');
   const [total, setTotal] = useState('');
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [maxQuantity, setMaxQuantity] = useState('');
   const [position, setPosition] = useState('');
 
@@ -94,6 +95,11 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
       setMaxQuantity(maxQuantityToSell);
     }
   };
+
+  useEffect(() => {
+    const selectedStock = query.get('stock');
+    setSelectedStock(selectedStock);
+  }, []);
 
   useEffect(() => {
     if (!currentPrice) return;

@@ -4,7 +4,6 @@ import ControlledTabs from './ControlledTabs';
 import { Chart } from 'react-google-charts';
 import './Stocks.css';
 import { Link, useParams, useLocation } from 'react-router-dom';
-import { useStock } from '../../context/SelectedStockContext';
 import { formatNumber } from '../../utils/function';
 import { Card, Alert } from 'react-bootstrap';
 import useQuery from '../../utils/Hooks/UseQuery';
@@ -13,11 +12,9 @@ const Stocks = () => {
   const [stock, setStock] = useState('');
   const [chart, setChart] = useState([]);
   const [company, setCompany] = useState('');
-  const { selectedStock, setSelectedStock } = useStock();
-  const [orderMsg, setOrderMsg] = useState('');
-  const params = useParams();
-  const location = useLocation();
   const query = useQuery();
+  const [selectedStock, setSelectedStock] = useState(query.get('stock'));
+  const [orderMsg, setOrderMsg] = useState('');
 
   const fetchStock = async () => {
     const stockId = query.get('stock');
@@ -72,7 +69,7 @@ const Stocks = () => {
 
   return (
     <>
-      <SearchNav setSelectedStock={setSelectedStock} />
+      <SearchNav />
       {orderMsg.successMsg ? (
         <Alert variant='success' className='w-75 mx-auto'>
           {orderMsg.successMsg}{' '}
