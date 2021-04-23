@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import { Form, Button, Col, Row, Card } from 'react-bootstrap';
 import './Transaction.css';
-import { useAuth } from '../../context/AuthContext';
 import useQuery from '../../utils/Hooks/UseQuery';
+
+import { AuthContext } from '../../context/AuthContext';
+//import { useAuth } from '../../context/AuthContext';
 
 function formatNum(num) {
   return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
@@ -15,9 +17,11 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   const [currentBalance, setCurrentBalance] = useState('');
   const [quantity, setQuantity] = useState('');
   const [total, setTotal] = useState('');
-  const { user } = useAuth();
   const [maxQuantity, setMaxQuantity] = useState('');
   const [position, setPosition] = useState('');
+
+  //const { user } = useAuth();
+  const { user } = useContext(AuthContext);
 
   const getCashBalance = async () => {
     const userid = user.id;
@@ -29,7 +33,9 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
 
   const getPosition = async () => {
     const userid = user.id;
-    const response = await fetch(`/api/position/${userid}/${selectedStock}`);
+    const response = await fetch(
+      `/api/currentHoldings/${userid}/${selectedStock}`
+    );
     const data = await response.json();
 
     if (!data.msg) {
@@ -99,7 +105,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   useEffect(() => {
     const selectedStock = query.get('stock');
     setSelectedStock(selectedStock);
-  }, []);
+  }, [query.get('stock')]);
 
   useEffect(() => {
     if (!currentPrice) return;

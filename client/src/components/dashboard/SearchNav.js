@@ -10,18 +10,24 @@ import {
   Dropdown,
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
+//import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
 import './SearchNav.css';
-import { useAuth } from '../../context/AuthContext';
 import { useHistory } from 'react-router-dom';
 import { FaStarAndCrescent } from 'react-icons/fa';
 
+//import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
+
 const SearchNav = () => {
-  const { searchInput, setSearchInput } = useOptions();
+  //const { searchInput, setSearchInput } = useOptions();
+  const [searchInput, setSearchInput] = useState();
   const [stocks, setStocks] = useState([]);
-  const { options, setOptions } = useOptionsUpdate();
-  const { user, setUser, isAuth, setIsAuth } = useAuth();
+  //const { options, setOptions } = useOptionsUpdate();
+  const [options, setOptions] = useState();
   const history = useHistory();
+
+  //const { user, setUser, isAuth, setIsAuth } = useAuth();
+  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
 
   const inputRef = useRef();
   const ulRef = useRef();
@@ -49,6 +55,8 @@ const SearchNav = () => {
   };
 
   useEffect(() => {
+    if (!searchInput) return;
+
     if (searchInput.length === 0) {
       setSearchInput('');
       setOptions([]);
@@ -101,6 +109,20 @@ const SearchNav = () => {
     getStocksList();
   }, []);
 
+  const displayOptions = !options
+    ? null
+    : options.length > 0
+    ? options.map((option, index) => {
+        return (
+          <ListGroup.Item key={index + 100} action>
+            <Link to={`/stock?stock=${option.symbol}`}>
+              {option.symbol} {option.name}
+            </Link>
+          </ListGroup.Item>
+        );
+      })
+    : null;
+
   return (
     <div>
       <Navbar bg='light' variant='light'>
@@ -149,7 +171,7 @@ const SearchNav = () => {
         </Nav>
       </Navbar>
       <ListGroup id='results' className='option-container' ref={ulRef}>
-        {options.length > 0
+        {/* {options.length > 0
           ? options.map((option, index) => {
               return (
                 <ListGroup.Item key={index + 100} action>
@@ -159,7 +181,8 @@ const SearchNav = () => {
                 </ListGroup.Item>
               );
             })
-          : null}
+          : null} */}
+        {displayOptions}
       </ListGroup>
     </div>
   );

@@ -1,14 +1,18 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import './Balance.css';
 import { Form, Col, Row, Button, Card } from 'react-bootstrap';
-import { useAuth } from '../../context/AuthContext';
 import SearchNav from './SearchNav';
+
+//import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const Balance = () => {
   const transferRef = useRef();
   const [cashTransferHistory, setCashTransferHistory] = useState('');
-  const { user, setUser, isAuth, setIsAuth } = useAuth();
   const [currentCashBalance, setCurrentCashBalance] = useState('');
+
+  //const { user, setUser, isAuth, setIsAuth } = useAuth();
+  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
 
   const handleTransfer = async (e) => {
     e.preventDefault();

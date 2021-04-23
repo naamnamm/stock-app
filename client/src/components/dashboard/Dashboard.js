@@ -14,13 +14,14 @@ import SearchNav from './SearchNav';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { formatNumber } from '../../utils/function';
 import AddWatchlist from './AddWatchlist';
-import { useAuth } from '../../context/AuthContext';
 import { Doughnut } from 'react-chartjs-2';
 import Tutorial from './Tutorial';
 
+//import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
+
 const Dashboard = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const { user } = useAuth();
   const [watchlist, setWatchlist] = useState('');
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [currentCashBalance, setCurrentCashBalance] = useState('');
@@ -28,6 +29,9 @@ const Dashboard = () => {
   const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
   const [chartData, setChartData] = useState('');
   const location = useLocation();
+
+  //const { user } = useAuth();
+  const { user } = useContext(AuthContext);
 
   const userid = user ? user.id : null;
 

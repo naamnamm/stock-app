@@ -46,4 +46,27 @@ router.get('/:userid', async (req, res) => {
   }
 });
 
+router.get('/:userid/:selectedStock', async (req, res) => {
+  const { userid, selectedStock } = req.params;
+
+  try {
+    const currentHoldings = await pool.query(
+      'SELECT * FROM currentHoldings WHERE user_id::text = $1',
+      [userid]
+    );
+
+    const position = currentHoldings.rows.find(
+      (stock) => stock.symbol === selectedStock
+    );
+
+    if (position) {
+      res.send(position.quantity);
+    } else {
+      res.send({ msg: 'no current position' });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = router;

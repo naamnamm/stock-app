@@ -1,15 +1,17 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Modal, Form, Button, ListGroup, FormControl } from 'react-bootstrap';
-import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
+
 import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const AddWatchlist = ({ closeModal, setWatchlist }) => {
   const [searchInput, setSearchInput] = useState('');
   const [stocks, setStocks] = useState([]);
   const [options, setOptions] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
-  //const { user } = useContext(AuthContext);
-  const { user, isAuth } = useAuth();
+
+  const { user } = useContext(AuthContext);
+  //const { user, isAuth } = useAuth();
 
   const inputRef = useRef();
   const ulRef = useRef();

@@ -10,69 +10,67 @@ import Login from './components/login-signup/Login';
 import Signup from './components/login-signup/Signup';
 import Order from './components/dashboard/Order';
 import PrivateRoute from './PrivateRoute';
-import { OptionsProvider } from './context/optionsContext';
-// import { AuthContext } from './context/AuthContext';
-import { AuthProvider } from './context/AuthContext';
+
+//import { AuthProvider } from './context/AuthContext';
+import { AuthContext } from './context/AuthContext';
 
 export default function App() {
-  // const [user, setUser] = useState([]);
-  // const [isAuth, setIsAuth] = useState(false);
-  //debugger;
-  // const value = {
-  //   user,
-  //   setUser,
-  //   isAuth,
-  //   setIsAuth,
-  // };
+  const [user, setUser] = useState([]);
+  const [isAuth, setIsAuth] = useState(false);
 
-  // const verifyToken = async () => {
-  //   try {
-  //     const response = await fetch('/api/auth/verify-token', {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${JSON.parse(
-  //           localStorage.getItem('accessToken')
-  //         )}`,
-  //       },
-  //     });
+  const value = {
+    user,
+    setUser,
+    isAuth,
+    setIsAuth,
+  };
 
-  //     const data = await response.json();
+  const verifyToken = async () => {
+    try {
+      const response = await fetch('/api/auth/verify-token', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem('accessToken')
+          )}`,
+        },
+      });
 
-  //     if (data.isVerified === true) {
-  //       setIsAuth(true);
-  //       setUser(data);
-  //       setLoading(false);
-  //     } else {
-  //       setIsAuth(false);
-  //       setUser('');
-  //     }
-  //   } catch (err) {
-  //     console.error(err.message);
-  //   }
-  // };
+      const data = await response.json();
 
-  // useEffect(() => {
-  //   verifyToken();
-  // }, []);
+      if (data.isVerified === true) {
+        setIsAuth(true);
+        setUser(data);
+        setLoading(false);
+      } else {
+        setIsAuth(false);
+        setUser('');
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    verifyToken();
+  }, []);
 
   return (
     <div className='App'>
       <Router>
-        {/* <AuthContext.Provider value={value}> */}
-        <AuthProvider>
+        <AuthContext.Provider value={value}>
+          {/* <AuthProvider> */}
           <Switch>
             <Route exact path='/' component={LandingPage} />
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
-            <OptionsProvider>
-              <PrivateRoute path='/dashboard' component={Dashboard} />
-              <PrivateRoute path='/balance' component={Balance} />
-              <PrivateRoute path='/order' component={Order} />
-              <PrivateRoute path='/stock' component={Stocks} />
-            </OptionsProvider>
+            <PrivateRoute path='/dashboard' component={Dashboard} />
+            <PrivateRoute path='/balance' component={Balance} />
+            <PrivateRoute path='/order' component={Order} />
+            <PrivateRoute path='/stock' component={Stocks} />
           </Switch>
-        </AuthProvider>
-        {/* </AuthContext.Provider> */}
+          {/* </AuthProvider> */}
+        </AuthContext.Provider>
       </Router>
     </div>
   );

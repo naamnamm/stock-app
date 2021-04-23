@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
-import { useAuth } from '../../context/AuthContext';
 import SearchNav from './SearchNav';
+
+//import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const moment = require('moment');
 
 const Order = () => {
   const [orders, setOrders] = useState('');
-  const { user } = useAuth();
+  //const { user } = useAuth();
+  const { user } = useContext(AuthContext);
 
   const displayFilledOrder = orders ? (
     <Table striped bordered hover>

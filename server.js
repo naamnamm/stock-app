@@ -14,7 +14,7 @@ app.use('/api/stocks', require('./routes/stocks'));
 app.use('/api/orders', require('./routes/order'));
 app.use('/api/currentHoldings', require('./routes/currentHoldings'));
 app.use('/api/cashBalance', require('./routes/cashBalance'));
-app.use('/api/position', require('./routes/position'));
+//app.use('/api/position', require('./routes/position'));
 app.use('/api/auth', require('./routes/auth'));
 //app.use('/api/assetChart', require('./routes/assetChart'));
 

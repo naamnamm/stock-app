@@ -32,8 +32,12 @@ const Stocks = () => {
 
   useEffect(() => {
     if (!selectedStock) return;
+    if (selectedStock != query.get('stock')) {
+      setSelectedStock(query.get('stock'));
+    }
+
     fetchStock();
-  }, [selectedStock]);
+  }, [query.get('stock')]);
 
   const displayChart = chart ? (
     <Chart
