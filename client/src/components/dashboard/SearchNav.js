@@ -9,20 +9,16 @@ import {
   DropdownButton,
   Dropdown,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-//import { useOptions, useOptionsUpdate } from '../../context/optionsContext';
+import { Link, useHistory } from 'react-router-dom';
 import './SearchNav.css';
-import { useHistory } from 'react-router-dom';
 import { FaStarAndCrescent } from 'react-icons/fa';
 
 //import { useAuth } from '../../context/AuthContext';
 import { AuthContext } from '../../context/AuthContext';
 
 const SearchNav = () => {
-  //const { searchInput, setSearchInput } = useOptions();
   const [searchInput, setSearchInput] = useState();
   const [stocks, setStocks] = useState([]);
-  //const { options, setOptions } = useOptionsUpdate();
   const [options, setOptions] = useState();
   const history = useHistory();
 

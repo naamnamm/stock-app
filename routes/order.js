@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../database/db');
+const pool = require('../database/dbPool');
 const fetch = require('node-fetch');
 const functions = require('../utils/calculateValue');
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../database/db');
+const pool = require('../database/dbPool');
 const functions = require('../utils/calculateValue');
 
 router.get('/:userid', async (req, res) => {

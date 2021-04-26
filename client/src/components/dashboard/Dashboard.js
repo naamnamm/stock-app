@@ -46,11 +46,11 @@ const Dashboard = () => {
 
   const handleDelete = async (stockid) => {
     const userid = user.id;
-    const response = await fetch(`/api/watchlist/delete/${stockid}/${userid}`, {
+    const response = await fetch(`/api/watchlist/${stockid}/${userid}`, {
       method: 'DELETE',
     });
     const data = await response.json();
-    setWatchlist(data.updatedWatchlist);
+    setWatchlist(data);
   };
 
   const displayWatchlist =

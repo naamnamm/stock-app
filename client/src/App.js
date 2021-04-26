@@ -41,7 +41,7 @@ export default function App() {
       if (data.isVerified === true) {
         setIsAuth(true);
         setUser(data);
-        setLoading(false);
+        //setLoading(false);
       } else {
         setIsAuth(false);
         setUser('');

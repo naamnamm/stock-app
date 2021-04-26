@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../database/db');
+const pool = require('../database/dbPool');
 const authToken = require('../utils/authToken');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -69,7 +69,7 @@ router.post('/login', async (req, res) => {
         };
 
         const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-          expiresIn: '12h',
+          expiresIn: '12hrs',
         });
 
         res.status(201).send({
