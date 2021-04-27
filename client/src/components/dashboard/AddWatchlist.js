@@ -34,6 +34,8 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
       const response = await fetch('/api/watchlist', config);
       const watchlistData = await response.json();
 
+      console.log(watchlistData);
+
       if (!response.ok) {
         setErrorMsg(watchlistData);
         setOptions([]);
@@ -97,11 +99,9 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
             ref={inputRef}
           />
         </Form>
-        {errorMsg
-          ? errorMsg.map((err) => (
-              <div className='text-danger'>{err.message}</div>
-            ))
-          : null}
+        {errorMsg ? (
+          <div className='text-danger'>{errorMsg.errorMessage}</div>
+        ) : null}
         <ListGroup
           id='results-watchlist'
           className='option-container ml-0'

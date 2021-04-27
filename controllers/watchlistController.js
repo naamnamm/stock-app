@@ -1,9 +1,8 @@
 const {
   getWatchlistByUserId,
-  getWatchlistBySymbolAndUserId,
-  createWatchlist,
   deleteWatchlist,
 } = require('../database/dbWatchlist');
+const watchlistService = require('../services/watchlistService');
 
 const get = async (req, res) => {
   const { userid } = req.params;
@@ -17,27 +16,12 @@ const get = async (req, res) => {
 
 const post = async (req, res) => {
   const { symbol, userid } = req.body;
-  const error = [];
 
-  const useridAndSymbolMatch = await getWatchlistBySymbolAndUserId(
-    symbol,
-    userid
-  );
-
-  if (useridAndSymbolMatch.length > 0) {
-    error.push({ message: 'Symbol alreay exists in watchlist.' });
-  }
-
-  if (error.length > 0) {
-    return res.status(401).send(error);
-  }
-
-  if (useridAndSymbolMatch.length === 0) {
-    // this used to be else
-    await createWatchlist(symbol, userid);
-
-    const watchlists = await getWatchlistByUserId(userid);
-    res.send(watchlists);
+  try {
+    const watchlist = await watchlistService.existingWatchlist(symbol, userid);
+    res.send(watchlist);
+  } catch (error) {
+    res.status(error.status).send({ errorMessage: error.message });
   }
 };
 
