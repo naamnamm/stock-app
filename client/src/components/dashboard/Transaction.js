@@ -48,7 +48,8 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
 
-    if (quantity > maxQuantity) {
+    if (quantity > maxQuantity || quantity <= 0) {
+      setOrderMsg({ errorMsg: 'Invalid quantity' });
       return;
     }
 
@@ -116,6 +117,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   useEffect(() => {
     const totalTransactionValue = quantity * currentPrice;
     setTotal(totalTransactionValue);
+    setOrderMsg('');
   }, [quantity]);
 
   useEffect(() => {
@@ -226,6 +228,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
         </Form.Group>
 
         <Button variant='success' type='submit' className='my-3'>
+          {/* disable if it's still loading */}
           {type} now
         </Button>
       </Form>

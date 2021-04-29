@@ -79,6 +79,10 @@ const Stocks = () => {
           {orderMsg.successMsg}{' '}
           <Link to='/order'>Check all your orders here!</Link>
         </Alert>
+      ) : orderMsg.errorMsg ? (
+        <Alert variant='danger' className='w-75 mx-auto'>
+          {orderMsg.errorMsg}{' '}
+        </Alert>
       ) : null}
       <div className='stock-main-container d-flex mx-auto mt-3'>
         <div>

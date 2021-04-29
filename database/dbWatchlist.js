@@ -1,7 +1,6 @@
 const pool = require('./dbPool');
 
 const getWatchlistByUserId = async (userid) => {
-  console.log(userid);
   const dbResponse = await pool.query(
     'SELECT * FROM watchlists WHERE user_id::text = $1',
     [userid]
