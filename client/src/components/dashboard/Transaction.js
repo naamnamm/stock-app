@@ -9,8 +9,9 @@ import { AuthContext } from '../../context/AuthContext';
 function formatNum(num) {
   return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
 }
+//should just calculate total
 
-const Transaction = ({ type, currentPrice, setOrderMsg }) => {
+const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   const quantityRef = useRef();
   const query = useQuery();
   const [selectedStock, setSelectedStock] = useState(query.get('stock'));
@@ -19,6 +20,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   const [total, setTotal] = useState('');
   const [maxQuantity, setMaxQuantity] = useState('');
   const [position, setPosition] = useState('');
+  const [loading, setloading] = useState(true);
 
   //const { user } = useAuth();
   const { user } = useContext(AuthContext);
@@ -32,7 +34,10 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   };
 
   const getPosition = async () => {
+    //debugger;
     const userid = user.id;
+
+    console.log(userid);
     const response = await fetch(
       `/api/currentHoldings/${userid}/${selectedStock}`
     );
@@ -47,6 +52,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
+    setloading(true);
 
     if (quantity > maxQuantity || quantity <= 0) {
       setOrderMsg({ errorMsg: 'Invalid quantity' });
@@ -73,6 +79,8 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
       const response = await fetch('/api/orders', config);
       const orderData = await response.json();
 
+      console.log(orderData);
+
       if (!response.ok) {
         setOrderMsg(orderData);
       } else {
@@ -80,14 +88,18 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
         setQuantity('');
         await getCashBalance();
         await getPosition();
+        setloading(false);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
+  //Question: should I handle this on the backend?
   const getMaxQuantity = () => {
     if (type === 'buy') {
+      //current balance fetched from `/api/cashBalance/${userid}`
+      //current price get as a prop from parent component
       if (!(currentBalance && currentPrice)) {
         return;
       }
@@ -97,6 +109,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
     }
 
     if (type === 'sell') {
+      //positing is fetch from `/api/currentHoldings/${userid}/${selectedStock}`
       const maxQuantityToSell = position ? position : null;
 
       setMaxQuantity(maxQuantityToSell);
@@ -117,7 +130,10 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
   useEffect(() => {
     const totalTransactionValue = quantity * currentPrice;
     setTotal(totalTransactionValue);
-    setOrderMsg('');
+
+    if (orderMsg.errorMsg) {
+      setOrderMsg('');
+    }
   }, [quantity]);
 
   useEffect(() => {
@@ -227,7 +243,12 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
           </Col>
         </Form.Group>
 
-        <Button variant='success' type='submit' className='my-3'>
+        <Button
+          variant='success'
+          type='submit'
+          className='my-3'
+          //disabled={!loading}
+        >
           {/* disable if it's still loading */}
           {type} now
         </Button>
@@ -242,3 +263,41 @@ const Transaction = ({ type, currentPrice, setOrderMsg }) => {
 };
 
 export default Transaction;
+
+// useEffect(() => {
+//   const selectedStock = query.get('stock');
+//   setSelectedStock(selectedStock);
+//   getPosition();
+// }, [query.get('stock')]);
+
+// useEffect(() => {
+//   if (!currentPrice && !currentBalance) return;
+//   //debugger;
+
+//   getMaxQuantity();
+// }, [currentPrice, currentBalance]);
+
+// // useEffect(() => {
+// //   if (!selectedStock) return;
+
+// //   getPosition();
+// // }, [selectedStock]);
+
+// useEffect(() => {
+//   //debugger;
+//   if (user.length === 0) return;
+//   getCashBalance();
+//   getPosition();
+// }, [user]);
+
+// useEffect(() => {
+//   const totalTransactionValue = quantity * currentPrice;
+//   setTotal(totalTransactionValue);
+//   setOrderMsg('');
+// }, [quantity]);
+
+// useEffect(() => {
+//   //debugger;
+//   getPosition();
+//   getMaxQuantity();
+// }, [type]);

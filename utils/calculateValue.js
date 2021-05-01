@@ -36,8 +36,10 @@ const calculateHoldingsValue = (array) => {
   };
 };
 
-const calculateCashAvailable = (arr) => {
-  const cashAvailableToTrade = arr.rows
+const calculateCashAvailable = (array) => {
+  if (!array) return;
+
+  const cashAvailableToTrade = array
     .map((t) => Number(t.amount))
     .reduce((acc, cur) => acc + cur, 0);
 

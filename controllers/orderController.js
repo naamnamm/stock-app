@@ -32,6 +32,7 @@ const post = async (req, res) => {
       const cashAvailableToTrade = functions.calculateCashAvailable(
         cashBalanceRows
       );
+
       const purchaseValue = quantity * price;
 
       //3. can proceed if you have enough cash to trade

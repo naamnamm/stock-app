@@ -71,6 +71,8 @@ const Stocks = () => {
     />
   ) : null;
 
+  console.log(orderMsg);
+
   return (
     <>
       <SearchNav />
@@ -100,6 +102,7 @@ const Stocks = () => {
             <ControlledTabs
               currentPrice={stock ? stock.quote.latestPrice : null}
               setOrderMsg={setOrderMsg}
+              orderMsg={orderMsg}
             />
           </Card>
         </div>

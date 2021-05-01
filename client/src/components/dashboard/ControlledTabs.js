@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Transaction from './Transaction';
 import { Tabs, Tab } from 'react-bootstrap';
 
-const ControlledTabs = ({ currentPrice, setOrderMsg }) => {
+const ControlledTabs = ({ currentPrice, setOrderMsg, orderMsg }) => {
   const [type, setType] = useState('buy');
 
   return (
@@ -16,6 +16,7 @@ const ControlledTabs = ({ currentPrice, setOrderMsg }) => {
           type={type}
           currentPrice={currentPrice}
           setOrderMsg={setOrderMsg}
+          orderMsg={orderMsg}
         />
       </Tab>
       <Tab eventKey='sell' title='Sell'>
@@ -23,6 +24,7 @@ const ControlledTabs = ({ currentPrice, setOrderMsg }) => {
           type={type}
           currentPrice={currentPrice}
           setOrderMsg={setOrderMsg}
+          orderMsg={orderMsg}
         />
       </Tab>
     </Tabs>
