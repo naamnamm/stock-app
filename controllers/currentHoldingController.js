@@ -1,8 +1,4 @@
 const currentHoldingService = require('../services/currentHoldingService');
-const {
-  getCurrentHoldingByUserId,
-  selectedStock,
-} = require('../database/dbCurrentHolding');
 
 const get = async (req, res) => {
   const { userid } = req.params;

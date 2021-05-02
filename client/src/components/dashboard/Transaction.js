@@ -20,10 +20,15 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   const [total, setTotal] = useState('');
   const [maxQuantity, setMaxQuantity] = useState('');
   const [position, setPosition] = useState('');
-  const [loading, setloading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   //const { user } = useAuth();
   const { user } = useContext(AuthContext);
+
+  console.log('type', type);
+  console.log('currentprice', currentPrice);
+  console.log('currentBalance', currentBalance);
+  console.log('maxQuantity', maxQuantity);
 
   const getCashBalance = async () => {
     const userid = user.id;
@@ -33,26 +38,8 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     setCurrentBalance(data.cashAvailableToTrade);
   };
 
-  const getPosition = async () => {
-    //debugger;
-    const userid = user.id;
-
-    console.log(userid);
-    const response = await fetch(
-      `/api/currentHoldings/${userid}/${selectedStock}`
-    );
-    const data = await response.json();
-
-    if (!data.msg) {
-      setPosition(data);
-    } else {
-      setPosition('');
-    }
-  };
-
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
-    setloading(true);
 
     if (quantity > maxQuantity || quantity <= 0) {
       setOrderMsg({ errorMsg: 'Invalid quantity' });
@@ -76,6 +63,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
         body: JSON.stringify(data),
       };
 
+      setLoading(true);
       const response = await fetch('/api/orders', config);
       const orderData = await response.json();
 
@@ -88,18 +76,28 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
         setQuantity('');
         await getCashBalance();
         await getPosition();
-        setloading(false);
       }
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
   };
 
-  //Question: should I handle this on the backend?
+  //note
+  // 1.when component first mount, currentBalance is '' && currentPrice is null
+  // 2. await currentBalance from fetch request
+  // 3. await currentPrice from parent component
+  // Question - once we get currentBalance & currentPrice, why useEffect on mount doesn't run?
+  // that's why I set up useEffect [currentBalance] && [currentPrice].
   const getMaxQuantity = () => {
+    console.log(
+      'max',
+      currentBalance,
+      currentPrice,
+      currentBalance && currentPrice
+    );
+
     if (type === 'buy') {
-      //current balance fetched from `/api/cashBalance/${userid}`
-      //current price get as a prop from parent component
       if (!(currentBalance && currentPrice)) {
         return;
       }
@@ -109,17 +107,11 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     }
 
     if (type === 'sell') {
-      //positing is fetch from `/api/currentHoldings/${userid}/${selectedStock}`
       const maxQuantityToSell = position ? position : null;
 
       setMaxQuantity(maxQuantityToSell);
     }
   };
-
-  useEffect(() => {
-    const selectedStock = query.get('stock');
-    setSelectedStock(selectedStock);
-  }, [query.get('stock')]);
 
   useEffect(() => {
     if (!currentPrice) return;
@@ -128,13 +120,55 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   }, [currentPrice]);
 
   useEffect(() => {
-    const totalTransactionValue = quantity * currentPrice;
-    setTotal(totalTransactionValue);
+    getMaxQuantity();
+  }, [currentBalance]);
 
-    if (orderMsg.errorMsg) {
-      setOrderMsg('');
+  //note
+  //when I select different stock from the searchbar
+  //position doesn't get updated
+  //That's why I set up useEffect [selectedStock].
+
+  const getPosition = async () => {
+    const userid = user.id;
+
+    //console.log(userid);
+    const response = await fetch(
+      `/api/currentHoldings/${userid}/${selectedStock}`
+    );
+    const data = await response.json();
+
+    if (!data.msg) {
+      setPosition(data);
+    } else {
+      setPosition('');
     }
-  }, [quantity]);
+  };
+
+  // useEffect(() => {
+  //   console.log('ran', selectedStock);
+  //   if (!query.get('stock')) return;
+
+  //   getPosition();
+  // }, [query.get('stock')]);
+
+  //note
+  // 1. when I change type to sell, maxQuantity to sell doens't get updated.
+  // 2. That's why I set up useEffect [type].
+  useEffect(() => {
+    getMaxQuantity();
+    getPosition();
+  }, [type]);
+
+  useEffect(() => {
+    console.log(query.get('stock'));
+    const selectedStock = query.get('stock');
+    setSelectedStock(selectedStock);
+
+    //when we actually get data from parent, this doesn't get re-render
+    // without useEffect(variable change) - position, maxQuantity don't get updated
+    // getMaxQuantity();
+    // getPosition();
+  }, [query.get('stock')]);
 
   useEffect(() => {
     if (!selectedStock) return;
@@ -149,13 +183,13 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   }, [user]);
 
   useEffect(() => {
-    getMaxQuantity();
-    getPosition();
-  }, [type]);
+    const totalTransactionValue = quantity * currentPrice;
+    setTotal(totalTransactionValue);
 
-  useEffect(() => {
-    getMaxQuantity();
-  }, [currentBalance]);
+    if (orderMsg.errorMsg) {
+      setOrderMsg('');
+    }
+  }, [quantity]);
 
   return (
     <div>

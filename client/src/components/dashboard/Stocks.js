@@ -71,8 +71,6 @@ const Stocks = () => {
     />
   ) : null;
 
-  console.log(orderMsg);
-
   return (
     <>
       <SearchNav />

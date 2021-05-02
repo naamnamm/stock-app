@@ -12,6 +12,7 @@ const currentHolding = async (userid) => {
           `https://cloud.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.IEX_API_TOKEN}`
         )
         .then((data) => data.data)
+        .catch()
     );
 
     const latestPrices = await Promise.all(fetchLatestPrices).then(
