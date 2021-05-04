@@ -9,7 +9,8 @@ const currentHolding = async (userid) => {
     const fetchLatestPrices = currentHoldings.map((item) =>
       axios
         .get(
-          `https://cloud.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.IEX_API_TOKEN}`
+          //`https://cloud.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.IEX_API_TOKEN}`
+          `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.SANDBOX_IEX_API_TOKEN}`
         )
         .then((data) => data.data)
         .catch()

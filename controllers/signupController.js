@@ -1,32 +1,13 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const pool = require('../database/dbPool');
-const { getUserByUsername, createNewUser } = require('../database/dbUser');
+const signupService = require('../services/signupService');
 
 module.exports = async (req, res) => {
+  const { username, password } = req.body;
+
   try {
-    const { username, password } = req.body;
-    const errors = [];
-
-    const userMatch = await getUserByUsername(username);
-
-    if (userMatch) {
-      errors.push({ message: 'Username already exist!' });
-    }
-
-    if (errors.length > 0) {
-      return res.status(401).send(errors);
-    } else {
-      const saltRounds = await bcrypt.genSalt();
-      const passHash = await bcrypt.hash(password, saltRounds);
-
-      await createNewUser(username, passHash, null);
-
-      res
-        .status(201)
-        .send({ success: { code: 201, message: 'successfully signed up' } });
-    }
+    const newUser = await signupService.signupUser(username, password);
+    console.log(newUser);
+    res.status(201).send(newUser);
   } catch (error) {
-    console.log(error);
+    res.status(error.status).send({ errorMessage: error.message });
   }
 };

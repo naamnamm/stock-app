@@ -18,7 +18,7 @@ const post = async (req, res) => {
   const { symbol, userid } = req.body;
 
   try {
-    const watchlist = await watchlistService.existingWatchlist(symbol, userid);
+    const watchlist = await watchlistService.addWatchlist(symbol, userid);
     res.send(watchlist);
   } catch (error) {
     res.status(error.status).send({ errorMessage: error.message });

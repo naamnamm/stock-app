@@ -34,6 +34,7 @@ const Login = () => {
 
       const response = await fetch('/api/auth/login', config);
       const loginData = await response.json();
+      console.log(loginData);
 
       if (!response.ok) {
         setErrorMsg(loginData.error.message);

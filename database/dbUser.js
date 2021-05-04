@@ -16,10 +16,12 @@ const updateUserLastActiveAt = async (lastActiveAt, username) => {
 };
 
 const createNewUser = async (username, password, lastActiveAt) => {
-  await pool.query(
+  const newUser = await pool.query(
     'INSERT INTO users (name, password, last_active_at) VALUES ($1, $2, $3) RETURNING *',
     [username, password, lastActiveAt]
   );
+
+  return newUser.rows[0];
 };
 
 module.exports = { getUserByUsername, updateUserLastActiveAt, createNewUser };

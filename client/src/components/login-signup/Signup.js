@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Navbar, Card } from 'react-bootstrap';
 import './Login-Signup.css';
 import { useHistory } from 'react-router-dom';
@@ -9,6 +9,7 @@ const Signup = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const [errorMsg, setErrorMsg] = useState('');
+  const [username, setUsername] = useState('');
   const history = useHistory();
 
   const handleSubmit = async (e) => {
@@ -29,13 +30,21 @@ const Signup = () => {
       };
 
       const response = await fetch('/api/auth/signup', config);
+      console.log(response);
       const signupData = await response.json();
+      console.log(signupData);
 
       !response.ok ? setErrorMsg(signupData) : history.push('/login');
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (errorMsg) {
+      setErrorMsg('');
+    }
+  }, [username]);
 
   return (
     <>
@@ -52,11 +61,9 @@ const Signup = () => {
         <Card.Body>
           <h2 className='text-center mb-4'>Sign Up</h2>
 
-          {errorMsg
-            ? errorMsg.map((err) => (
-                <div className='text-danger'>{err.message}</div>
-              ))
-            : null}
+          {errorMsg ? (
+            <div className='text-danger'>{errorMsg.errorMessage}</div>
+          ) : null}
 
           <Form onSubmit={handleSubmit}>
             <Form.Group id='username' className='text-left text-muted'>
@@ -66,6 +73,7 @@ const Signup = () => {
               <Form.Control
                 type='username'
                 placeholder='Enter Username'
+                onChange={(e) => setUsername(e.target.value)}
                 ref={usernameRef}
                 required
               />
