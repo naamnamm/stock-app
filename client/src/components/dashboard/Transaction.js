@@ -9,7 +9,6 @@ import { AuthContext } from '../../context/AuthContext';
 function formatNum(num) {
   return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
 }
-//should just calculate total
 
 const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   const quantityRef = useRef();
@@ -143,13 +142,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
       setPosition('');
     }
   };
-
-  // useEffect(() => {
-  //   console.log('ran', selectedStock);
-  //   if (!query.get('stock')) return;
-
-  //   getPosition();
-  // }, [query.get('stock')]);
 
   //note
   // 1. when I change type to sell, maxQuantity to sell doens't get updated.

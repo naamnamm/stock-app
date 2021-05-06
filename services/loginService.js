@@ -1,15 +1,17 @@
-const { getUserByUsername } = require('../database/dbUser');
+const {
+  getUserByUsername,
+  updateUserLastActiveAt,
+} = require('../database/dbUser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const loginUser = async (username, password) => {
   const usernameMatch = await getUserByUsername(username);
 
-  const passwordMatch = await bcrypt.compare(password, usernameMatch.password);
-
-  console.log(usernameMatch && passwordMatch);
-
-  if (!usernameMatch || !passwordMatch) {
+  if (
+    !usernameMatch ||
+    !(await bcrypt.compare(password, usernameMatch.password))
+  ) {
     const error = new Error('either username or password does not match');
     error.status = 403;
     throw error;
