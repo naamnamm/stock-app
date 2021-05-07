@@ -1,6 +1,21 @@
 const jwt = require('jsonwebtoken');
 
-const authToken = (req, res, next) => {
+const createToken = (usernameMatch) => {
+  const { id, name } = usernameMatch;
+
+  const payload = {
+    id,
+    name,
+  };
+
+  const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: '12hrs',
+  });
+
+  return token;
+};
+
+const verifyToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -14,4 +29,4 @@ const authToken = (req, res, next) => {
   });
 };
 
-module.exports = authToken;
+module.exports = { createToken, verifyToken };

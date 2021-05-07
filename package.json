@@ -7,6 +7,7 @@
     "start": "node server.js",
     "client": "npm run watch --prefix client",
     "dev": "concurrently \"nodemon server.js\" \"npm run client\"",
+    "test": "jest",
     "heroku-prebuild": "npm i --prefix client && npm run build --prefix client",
     "heroku-postbuild": "echo This runs afterwards."
   },
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
+    "jest": "^26.6.3",
     "nodemon": "^2.0.6"
   }
 }
