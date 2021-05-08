@@ -37,7 +37,7 @@ const Login = () => {
       console.log(loginData);
 
       if (!response.ok) {
-        setErrorMsg(loginData.error.message);
+        setErrorMsg(loginData.errorMessage);
       } else {
         localStorage.setItem('accessToken', JSON.stringify(loginData.token));
         setIsAuth(true);

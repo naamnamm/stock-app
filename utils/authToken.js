@@ -1,5 +1,15 @@
 const jwt = require('jsonwebtoken');
 
+// const userToken = (token, userId, userName) => {
+//   (this.token = token), (this.id = userId), (this.name = userName);
+// };
+class UserToken {
+  constructor(token, userId, userName) {
+    // this.user = { id: userId, name: userName };
+    (this.token = token), (this.id = userId), (this.name = userName);
+  }
+}
+
 const createToken = (usernameMatch) => {
   const { id, name } = usernameMatch;
 
@@ -29,4 +39,4 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-module.exports = { createToken, verifyToken };
+module.exports = { createToken, verifyToken, UserToken };
