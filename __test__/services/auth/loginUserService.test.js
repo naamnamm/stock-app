@@ -20,7 +20,7 @@ describe('Login User Service', () => {
       const username = 'user123';
       const password = 'pass123';
 
-      getUserByUsername.mockReturnValue(id, name);
+      getUserByUsername.mockReturnValue(id, name, password);
       createToken.mockReturnValue(token);
 
       const result = await loginUserService.loginUser(username, password);
