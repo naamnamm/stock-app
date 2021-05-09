@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import './Balance.css';
 import { Form, Col, Row, Button, Card } from 'react-bootstrap';
-import SearchNav from './SearchNav';
+import SearchNav from '../dashboard-page/SearchNav';
 
 //import { useAuth } from '../../context/AuthContext';
 import { AuthContext } from '../../context/AuthContext';

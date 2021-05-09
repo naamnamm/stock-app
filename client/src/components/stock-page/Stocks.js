@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import SearchNav from './SearchNav';
+import SearchNav from '../dashboard-page/SearchNav';
 import ControlledTabs from './ControlledTabs';
 import { Chart } from 'react-google-charts';
 import './Stocks.css';

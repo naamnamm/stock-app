@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 //import { Link, useParams, useLocation } from 'react-router-dom';
-import Dashboard from './components/dashboard/Dashboard';
-import Stocks from './components/dashboard/Stocks';
-import Balance from './components/dashboard/Balance';
+import Dashboard from './components/dashboard-page/Dashboard';
+import Stocks from './components/stock-page/Stocks';
+import Balance from './components/balance-page/Balance';
 import LandingPage from './components/landing-page/LandingPage';
 import Login from './components/login-signup/Login';
 import Signup from './components/login-signup/Signup';
-import Order from './components/dashboard/Order';
+import Order from './components/order-page/Order';
 import PrivateRoute from './PrivateRoute';
 
 //import { AuthProvider } from './context/AuthContext';

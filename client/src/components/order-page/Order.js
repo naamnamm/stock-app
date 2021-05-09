@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Table } from 'react-bootstrap';
-import SearchNav from './SearchNav';
+import SearchNav from '../dashboard-page/SearchNav';
 
 //import { useAuth } from '../../context/AuthContext';
 import { AuthContext } from '../../context/AuthContext';
