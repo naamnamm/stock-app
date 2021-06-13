@@ -8,15 +8,12 @@ const bcrypt = require('bcrypt');
 jest.mock('bcrypt');
 
 const loginUserService = require('../../services/loginService');
-
-const getMockedLoginUserData = () => {
-  return new UserToken('token123', 'id123', 'user123');
-};
+//const loginUserService = require('../services/loginService');
 
 describe('Login User Service', () => {
   describe('Login User', () => {
     test('Should return user login data', async () => {
-      const mockUserLoginData = getMockedLoginUserData();
+      const mockUserLoginData = new UserToken('token123', 'id123', 'user123');
 
       const username = 'user123';
       const password = 'pass123';
@@ -26,6 +23,7 @@ describe('Login User Service', () => {
       createToken.mockReturnValue('token123');
 
       const result = await loginUserService.loginUser(username, password);
+      //console.log(result);
 
       expect(result.id).toEqual(mockUserLoginData.id);
       expect(result.name).toEqual(mockUserLoginData.name);

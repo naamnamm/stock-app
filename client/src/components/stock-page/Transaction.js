@@ -24,11 +24,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   //const { user } = useAuth();
   const { user } = useContext(AuthContext);
 
-  console.log('type', type);
-  console.log('currentprice', currentPrice);
-  console.log('currentBalance', currentBalance);
-  console.log('maxQuantity', maxQuantity);
-
   const getCashBalance = async () => {
     const userid = user.id;
     const response = await fetch(`/api/cashBalance/${userid}`);
@@ -82,20 +77,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     setLoading(false);
   };
 
-  //note
-  // 1.when component first mount, currentBalance is '' && currentPrice is null
-  // 2. await currentBalance from fetch request
-  // 3. await currentPrice from parent component
-  // Question - once we get currentBalance & currentPrice, why useEffect on mount doesn't run?
-  // that's why I set up useEffect [currentBalance] && [currentPrice].
   const getMaxQuantity = () => {
-    console.log(
-      'max',
-      currentBalance,
-      currentPrice,
-      currentBalance && currentPrice
-    );
-
     if (type === 'buy') {
       if (!(currentBalance && currentPrice)) {
         return;
@@ -122,11 +104,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     getMaxQuantity();
   }, [currentBalance]);
 
-  //note
-  //when I select different stock from the searchbar
-  //position doesn't get updated
-  //That's why I set up useEffect [selectedStock].
-
   const getPosition = async () => {
     const userid = user.id;
 
@@ -143,9 +120,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     }
   };
 
-  //note
-  // 1. when I change type to sell, maxQuantity to sell doens't get updated.
-  // 2. That's why I set up useEffect [type].
   useEffect(() => {
     getMaxQuantity();
     getPosition();
@@ -155,11 +129,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     console.log(query.get('stock'));
     const selectedStock = query.get('stock');
     setSelectedStock(selectedStock);
-
-    //when we actually get data from parent, this doesn't get re-render
-    // without useEffect(variable change) - position, maxQuantity don't get updated
-    // getMaxQuantity();
-    // getPosition();
   }, [query.get('stock')]);
 
   useEffect(() => {
@@ -173,6 +142,16 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     getCashBalance();
     getPosition();
   }, [user]);
+
+  function handleQuantityChange(e) {
+    const newQuantity = e.target.value;
+    const totalTransactionValue = newQuantity * currentPrice;
+
+    setQuantity(newQuantity);
+    setTotal(totalTransactionValue);
+  }
+
+  //https://dmitripavlutin.com/differences-between-arrow-and-regular-functions/
 
   useEffect(() => {
     const totalTransactionValue = quantity * currentPrice;
@@ -199,7 +178,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
           <Col sm={8} className='pl-3 pr-0'>
             <Form.Control
               type='number'
-              onChange={(e) => setQuantity(e.target.value)}
+              onChange={handleQuantityChange}
               value={quantity}
               placeholder='0.00'
               ref={quantityRef}
