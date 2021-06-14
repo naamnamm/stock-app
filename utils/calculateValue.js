@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 function formatNum(num) {
   return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
 }
@@ -46,7 +48,25 @@ const calculateCashAvailable = (array) => {
   return cashAvailableToTrade;
 };
 
-const generateChartData = () => {};
+const fetchStockLatestPrices = async (array) => {
+  const mappedPromises = array.map((item) =>
+    axios
+      .get(
+        //`https://cloud.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.IEX_API_TOKEN}`
+        `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.SANDBOX_IEX_API_TOKEN}`
+      )
+      .then((data) => data.data)
+      .catch()
+  );
+
+  const latestPrices = await Promise.all(mappedPromises).then((response) => {
+    return response.map((item) => item.quote.latestPrice);
+  });
+
+  console.log('latestprice', latestPrices);
+
+  return latestPrices;
+};
 
 module.exports = {
   formatNum,
@@ -54,4 +74,5 @@ module.exports = {
   calculateCashAvailable,
   calculateHoldingsValue,
   createOrderModel,
+  fetchStockLatestPrices,
 };

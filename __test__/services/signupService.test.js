@@ -12,6 +12,7 @@ describe('User Registration Service', () => {
       const mockNewUser = { id: 'id123', name: 'user123' };
 
       getUserByUsername.mockReturnValue(null);
+      // do we need to get mock return value for bcrypt?
       // bcrypt.genSalt.mockReturnValue(10);
       // bcrypt.hash.mockReturnValue('hash123');
 

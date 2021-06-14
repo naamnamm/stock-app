@@ -5,21 +5,11 @@ const functions = require('../utils/calculateValue');
 const currentHolding = async (userid) => {
   const currentHoldings = await getCurrentHoldingByUserId(userid);
 
-  if (currentHoldings) {
-    const fetchLatestPrices = currentHoldings.map((item) =>
-      axios
-        .get(
-          //`https://cloud.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.IEX_API_TOKEN}`
-          `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.SANDBOX_IEX_API_TOKEN}`
-        )
-        .then((data) => data.data)
-        .catch()
-    );
+  console.log(currentHoldings);
 
-    const latestPrices = await Promise.all(fetchLatestPrices).then(
-      (response) => {
-        return response.map((item) => item.quote.latestPrice);
-      }
+  if (currentHoldings) {
+    const latestPrices = await functions.fetchStockLatestPrices(
+      currentHoldings
     );
 
     currentHoldings.map((item, i) => {
@@ -27,6 +17,8 @@ const currentHolding = async (userid) => {
       return functions.createStockModel(item);
     });
   }
+
+  console.log(currentHoldings);
 
   const holdingsValue = functions.calculateHoldingsValue(currentHoldings);
 
@@ -44,3 +36,19 @@ const selectedStock = async (userid, selectedStock) => {
 };
 
 module.exports = { currentHolding, selectedStock };
+
+// const fetchLatestPrices = currentHoldings.map((item) =>
+//   axios
+//     .get(
+//       //`https://cloud.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.IEX_API_TOKEN}`
+//       `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.SANDBOX_IEX_API_TOKEN}`
+//     )
+//     .then((data) => data.data)
+//     .catch()
+// );
+
+// const latestPrices = await Promise.all(fetchLatestPrices).then(
+//   (response) => {
+//     return response.map((item) => item.quote.latestPrice);
+//   }
+// );
