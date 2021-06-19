@@ -15,7 +15,7 @@ app.use('/api/cashBalance', require('./routes/cashBalance'));
 app.use('/api/auth', require('./routes/auth'));
 
 //still need to organize transaction file
-app.use('/api/orders', require('./routes/order'));
+app.use('/api/transactions', require('./routes/transactions'));
 
 // do i need stock controller?
 app.use('/api/stocks', require('./routes/stocks'));

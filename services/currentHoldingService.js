@@ -1,26 +1,22 @@
 const { getCurrentHoldingByUserId } = require('../database/dbCurrentHolding');
-const axios = require('axios');
-const functions = require('../utils/calculateValue');
+const functions = require('../utils/functions');
 
 const currentHolding = async (userid) => {
   const currentHoldings = await getCurrentHoldingByUserId(userid);
-
-  console.log(currentHoldings);
 
   if (currentHoldings) {
     const latestPrices = await functions.fetchStockLatestPrices(
       currentHoldings
     );
 
+    // how should I test this?
+
     currentHoldings.map((item, i) => {
       Object.assign(item, { latestPrice: `${latestPrices[i]}` });
       return functions.createStockModel(item);
     });
   }
-
-  console.log(currentHoldings);
-
-  const holdingsValue = functions.calculateHoldingsValue(currentHoldings);
+  const holdingsValue = functions.calculateHoldingValue(currentHoldings);
 
   return { currentHoldings, holdingsValue };
 };
@@ -52,3 +48,9 @@ module.exports = { currentHolding, selectedStock };
 //     return response.map((item) => item.quote.latestPrice);
 //   }
 // );
+
+// const mappedCurrentHoldings = functions.mappedStock(
+//   currentHoldings,
+//   latestPrices
+// );
+// console.log('mapped', mappedCurrentHoldings);

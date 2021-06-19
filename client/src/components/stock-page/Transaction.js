@@ -58,7 +58,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
       };
 
       setLoading(true);
-      const response = await fetch('/api/orders', config);
+      const response = await fetch('/api/transactions', config);
       const orderData = await response.json();
 
       console.log(orderData);

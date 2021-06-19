@@ -10,30 +10,37 @@ const createStockModel = (stock) => {
   stock.gainLoss = stock.holdingValue - stock.holdingCost;
 };
 
+const mappedStock = (arrOfStocks, arrOfPrices) => {
+  arrOfStocks.map((item, i) => {
+    Object.assign(item, { latestPrice: `${arrOfPrices[i]}` });
+    return createStockModel(item);
+  });
+
+  return arrOfStocks;
+};
+
 const createOrderModel = (order) => {
   order.value = Number(order.quantity) * Number(order.price);
   return order;
 };
 
-const calculateHoldingsValue = (array) => {
-  const eachHoldingCost = array.map(
-    (item) => Number(item.quantity) * Number(item.purchaseprice)
-  );
-  const totalCost = eachHoldingCost.reduce((a, b) => {
-    return a + b;
-  }, 0);
+const calculateHoldingValue = (array) => {
+  const totalHoldingCost = array
+    .map((item) => Number(item.quantity) * Number(item.purchaseprice))
+    .reduce((a, b) => {
+      return a + b;
+    }, 0);
 
-  const eachHoldingValue = array.map(
-    (item) => Number(item.quantity) * Number(item.latestPrice)
-  );
-  const totalValue = eachHoldingValue.reduce((a, b) => {
-    return a + b;
-  }, 0);
+  const totalHoldingValue = array
+    .map((item) => Number(item.quantity) * Number(item.latestPrice))
+    .reduce((a, b) => {
+      return a + b;
+    }, 0);
 
-  const gainLoss = totalValue - totalCost;
+  const gainLoss = totalHoldingValue - totalHoldingCost;
 
   return {
-    totalValue: formatNum(totalValue),
+    totalValue: formatNum(totalHoldingValue),
     gainLoss: formatNum(gainLoss),
   };
 };
@@ -72,7 +79,33 @@ module.exports = {
   formatNum,
   createStockModel,
   calculateCashAvailable,
-  calculateHoldingsValue,
   createOrderModel,
   fetchStockLatestPrices,
+  mappedStock,
+  calculateHoldingValue,
 };
+
+// const calculateHoldingsValue = (array) => {
+//   //console.log('calculate', array);
+
+//   const eachHoldingCost = array.map(
+//     (item) => Number(item.quantity) * Number(item.purchaseprice)
+//   );
+//   const totalCost = eachHoldingCost.reduce((a, b) => {
+//     return a + b;
+//   }, 0);
+
+//   const eachHoldingValue = array.map(
+//     (item) => Number(item.quantity) * Number(item.latestPrice)
+//   );
+//   const totalValue = eachHoldingValue.reduce((a, b) => {
+//     return a + b;
+//   }, 0);
+
+//   const gainLoss = totalValue - totalCost;
+
+//   return {
+//     totalValue: formatNum(totalValue),
+//     gainLoss: formatNum(gainLoss),
+//   };
+// };

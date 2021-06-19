@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../database/dbPool');
 const fetch = require('node-fetch');
-const functions = require('../utils/calculateValue');
-const { get, post } = require('../controllers/orderController');
+const functions = require('../utils/functions');
+const { get, post } = require('../controllers/transactionsController');
 
 router.get('/:userid', get);
 
