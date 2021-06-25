@@ -4,21 +4,21 @@ const { getOrderByUserId } = require('../database/dbOrder');
 const { getCashBalanceByUserId } = require('../database/dbCashBalance');
 const transactionsService = require('../services/transactionsService');
 
-const get = async (req, res) => {
-  const { userid } = req.params;
+// const get = async (req, res) => {
+//   const { userid } = req.params;
 
-  try {
-    const allOrders = await getOrderByUserId(userid);
+//   try {
+//     const allOrders = await getOrderByUserId(userid);
 
-    const mappedOrders = allOrders.map((item) => {
-      return functions.createOrderModel(item);
-    });
+//     const mappedOrders = allOrders.map((item) => {
+//       return functions.createOrderModel(item);
+//     });
 
-    res.send(mappedOrders);
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     res.send(mappedOrders);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 const post = async (req, res) => {
   const { type } = req.body;
@@ -28,6 +28,7 @@ const post = async (req, res) => {
       const buyingTransaction = await transactionsService.buyingTransaction(
         req.body
       );
+
       res.send(buyingTransaction);
     } catch (error) {
       console.log(error);
@@ -144,4 +145,4 @@ const post = async (req, res) => {
   // }
 };
 
-module.exports = { get, post };
+module.exports = { post };

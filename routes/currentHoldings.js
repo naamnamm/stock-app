@@ -6,8 +6,10 @@ const {
   getBySelectedStock,
 } = require('../controllers/currentHoldingController');
 
+// this is from Dashboard.js
 router.get('/:userid', get);
 
+// this is from Transaction.js
 router.get('/:userid/:selectedStock', getBySelectedStock);
 
 module.exports = router;

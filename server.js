@@ -9,13 +9,14 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use('/api/watchlist', require('./routes/watchlist'));
-app.use('/api/transfer', require('./routes/transfer'));
+app.use('/api/cashTransfer', require('./routes/cashTransfer'));
 app.use('/api/currentHoldings', require('./routes/currentHoldings'));
 app.use('/api/cashBalance', require('./routes/cashBalance'));
 app.use('/api/auth', require('./routes/auth'));
 
 //still need to organize transaction file
 app.use('/api/transactions', require('./routes/transactions'));
+app.use('/api/orders', require('./routes/orders'));
 
 // do i need stock controller?
 app.use('/api/stocks', require('./routes/stocks'));

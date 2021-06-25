@@ -27,8 +27,10 @@ const Balance = () => {
         body: JSON.stringify({ amount, user, type: 'transfer-in' }),
       };
 
-      const response = await fetch('/api/transfer', config);
+      const response = await fetch('/api/cashTransfer', config);
       const data = await response.json();
+
+      console.log(data);
 
       setCashTransferHistory(data.transaction);
     } catch (error) {
@@ -40,13 +42,15 @@ const Balance = () => {
     const userid = user.id;
     const response = await fetch(`/api/cashBalance/${userid}`);
     const data = await response.json();
-    setCurrentCashBalance(data.cashAvailableToTrade);
+    setCurrentCashBalance(data.amount);
   };
 
   const getCashTransfer = async () => {
     const userid = user.id;
-    const response = await fetch(`/api/transfer/${userid}`);
+    const response = await fetch(`/api/cashTransfer/${userid}`);
     const data = await response.json();
+
+    console.log(data);
 
     if (data.length > 0) {
       setCashTransferHistory(data);
@@ -75,7 +79,7 @@ const Balance = () => {
       <SearchNav />
       <div className='cash-main-container d-flex mx-auto mt-3'>
         <div className='left-container balance-summary mr-3'>
-          <h3 className='text-left'>Current balance</h3>
+          <h3 className='text-left'>Current Cash Balance</h3>
           <div>
             <hr />{' '}
           </div>
@@ -83,7 +87,7 @@ const Balance = () => {
             {' '}
             You have ${currentCashBalance ? currentCashBalance : 0} to trade
           </p>
-          <h3 className='text-left'>Transfer History</h3>
+          <h3 className='text-left'>Cash Transfer History</h3>
           <div>
             <hr />{' '}
           </div>

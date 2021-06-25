@@ -55,6 +55,7 @@ CREATE TABLE currentHoldings (
 
 CREATE UNIQUE INDEX currentHoldings_user_id ON currentHoldings (user_id, symbol);
 
+-- old table
 CREATE TABLE cash_balance (
   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
   type TEXT NOT NULL,
@@ -62,6 +63,17 @@ CREATE TABLE cash_balance (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id uuid REFERENCES users(id)
 );
+
+-- update cash balance table
+CREATE TABLE cash_balances (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  amount NUMERIC(8,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  user_id uuid REFERENCES users(id)
+);
+
+CREATE UNIQUE INDEX cash_balances_user_id ON cash_balances (user_id);
+
 
 -- ALTER TABLE currentHoldings 
 -- ADD CONSTRAINT currentHoldings_user_id

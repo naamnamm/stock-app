@@ -29,7 +29,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     const response = await fetch(`/api/cashBalance/${userid}`);
     const data = await response.json();
 
-    setCurrentBalance(data.cashAvailableToTrade);
+    setCurrentBalance(data.amount);
   };
 
   const handleOrderSubmit = async (e) => {
@@ -123,6 +123,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   useEffect(() => {
     getMaxQuantity();
     getPosition();
+    getCashBalance();
   }, [type]);
 
   useEffect(() => {

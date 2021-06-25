@@ -1,41 +1,40 @@
 const {
   getCashBalanceByUserId,
   createCashTransactionByUserId,
+  updateCashBalanceByUserId,
 } = require('../database/dbCashBalance');
-const { createOrderByUserId } = require('../database/dbOrder');
+const { createFilledOrderByUserId } = require('../database/dbOrder');
 const {
-  createHoldingByUSerId,
+  createOrUpdateBuyingHoldingByUserId,
+  updateSellingHoldingByUserId,
   searchExistingHoldingByUserId,
-  sellHoldingByUSerId,
 } = require('../database/dbCurrentHolding');
 
 const buyingTransaction = async (reqBody) => {
   const { symbol, type, quantity, price, userid } = reqBody;
 
-  const cashBalanceRows = await getCashBalanceByUserId(userid);
-
-  const cashAvailableToTrade = functions.calculateCashAvailable(
-    cashBalanceRows
-  );
+  const cashBalance = await getCashBalanceByUserId(userid);
 
   const purchaseValue = quantity * price;
 
-  if (purchaseValue > cashAvailableToTrade) {
+  if (purchaseValue > cashBalance.amount) {
     const error = new Error('not enough cash to trade');
     error.status = 403;
     throw error;
   }
+  // to delete this
+  //await createCashTransactionByUserId(type, -Math.abs(purchaseValue), userid);
+  //need to fix this - to update cash balance
+  await updateCashBalanceByUserId(purchaseValue, userid);
+  // need to rename this to transaction
+  await createFilledOrderByUserId(symbol, type, quantity, price, userid);
 
-  await createCashTransactionByUserId(type, -Math.abs(purchaseValue), userid);
-
-  await createOrderByUserId(symbol, type, quantity, price, userid);
-
-  await createHoldingByUSerId(symbol, quantity, price, userid);
+  await createOrUpdateBuyingHoldingByUserId(symbol, quantity, price, userid);
 
   return { successMsg: `Your ${type}ing order has been filled` };
 };
 
-const sellingTransaction = async () => {
+const sellingTransaction = async (reqBody) => {
   const { symbol, type, quantity, price, userid } = reqBody;
 
   const existingHolding = searchExistingHoldingByUserId(symbol, userid);
@@ -53,12 +52,14 @@ const sellingTransaction = async () => {
   }
 
   const sellingValue = quantity * price;
-  //ok
-  await createCashTransactionByUserId(type, sellingValue, userid);
-  //ok
-  await createOrderByUserId(symbol, type, quantity, price, userid);
-  //ok
-  await sellHoldingByUSerId(symbol, quantity, price, userid);
+
+  //await createCashTransactionByUserId(type, -Math.abs(sellingValue), userid);
+  //need to fix
+  await updateCashBalanceByUserId(-sellingValue, userid);
+  //need to fix
+  await createFilledOrderByUserId(symbol, type, quantity, price, userid);
+
+  await updateSellingHoldingByUserId(symbol, quantity, price, userid);
 
   return { successMsg: `Your ${type}ing order has been filled` };
 };

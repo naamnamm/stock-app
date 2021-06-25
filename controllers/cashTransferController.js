@@ -3,7 +3,10 @@ const {
   getCashTransferByUserId,
   createCashTransferByUserId,
 } = require('../database/dbCashTransfer');
-const { createCashBalanceByUserId } = require('../database/dbCashBalance');
+const {
+  createCashTransactionByUserId,
+  updateCashBalanceByUserId,
+} = require('../database/dbCashBalance');
 
 const get = async (req, res) => {
   const { userid } = req.params;
@@ -23,7 +26,9 @@ const post = async (req, res) => {
     await createCashTransferByUserId(type, amount, user.id);
 
     //then insert transaction into cash_balance
-    await createCashBalanceByUserId(type, amount, user.id);
+    // need to merge these into one
+    await updateCashBalanceByUserId(amount, user.id);
+    //await createCashTransactionByUserId(type, amount, user.id);
 
     const transferHistory = await getCashTransferByUserId(user.id);
 

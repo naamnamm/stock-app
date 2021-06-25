@@ -4,6 +4,8 @@ const get = async (req, res) => {
   const { userid } = req.params;
 
   const currentHoldings = await currentHoldingService.currentHolding(userid);
+
+  console.log('currentHoldings', currentHoldings);
   res.send(currentHoldings);
 };
 
@@ -15,6 +17,7 @@ const getBySelectedStock = async (req, res) => {
     selectedStock
   );
 
+  console.log('holdingQuantity', holdingQuantity);
   res.send(holdingQuantity);
 };
 

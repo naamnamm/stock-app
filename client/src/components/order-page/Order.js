@@ -66,7 +66,7 @@ const Order = () => {
           <hr />{' '}
         </div>
         <p> You don't have any open orders</p>
-        <h3 className='text-left'>Filled Order</h3>
+        <h3 className='text-left'>Filled Orders</h3>
         <div>
           <hr />{' '}
         </div>

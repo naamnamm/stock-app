@@ -130,8 +130,10 @@ const Dashboard = () => {
   const getCashBalance = async () => {
     const response = await fetch(`/api/cashBalance/${userid}`);
     const data = await response.json();
+    console.log('cash', data.amount);
+    setCurrentCashBalance(Number(data.amount));
 
-    setCurrentCashBalance(parseFloat(data.cashAvailableToTrade).toFixed(2));
+    //    setCurrentCashBalance(parseFloat(data.cashAvailableToTrade).toFixed(2));
   };
 
   const getDoughnutChart = () => {

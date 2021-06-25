@@ -28,6 +28,10 @@ const selectedStock = async (userid, selectedStock) => {
     (stock) => stock.symbol === selectedStock
   );
 
+  if (!position) {
+    return;
+  }
+
   return position.quantity;
 };
 

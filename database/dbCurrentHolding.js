@@ -9,14 +9,14 @@ const getCurrentHoldingByUserId = async (userid) => {
   return dbResponse.rows;
 };
 
-const createHoldingByUSerId = async (symbol, quantity, price, userid) => {
-  const dbResponse = await pool.query(
-    'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (symbol, user_id) DO UPDATE SET purchaseprice = ((currentHoldings.purchaseprice * currentHoldings.quantity) + (EXCLUDED.purchaseprice * EXCLUDED.quantity))/(currentHoldings.quantity + EXCLUDED.quantity), quantity = currentHoldings.quantity + EXCLUDED.quantity RETURNING *',
-    [symbol, quantity, price, userid]
-  );
+// const createHoldingByUserId = async (symbol, quantity, price, userid) => {
+//   const dbResponse = await pool.query(
+//     'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4) RETURNING *',
+//     [symbol, quantity, price, userid]
+//   );
 
-  return dbResponse.rows;
-};
+//   return dbResponse.rows;
+// };
 
 const searchExistingHoldingByUserId = async (symbol, userid) => {
   const dbResponse = await pool.query(
@@ -27,7 +27,30 @@ const searchExistingHoldingByUserId = async (symbol, userid) => {
   return dbResponse.rows;
 };
 
-const sellHoldingByUSerId = async (symbol, quantity, price, userid) => {
+const createOrUpdateBuyingHoldingByUserId = async (
+  symbol,
+  quantity,
+  price,
+  userid
+) => {
+  // (68 * 1) + (29 * 62.86) / (29+1)
+  //purchaseprice = ((currentHoldings.purchaseprice * currentHoldings.quantity) - (EXCLUDED.purchaseprice * EXCLUDED.quantity))/(currentHoldings.quantity - EXCLUDED.quantity),
+  // quantity = currentHoldings.quantity + EXCLUDED.quantity
+
+  const dbResponse = await pool.query(
+    'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (symbol, user_id) DO UPDATE SET purchaseprice = ((currentHoldings.purchaseprice * currentHoldings.quantity) + (EXCLUDED.purchaseprice * EXCLUDED.quantity))/(currentHoldings.quantity + EXCLUDED.quantity), quantity = currentHoldings.quantity + EXCLUDED.quantity RETURNING *',
+    [symbol, quantity, price, userid]
+  );
+
+  return dbResponse.rows;
+};
+
+const createOrUpdateSellingHoldingByUserId = async (
+  symbol,
+  quantity,
+  price,
+  userid
+) => {
   const dbResponse = await pool.query(
     'INSERT INTO currentHoldings (symbol, quantity, purchasePrice, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (symbol, user_id) DO UPDATE SET purchaseprice = ((currentHoldings.purchaseprice * currentHoldings.quantity) - (EXCLUDED.purchaseprice * EXCLUDED.quantity))/(currentHoldings.quantity - EXCLUDED.quantity), quantity = currentHoldings.quantity - EXCLUDED.quantity RETURNING *',
     [symbol, quantity, price, userid]
@@ -38,7 +61,7 @@ const sellHoldingByUSerId = async (symbol, quantity, price, userid) => {
 
 module.exports = {
   getCurrentHoldingByUserId,
-  createHoldingByUSerId,
+  createOrUpdateBuyingHoldingByUserId,
+  createOrUpdateSellingHoldingByUserId,
   searchExistingHoldingByUserId,
-  sellHoldingByUSerId,
 };
