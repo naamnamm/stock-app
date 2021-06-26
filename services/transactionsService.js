@@ -1,6 +1,5 @@
 const {
   getCashBalanceByUserId,
-  createCashTransactionByUserId,
   updateCashBalanceByUserId,
 } = require('../database/dbCashBalance');
 const { createFilledOrderByUserId } = require('../database/dbOrder');
@@ -22,11 +21,9 @@ const buyingTransaction = async (reqBody) => {
     error.status = 403;
     throw error;
   }
-  // to delete this
-  //await createCashTransactionByUserId(type, -Math.abs(purchaseValue), userid);
-  //need to fix this - to update cash balance
+
   await updateCashBalanceByUserId(purchaseValue, userid);
-  // need to rename this to transaction
+
   await createFilledOrderByUserId(symbol, type, quantity, price, userid);
 
   await createOrUpdateBuyingHoldingByUserId(symbol, quantity, price, userid);
@@ -36,6 +33,8 @@ const buyingTransaction = async (reqBody) => {
 
 const sellingTransaction = async (reqBody) => {
   const { symbol, type, quantity, price, userid } = reqBody;
+
+  console.log('test', symbol, type, quantity, price, userid);
 
   const existingHolding = searchExistingHoldingByUserId(symbol, userid);
 
@@ -53,10 +52,8 @@ const sellingTransaction = async (reqBody) => {
 
   const sellingValue = quantity * price;
 
-  //await createCashTransactionByUserId(type, -Math.abs(sellingValue), userid);
-  //need to fix
   await updateCashBalanceByUserId(-sellingValue, userid);
-  //need to fix
+
   await createFilledOrderByUserId(symbol, type, quantity, price, userid);
 
   await updateSellingHoldingByUserId(symbol, quantity, price, userid);

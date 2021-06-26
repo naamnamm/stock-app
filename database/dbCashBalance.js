@@ -10,13 +10,13 @@ const createCashTransactionByUserId = async (type, amount, userid) => {
 
 //need to refactor cash_balance table
 const updateCashBalanceByUserId = async (amount, userid) => {
-  console.log('userid', userid);
-  const test = await pool.query(
-    'SELECT * FROM cash_balances WHERE user_id::text = $1',
-    [userid]
-  );
+  // console.log('userid', userid);
+  // const test = await pool.query(
+  //   'SELECT * FROM cash_balances WHERE user_id::text = $1',
+  //   [userid]
+  // );
 
-  console.log('test', test.rows[0]);
+  // console.log('test', test.rows[0]);
 
   const dbResponse = await pool.query(
     'INSERT INTO cash_balances (amount, user_id) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET amount = cash_balances.amount - EXCLUDED.amount RETURNING *',
