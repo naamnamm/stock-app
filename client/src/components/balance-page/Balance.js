@@ -30,8 +30,6 @@ const Balance = () => {
       const response = await fetch('/api/cashTransfer', config);
       const data = await response.json();
 
-      console.log(data);
-
       setCashTransferHistory(data.transaction);
     } catch (error) {
       console.log(error);
@@ -49,8 +47,6 @@ const Balance = () => {
     const userid = user.id;
     const response = await fetch(`/api/cashTransfer/${userid}`);
     const data = await response.json();
-
-    console.log(data);
 
     if (data.length > 0) {
       setCashTransferHistory(data);

@@ -9,14 +9,7 @@ router.get('/:userid', async (req, res) => {
 
   const cashBalance = await getCashBalanceByUserId(userid);
 
-  console.log('cash bal', cashBalance);
   res.send(cashBalance);
-
-  // const cashAvailableToTrade = functions.calculateCashAvailable(cashBalance);
-
-  // if (cashAvailableToTrade) {
-  //   res.send({ cashAvailableToTrade });
-  // }
 });
 
 module.exports = router;

@@ -132,8 +132,6 @@ const Dashboard = () => {
     const data = await response.json();
     console.log('cash', data.amount);
     setCurrentCashBalance(Number(data.amount));
-
-    //    setCurrentCashBalance(parseFloat(data.cashAvailableToTrade).toFixed(2));
   };
 
   const getDoughnutChart = () => {
@@ -218,7 +216,7 @@ const Dashboard = () => {
   return (
     <>
       <SearchNav />
-      {(!currentCashBalance || !currentHoldings) && <Tutorial />}
+      {!currentCashBalance && !currentHoldings && <Tutorial />}
       <div className='main-container d-flex mx-auto mt-3'>
         <div className='left-container mx-2'>
           <Card>

@@ -70,8 +70,6 @@ const fetchStockLatestPrices = async (array) => {
     return response.map((item) => item.quote.latestPrice);
   });
 
-  console.log('latestprice', latestPrices);
-
   return latestPrices;
 };
 
@@ -84,28 +82,3 @@ module.exports = {
   mappedStock,
   calculateHoldingValue,
 };
-
-// const calculateHoldingsValue = (array) => {
-//   //console.log('calculate', array);
-
-//   const eachHoldingCost = array.map(
-//     (item) => Number(item.quantity) * Number(item.purchaseprice)
-//   );
-//   const totalCost = eachHoldingCost.reduce((a, b) => {
-//     return a + b;
-//   }, 0);
-
-//   const eachHoldingValue = array.map(
-//     (item) => Number(item.quantity) * Number(item.latestPrice)
-//   );
-//   const totalValue = eachHoldingValue.reduce((a, b) => {
-//     return a + b;
-//   }, 0);
-
-//   const gainLoss = totalValue - totalCost;
-
-//   return {
-//     totalValue: formatNum(totalValue),
-//     gainLoss: formatNum(gainLoss),
-//   };
-// };

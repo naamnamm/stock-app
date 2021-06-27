@@ -7,6 +7,7 @@ const {
   createOrUpdateBuyingHoldingByUserId,
   updateSellingHoldingByUserId,
   searchExistingHoldingByUserId,
+  deleteHoldingByUserId,
 } = require('../database/dbCurrentHolding');
 
 const buyingTransaction = async (reqBody) => {
@@ -34,8 +35,6 @@ const buyingTransaction = async (reqBody) => {
 const sellingTransaction = async (reqBody) => {
   const { symbol, type, quantity, price, userid } = reqBody;
 
-  console.log('test', symbol, type, quantity, price, userid);
-
   const existingHolding = searchExistingHoldingByUserId(symbol, userid);
 
   if (!existingHolding) {
@@ -56,7 +55,16 @@ const sellingTransaction = async (reqBody) => {
 
   await createFilledOrderByUserId(symbol, type, quantity, price, userid);
 
-  await updateSellingHoldingByUserId(symbol, quantity, price, userid);
+  const holding = await updateSellingHoldingByUserId(
+    symbol,
+    quantity,
+    price,
+    userid
+  );
+
+  if (Number(holding.quantity) === 0) {
+    await deleteHoldingByUserId(symbol, userid);
+  }
 
   return { successMsg: `Your ${type}ing order has been filled` };
 };

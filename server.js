@@ -13,8 +13,6 @@ app.use('/api/cashTransfer', require('./routes/cashTransfer'));
 app.use('/api/currentHoldings', require('./routes/currentHoldings'));
 app.use('/api/cashBalance', require('./routes/cashBalance'));
 app.use('/api/auth', require('./routes/auth'));
-
-//still need to organize transaction file
 app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/orders', require('./routes/orders'));
 

@@ -34,8 +34,6 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
       const response = await fetch('/api/watchlist', config);
       const watchlistData = await response.json();
 
-      console.log(watchlistData);
-
       if (!response.ok) {
         setErrorMsg(watchlistData);
         setOptions([]);
