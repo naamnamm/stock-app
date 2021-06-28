@@ -6,7 +6,7 @@ const { createFilledOrderByUserId } = require('../database/dbOrder');
 const {
   createOrUpdateBuyingHoldingByUserId,
   updateSellingHoldingByUserId,
-  searchExistingHoldingByUserId,
+  getCurrentHoldingByUserIdandSymbol,
   deleteHoldingByUserId,
 } = require('../database/dbCurrentHolding');
 
@@ -23,7 +23,7 @@ const buyingTransaction = async (reqBody) => {
     throw error;
   }
 
-  await updateCashBalanceByUserId(purchaseValue, userid);
+  await updateCashBalanceByUserId(-purchaseValue, userid);
 
   await createFilledOrderByUserId(symbol, type, quantity, price, userid);
 
@@ -35,7 +35,7 @@ const buyingTransaction = async (reqBody) => {
 const sellingTransaction = async (reqBody) => {
   const { symbol, type, quantity, price, userid } = reqBody;
 
-  const existingHolding = searchExistingHoldingByUserId(symbol, userid);
+  const existingHolding = getCurrentHoldingByUserIdandSymbol(userid, symbol);
 
   if (!existingHolding) {
     const error = new Error('no holding found');
@@ -51,7 +51,7 @@ const sellingTransaction = async (reqBody) => {
 
   const sellingValue = quantity * price;
 
-  await updateCashBalanceByUserId(-sellingValue, userid);
+  await updateCashBalanceByUserId(sellingValue, userid);
 
   await createFilledOrderByUserId(symbol, type, quantity, price, userid);
 

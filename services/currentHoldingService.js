@@ -1,38 +1,47 @@
-const { getCurrentHoldingByUserId } = require('../database/dbCurrentHolding');
+const {
+  getCurrentHoldingByUserId,
+  getCurrentHoldingByUserIdandSymbol,
+} = require('../database/dbCurrentHolding');
 const functions = require('../utils/functions');
 
-const currentHolding = async (userid) => {
+const currentHoldings = async (userid) => {
   const currentHoldings = await getCurrentHoldingByUserId(userid);
 
-  if (currentHoldings) {
-    const latestPrices = await functions.fetchStockLatestPrices(
-      currentHoldings
-    );
-
-    // how should I test this?
-
-    currentHoldings.map((item, i) => {
-      Object.assign(item, { latestPrice: `${latestPrices[i]}` });
-      return functions.createStockModel(item);
-    });
+  if (!currentHoldings) {
+    const error = new Error('no currentHoldings found');
+    error.status = 404;
+    throw error;
   }
+
+  const latestPrices = await functions.fetchStockLatestPrices(currentHoldings);
+
+  currentHoldings.map((item, i) => {
+    Object.assign(item, { latestPrice: `${latestPrices[i]}` });
+    return functions.createStockModel(item);
+  });
+
   const holdingsValue = functions.calculateHoldingValue(currentHoldings);
 
   return { currentHoldings, holdingsValue };
 };
 
-const selectedStock = async (userid, selectedStock) => {
-  const currentHoldings = await getCurrentHoldingByUserId(userid);
-
-  const position = currentHoldings.find(
-    (stock) => stock.symbol === selectedStock
+const currentHoldingByStockSymbol = async (userid, selectedStock) => {
+  const currentHolding = await getCurrentHoldingByUserIdandSymbol(
+    userid,
+    selectedStock
   );
 
-  if (!position) {
-    return;
+  // const currentHolding = currentHoldings.find(
+  //   (stock) => stock.symbol === selectedStock
+  // );
+
+  if (!currentHolding) {
+    const error = new Error('no currentHolding found');
+    error.status = 404;
+    throw error;
   }
 
-  return position.quantity;
+  return currentHolding;
 };
 
-module.exports = { currentHolding, selectedStock };
+module.exports = { currentHoldings, currentHoldingByStockSymbol };

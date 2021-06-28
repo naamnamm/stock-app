@@ -9,18 +9,27 @@ const getCurrentHoldingByUserId = async (userid) => {
   return dbResponse.rows;
 };
 
-const deleteHoldingByUserId = async (symbol, userid) => {
+const getCurrentHoldingByUserIdandSymbol = async (userid, symbol) => {
   const dbResponse = await pool.query(
-    'DELETE FROM currentHoldings WHERE symbol = $1 AND user_id::text = $2',
-    [symbol, userid]
+    'SELECT quantity FROM currentHoldings WHERE user_id::text = $1 AND symbol = $2',
+    [userid, symbol]
   );
 
   return dbResponse.rows;
 };
 
-const searchExistingHoldingByUserId = async (symbol, userid) => {
+// const searchExistingHoldingByUserId = async (symbol, userid) => {
+//   const dbResponse = await pool.query(
+//     'SELECT quantity FROM currentHoldings WHERE symbol = $1 AND user_id::text = $2',
+//     [symbol, userid]
+//   );
+
+//   return dbResponse.rows;
+// };
+
+const deleteHoldingByUserId = async (symbol, userid) => {
   const dbResponse = await pool.query(
-    'SELECT quantity FROM currentHoldings WHERE symbol = $1 AND user_id::text = $2',
+    'DELETE FROM currentHoldings WHERE symbol = $1 AND user_id::text = $2',
     [symbol, userid]
   );
 
@@ -61,8 +70,9 @@ const updateSellingHoldingByUserId = async (
 
 module.exports = {
   getCurrentHoldingByUserId,
+  getCurrentHoldingByUserIdandSymbol,
   createOrUpdateBuyingHoldingByUserId,
   updateSellingHoldingByUserId,
-  searchExistingHoldingByUserId,
+  // searchExistingHoldingByUserId,
   deleteHoldingByUserId,
 };
