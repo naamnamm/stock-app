@@ -107,14 +107,13 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   const getPosition = async () => {
     const userid = user.id;
 
-    //console.log(userid);
     const response = await fetch(
       `/api/currentHoldings/${userid}/${selectedStock}`
     );
     const data = await response.json();
 
-    if (!data.msg) {
-      setPosition(data);
+    if (!data.errorMessage) {
+      setPosition(data.quantity);
     } else {
       setPosition('');
     }
@@ -183,7 +182,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
               value={quantity}
               placeholder='0.00'
               ref={quantityRef}
-              Required
+              required
             />
           </Col>
         </Form.Group>

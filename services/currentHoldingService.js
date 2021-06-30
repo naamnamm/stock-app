@@ -4,10 +4,13 @@ const {
 } = require('../database/dbCurrentHolding');
 const functions = require('../utils/functions');
 
-const currentHoldings = async (userid) => {
+const getHoldings = async (userid) => {
+  // 1. mock this array
   const currentHoldings = await getCurrentHoldingByUserId(userid);
+  // make [{}]
 
   if (!currentHoldings) {
+    // [10]
     const error = new Error('no currentHoldings found');
     error.status = 404;
     throw error;
@@ -15,25 +18,23 @@ const currentHoldings = async (userid) => {
 
   const latestPrices = await functions.fetchStockLatestPrices(currentHoldings);
 
+  //check to see if each item has a property called latestPrices
   currentHoldings.map((item, i) => {
     Object.assign(item, { latestPrice: `${latestPrices[i]}` });
-    return functions.createStockModel(item);
+    return functions.createStockModel(item); // this can be test later
   });
 
   const holdingsValue = functions.calculateHoldingValue(currentHoldings);
 
+  // test this
   return { currentHoldings, holdingsValue };
 };
 
-const currentHoldingByStockSymbol = async (userid, selectedStock) => {
+const getHoldingByStockSymbol = async (userid, stockSymbol) => {
   const currentHolding = await getCurrentHoldingByUserIdandSymbol(
     userid,
-    selectedStock
+    stockSymbol
   );
-
-  // const currentHolding = currentHoldings.find(
-  //   (stock) => stock.symbol === selectedStock
-  // );
 
   if (!currentHolding) {
     const error = new Error('no currentHolding found');
@@ -44,4 +45,4 @@ const currentHoldingByStockSymbol = async (userid, selectedStock) => {
   return currentHolding;
 };
 
-module.exports = { currentHoldings, currentHoldingByStockSymbol };
+module.exports = { getHoldings, getHoldingByStockSymbol };

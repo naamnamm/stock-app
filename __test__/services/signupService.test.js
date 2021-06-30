@@ -27,7 +27,7 @@ describe('User Registration Service', () => {
       expect(result.name).toEqual(mockNewUser.name);
     });
 
-    // test('Should throw error if username does not match', async () => {
+    // test('Should throw error if username match', async () => {
     //   const username = 'user123';
     //   const password = 'pass123';
 
@@ -36,18 +36,6 @@ describe('User Registration Service', () => {
     //   await expect(async () => {
     //     await loginUserService.loginUser(username, password);
     //   }).rejects.toEqual(new Error('username does not match'));
-    // });
-
-    // test('Should throw error if password does not match', async () => {
-    //   const username = 'user123';
-    //   const password = 'pass123';
-
-    //   getUserByUsername.mockReturnValue({ id: 'id123', name: username });
-    //   bcrypt.compare.mockReturnValue(false);
-
-    //   await expect(async () => {
-    //     await loginUserService.loginUser(username, password);
-    //   }).rejects.toEqual(new Error('password does not match'));
     // });
   });
 });
