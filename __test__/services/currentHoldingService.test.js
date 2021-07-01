@@ -54,27 +54,5 @@ describe('Current Holding Service', () => {
       expect(result[0]).toHaveProperty('quantity');
       expect(result[0].quantity).toEqual(1);
     });
-
-    // test('Should throw error if there is no currentHoldings', async () => {
-    //   const userid = 'id123';
-
-    //   getCurrentHoldingByUserId.mockReturnValue(null);
-
-    //   await expect(async () => {
-    //     await currentHoldingService.getHoldings(userid);
-    //   }).rejects.toEqual(new Error('no currentHoldings found'));
-    // });
   });
 });
-
-// const mockCurrentHolding = {
-//   id: 'id123',
-//   symbol: 'symbol123',
-//   quantity: '1',
-//   purchaseprice: '1',
-//   user_id: 'user123',
-//   latestPrices: 2,
-//   holdingValue: '2',
-//   holdingCost: '1',
-//   gainLoss: '1',
-// };

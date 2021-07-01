@@ -5,12 +5,9 @@ const {
 const functions = require('../utils/functions');
 
 const getHoldings = async (userid) => {
-  // 1. mock this array
   const currentHoldings = await getCurrentHoldingByUserId(userid);
-  // make [{}]
 
   if (!currentHoldings) {
-    // [10]
     const error = new Error('no currentHoldings found');
     error.status = 404;
     throw error;
@@ -18,15 +15,13 @@ const getHoldings = async (userid) => {
 
   const latestPrices = await functions.fetchStockLatestPrices(currentHoldings);
 
-  //check to see if each item has a property called latestPrices
   currentHoldings.map((item, i) => {
     Object.assign(item, { latestPrice: `${latestPrices[i]}` });
-    return functions.createStockModel(item); // this can be test later
+    return functions.createStockModel(item);
   });
 
   const holdingsValue = functions.calculateHoldingValue(currentHoldings);
 
-  // test this
   return { currentHoldings, holdingsValue };
 };
 
