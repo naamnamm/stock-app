@@ -10,7 +10,7 @@ const addWatchlist = async (symbol, userid) => {
     userid
   );
 
-  if (useridAndSymbolMatch.length > 0) {
+  if (useridAndSymbolMatch) {
     const error = new Error('Symbol already exists in watchlist.');
     error.status = 409;
     throw error;

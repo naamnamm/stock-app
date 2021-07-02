@@ -15,7 +15,7 @@ const getWatchlistBySymbolAndUserId = async (symbol, userid) => {
     [symbol, userid]
   );
 
-  return dbResponse.rows;
+  return dbResponse.rows[0];
 };
 
 const createWatchlist = async (symbol, userid) => {

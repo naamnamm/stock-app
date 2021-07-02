@@ -7,11 +7,12 @@ const watchlistService = require('../services/watchlistService');
 const get = async (req, res) => {
   const { userid } = req.params;
 
-  res.send(await getWatchlistByUserId(userid));
-  //we don't need to check if watchlist exist?
-  // if (watchlist) {
-  //   res.send(JSON.stringify(watchlist.rows));
-  // }
+  try {
+    const watchlist = await getWatchlistByUserId(userid);
+    res.send(watchlist);
+  } catch (error) {
+    throw error;
+  }
 };
 
 const post = async (req, res) => {
@@ -28,11 +29,15 @@ const post = async (req, res) => {
 const deleteFn = async (req, res) => {
   const { stockid, userid } = req.params;
 
-  await deleteWatchlist(stockid, userid);
+  try {
+    await deleteWatchlist(stockid, userid);
 
-  const updatedWatchlist = await getWatchlistByUserId(userid);
+    const updatedWatchlist = await getWatchlistByUserId(userid);
 
-  res.send(updatedWatchlist);
+    res.send(updatedWatchlist);
+  } catch (error) {
+    throw error;
+  }
 };
 
 module.exports = { post, get, deleteFn };

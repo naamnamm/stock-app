@@ -8,7 +8,6 @@ const bcrypt = require('bcrypt');
 jest.mock('bcrypt');
 
 const loginUserService = require('../../services/loginService');
-//const loginUserService = require('../services/loginService');
 
 describe('Login User Service', () => {
   describe('Login User', () => {
@@ -23,7 +22,6 @@ describe('Login User Service', () => {
       createToken.mockReturnValue('token123');
 
       const result = await loginUserService.loginUser(username, password);
-      //console.log(result);
 
       expect(result.id).toEqual(mockUserLoginData.id);
       expect(result.name).toEqual(mockUserLoginData.name);
@@ -36,11 +34,6 @@ describe('Login User Service', () => {
 
       getUserByUsername.mockReturnValue(null);
 
-      //why does this not work?
-      //const result = await loginUserService.loginUser(username, password);
-      //expect(result).toEqual(new Error('username does not match'));
-
-      //Q2 is this correct? this doesn't make sense to me
       await expect(async () => {
         await loginUserService.loginUser(username, password);
       }).rejects.toEqual(new Error('username does not match'));

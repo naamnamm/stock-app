@@ -11,12 +11,6 @@ router.post('/', post);
 
 module.exports = router;
 
-//res.send({ errorMsg: 'Failed to place order, please try again' });
-// const existingHolding = await pool.query(
-//   'SELECT * FROM currentHoldings WHERE user_id::text = $1 AND symbol = $2',
-//   [userid, symbol]
-// );
-
 //https://stackoverflow.com/questions/1109061/insert-on-duplicate-update-in-postgresql
 //https://www.javatpoint.com/postgresql-upsert
 
