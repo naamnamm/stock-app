@@ -112,11 +112,11 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     );
     const data = await response.json();
 
-    if (!data.errorMessage) {
-      setPosition(data.quantity);
-    } else {
+    if (data.errorMessage) {
       setPosition('');
     }
+
+    setPosition(data.quantity);
   };
 
   useEffect(() => {

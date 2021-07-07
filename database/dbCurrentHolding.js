@@ -15,7 +15,7 @@ const getCurrentHoldingByUserIdandSymbol = async (userid, symbol) => {
     [userid, symbol]
   );
 
-  return dbResponse.rows;
+  return dbResponse.rows[0];
 };
 
 const deleteHoldingByUserId = async (symbol, userid) => {

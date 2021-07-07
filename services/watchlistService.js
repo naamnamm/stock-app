@@ -16,10 +16,17 @@ const addWatchlist = async (symbol, userid) => {
     throw error;
   }
 
+  //Do i need to test createWatchlist below?
   await createWatchlist(symbol, userid);
+
   const watchlist = await getWatchlistByUserId(userid);
 
   return watchlist;
 };
 
 module.exports = { addWatchlist };
+
+// question: this is my watchlist service, here is how i test it.
+// is there anything else I should be testing?
+// Do i need to test createWatchlist below?
+// await createWatchlist(symbol, userid);

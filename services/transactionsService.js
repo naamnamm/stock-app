@@ -18,15 +18,16 @@ const buyingTransaction = async (reqBody) => {
   const purchaseValue = quantity * price;
 
   if (purchaseValue > cashBalance.amount) {
-    const error = new Error('not enough cash to trade');
+    const error = new Error('not enough cash to buy');
     error.status = 403;
     throw error;
   }
 
+  //should I test if cash balance is updated correctly?
   await updateCashBalanceByUserId(-purchaseValue, userid);
-
+  //should I test if filled order has been created correctly?
   await createFilledOrderByUserId(symbol, type, quantity, price, userid);
-
+  // should i test if holding has been updated correctly?
   await createOrUpdateBuyingHoldingByUserId(symbol, quantity, price, userid);
 
   return { successMsg: `Your ${type}ing order has been filled` };
@@ -70,3 +71,14 @@ const sellingTransaction = async (reqBody) => {
 };
 
 module.exports = { buyingTransaction, sellingTransaction };
+
+//the front end has the logic to check if buying or selling unit is valid
+// for example the front won't let user sell more than what user currectly hold
+// question: do I still need to check this logic at the backend?
+// if (Number(existingHolding) < Number(quantity)) {
+//   const error = new Error('not enough amount to sell');
+//   error.status = 403;
+//   throw error;
+// }
+
+//

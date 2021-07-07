@@ -5,7 +5,7 @@ const signupUserService = require('../../services/signupService');
 
 describe('User Registration Service', () => {
   describe('Register User', () => {
-    test('When username doesn not match, new user is being created', async () => {
+    test('When username does not match, new user is being created', async () => {
       getUserByUsername.mockReturnValue(null);
 
       const username = 'user123';
