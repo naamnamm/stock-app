@@ -30,9 +30,10 @@ describe('Transactions Service', () => {
         getCashBalanceByUserId.mockReturnValue({ amount: 30 });
 
         await transactionsService.buyingTransaction(mockReqBody);
-        // await expect(async () => {
-        //   await transactionsService.buyingTransaction(mockReqBody);
-        // }).resolves.not.toThrow();
+
+        await expect(async () => {
+          await transactionsService.buyingTransaction(mockReqBody);
+        }).resolves.not.toThrow();
 
         expect(spy).toHaveBeenCalledTimes(1);
       });
