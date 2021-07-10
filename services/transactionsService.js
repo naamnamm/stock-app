@@ -23,11 +23,10 @@ const buyingTransaction = async (reqBody) => {
     throw error;
   }
 
-  //should I test if cash balance is updated correctly?
   await updateCashBalanceByUserId(-purchaseValue, userid);
-  //should I test if filled order has been created correctly?
+
   await createFilledOrderByUserId(symbol, type, quantity, price, userid);
-  // should i test if holding has been updated correctly?
+
   await createOrUpdateBuyingHoldingByUserId(symbol, quantity, price, userid);
 
   return { successMsg: `Your ${type}ing order has been filled` };

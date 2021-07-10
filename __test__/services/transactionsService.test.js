@@ -16,32 +16,40 @@ const transactionsService = require('../../services/transactionsService');
 
 describe('Transactions Service', () => {
   describe('Buying Transactions', () => {
-    test('should return success message for buying transaction', async () => {
-      updateCashBalanceByUserId.mockReturnValue(null);
-      createFilledOrderByUserId.mockReturnValue();
-      createOrUpdateBuyingHoldingByUserId.mockReturnValue;
+    test('should process buying transaction if cashBalance > purchasing value', () =>
+      async () => {
+        const mockReqBody = {
+          symbol: 'XXX',
+          type: 'buy',
+          quantity: 1,
+          price: 20,
+          userid: 'id123',
+        };
+        const spy = jest.spyOn('updateCashBalanceByUserId');
 
-      const username = 'user123';
-      const password = 'pass123';
-      const spy = jest.spyOn(signupUserService, 'signupUser');
+        getCashBalanceByUserId.mockReturnValue({ amount: 30 });
 
-      await signupUserService.signupUser(username, password);
+        await transactionsService.buyingTransaction(mockReqBody);
+        // await expect(async () => {
+        //   await transactionsService.buyingTransaction(mockReqBody);
+        // }).resolves.not.toThrow();
 
-      expect(spy).toHaveBeenCalledTimes(1);
-    });
+        expect(spy).toHaveBeenCalledTimes(1);
+      });
 
-    test('Should throw error if username match', async () => {
-      const username = 'user123';
-      const password = 'pass123';
+    // test('Should throw error if cashBalance < purchasing value', async () => {
+    //   const mockReqBody = {
+    //     quantity: 1,
+    //     price: 20,
+    //   };
 
-      getUserByUsername.mockReturnValue({ user: 'user123' });
+    //   getCashBalanceByUserId.mockReturnValue({ amount: 10 });
 
-      try {
-        await signupUserService.signupUser(username, password);
-      } catch (e) {
-        expect(e).toEqual(new Error('Username already exist'));
-        expect(e.status).toEqual(409);
-      }
-    });
+    //   try {
+    //     await transactionsService.buyingTransaction(mockReqBody);
+    //   } catch (e) {
+    //     expect(e).toEqual(new Error('not enough cash to buy'));
+    //   }
+    // });
   });
 });
