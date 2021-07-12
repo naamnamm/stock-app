@@ -45,16 +45,6 @@ const calculateHoldingValue = (array) => {
   };
 };
 
-const calculateCashAvailable = (array) => {
-  if (!array) return;
-
-  const cashAvailableToTrade = array
-    .map((t) => Number(t.amount))
-    .reduce((acc, cur) => acc + cur, 0);
-
-  return cashAvailableToTrade;
-};
-
 const fetchStockLatestPrices = async (array) => {
   const mappedPromises = array.map((item) =>
     axios
@@ -76,7 +66,6 @@ const fetchStockLatestPrices = async (array) => {
 module.exports = {
   formatNum,
   createStockModel,
-  calculateCashAvailable,
   createOrderModel,
   fetchStockLatestPrices,
   mappedStock,
