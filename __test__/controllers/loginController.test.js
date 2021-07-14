@@ -23,8 +23,14 @@ const getMockedLoginUser = () => {
   return new UserToken('token123', 'id123', 'user123');
 };
 
+//why req work without invoking but response doesn't'
+
 const request = { body: { username: 'user123', password: 'pass123' } };
 const body = request.body;
+//why does resspose need to invoke getMockedResponse() why can't I just pass a name?
+// -- if I don't - I can't call request.send right? why is that?
+// getMockedResponse() - return a value + ability to call a function inside response object?
+// getMockedResponse - return just a value of response obj?
 const response = getMockedResponse();
 
 describe('Login User Controller', () => {
@@ -51,16 +57,15 @@ describe('Login User Controller', () => {
       expect(response.send).toHaveBeenCalledWith(loginUser);
     });
 
-    // test('Should throw error if password does not match', async () => {
-    //   const username = 'user123';
-    //   const password = 'pass123';
-
-    //   getUserByUsername.mockReturnValue({ id: 'id123', name: username });
-    //   bcrypt.compare.mockReturnValue(false);
-
-    //   await expect(async () => {
-    //     await loginUserService.loginUser(username, password);
-    //   }).rejects.toEqual(new Error('password does not match'));
-    // });
+    test('Should throw error if username and/or password does not match', async () => {
+      loginService.loginUser.mockImplementation(() => {
+        throw new Error('username and/or password does not match');
+      });
+      try {
+        await loginController(request, response);
+      } catch (e) {
+        expect(e).toEqual(new Error('username and/or password does not match'));
+      }
+    });
   });
 });

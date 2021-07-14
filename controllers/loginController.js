@@ -8,6 +8,7 @@ module.exports = async (req, res) => {
   // if it came back then it's successfull
   try {
     const loginUser = await loginService.loginUser(username, password);
+    console.log(loginUser);
     res.send(loginUser);
   } catch (error) {
     console.log(error);
