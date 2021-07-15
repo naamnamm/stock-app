@@ -26,7 +26,6 @@ const getMockedLoginUser = () => {
 //why req work without invoking but response doesn't'
 
 const request = { body: { username: 'user123', password: 'pass123' } };
-const body = request.body;
 //why does resspose need to invoke getMockedResponse() why can't I just pass a name?
 // -- if I don't - I can't call request.send right? why is that?
 // getMockedResponse() - return a value + ability to call a function inside response object?
@@ -61,11 +60,8 @@ describe('Login User Controller', () => {
       loginService.loginUser.mockImplementation(() => {
         throw new Error('username and/or password does not match');
       });
-      try {
-        await loginController(request, response);
-      } catch (e) {
-        expect(e).toEqual(new Error('username and/or password does not match'));
-      }
+
+      expect(loginController(request, response)).resolves.toThrowError();
     });
   });
 });
