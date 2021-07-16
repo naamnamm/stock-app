@@ -130,7 +130,7 @@ const Dashboard = () => {
   const getCashBalance = async () => {
     const response = await fetch(`/api/cashBalance/${userid}`);
     const data = await response.json();
-    console.log('cash', data.amount);
+    //console.log('cash', data.amount);
     setCurrentCashBalance(Number(data.amount));
   };
 

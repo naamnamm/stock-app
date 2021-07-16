@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 // };
 class UserToken {
   constructor(token, userId, userName) {
-    // this.user = { id: userId, name: userName };
     (this.token = token), (this.id = userId), (this.name = userName);
   }
 }
