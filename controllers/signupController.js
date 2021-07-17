@@ -5,6 +5,7 @@ module.exports = async (req, res) => {
 
   try {
     const newUser = await signupService.signupUser(username, password);
+    console.log(res);
     res.status(201).send(newUser);
   } catch (error) {
     res.status(error.status).send({ errorMessage: error.message });
