@@ -29,6 +29,6 @@ describe('Log out Controller', () => {
       throw new Error('something went wrong during');
     });
 
-    expect(logoutController(request, response)).resolves.toThrowError();
+    expect(logoutController(request, response)).rejects.toThrowError();
   });
 });
