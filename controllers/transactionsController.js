@@ -8,7 +8,6 @@ const post = async (req, res) => {
       const buyingTransaction = await transactionsService.buyingTransaction(
         req.body
       );
-
       res.send(buyingTransaction);
     } catch (error) {
       console.log(error);
