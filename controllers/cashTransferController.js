@@ -7,7 +7,9 @@ const { updateCashBalanceByUserId } = require('../database/dbCashBalance');
 const get = async (req, res) => {
   const { userid } = req.params;
 
-  res.send(await getCashTransferByUserId(userid));
+  const cashTransfer = await getCashTransferByUserId(userid);
+
+  res.send(cashTransfer);
 };
 
 const post = async (req, res) => {
@@ -22,7 +24,7 @@ const post = async (req, res) => {
 
     res.status(201).send({ msg: 'success', transaction: transferHistory });
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
