@@ -7,7 +7,6 @@ const getCurrentHoldings = async (req, res) => {
     const currentHoldings = await currentHoldingService.getHoldings(userid);
     res.send(currentHoldings);
   } catch (error) {
-    console.log(error);
     res.status(error.status).send({ errorMessage: error.message });
   }
 };
@@ -23,7 +22,6 @@ const getCurrentHoldingByStockSymbol = async (req, res) => {
 
     res.send(currentHolding);
   } catch (error) {
-    console.log(error);
     res.status(error.status).send({ errorMessage: error.message });
   }
 };

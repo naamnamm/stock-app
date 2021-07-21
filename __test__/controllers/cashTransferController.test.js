@@ -4,7 +4,7 @@ const {
 } = require('../../database/dbCashTransfer');
 jest.mock('../../database/dbCashTransfer');
 
-const { createCashTransferByUserId } = require('../../database/dbCashTransfer');
+//const { updateCashBalanceByUserId } = require('../../database/dbCashTransfer');
 jest.mock('../../database/dbCashBalance');
 
 const cashTransferController = require('../../controllers/cashTransferController');
@@ -42,19 +42,26 @@ describe('Cash Transfer Controller', () => {
 
   describe('post cash transfer by userid', () => {
     test('should post cash transfer', async () => {
-      getCashTransferByUserId.mockReturnValue(cashTransfer);
+      const mockCashTransfer = { userid: 'id123', amount: 10 };
+
+      getCashTransferByUserId.mockReturnValue(mockCashTransfer);
+
+      const mockSendObject = { msg: 'success', transaction: mockCashTransfer };
 
       await cashTransferController.post(request, response);
 
-      expect(response.send).toHaveBeenCalledWith(cashTransfer);
+      expect(response.status).toHaveBeenCalledWith(201);
+      expect(response.send).toHaveBeenCalledWith(mockSendObject);
     });
 
-    // test('Should throw error if cashTransfer is undefined', async () => {
+    test('Should throw error', async () => {
+      createCashTransferByUserId.mockImplementation(() => {
+        throw new Error();
+      });
 
-    //   getCashTransferByUserId.mockreturnValue(undefined);
-
-    //   expect(cashTransferController.get(request, response)).toThrowError();
-
-    // });
+      expect(
+        cashTransferController.post(request, response)
+      ).rejects.toThrowError();
+    });
   });
 });
