@@ -22,6 +22,8 @@ const getCurrentHoldingByStockSymbol = async (req, res) => {
 
     res.send(currentHolding);
   } catch (error) {
+    console.log('error :>> ', error);
+    console.log('typeof :>> ', typeof error);
     res.status(error.status).send({ errorMessage: error.message });
   }
 };

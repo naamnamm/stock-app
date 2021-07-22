@@ -16,7 +16,6 @@ const addWatchlist = async (symbol, userid) => {
     throw error;
   }
 
-  //Do i need to test createWatchlist below?
   await createWatchlist(symbol, userid);
 
   const watchlist = await getWatchlistByUserId(userid);
