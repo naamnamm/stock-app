@@ -1,5 +1,3 @@
-const { updateUserLastActiveAt } = require('../../database/dbUser');
-const dbUser = require('../../database/dbUser');
 jest.mock('../../database/dbUser');
 
 const signupService = require('../../services/signupService');

@@ -1,7 +1,10 @@
 const axios = require('axios');
 
 function formatNum(num) {
-  return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
+  return num.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 const createStockModel = (stock) => {
