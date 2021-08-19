@@ -11,15 +11,7 @@ const createStockModel = (stock) => {
   stock.holdingValue = Number(stock.latestPrice) * Number(stock.quantity);
   stock.holdingCost = Number(stock.purchaseprice) * Number(stock.quantity);
   stock.gainLoss = stock.holdingValue - stock.holdingCost;
-};
-
-const mappedStock = (arrOfStocks, arrOfPrices) => {
-  arrOfStocks.map((item, i) => {
-    Object.assign(item, { latestPrice: `${arrOfPrices[i]}` });
-    return createStockModel(item);
-  });
-
-  return arrOfStocks;
+  return stock;
 };
 
 const createOrderModel = (order) => {
@@ -71,6 +63,14 @@ module.exports = {
   createStockModel,
   createOrderModel,
   fetchStockLatestPrices,
-  mappedStock,
   calculateHoldingValue,
 };
+
+// const mappedStock = (arrOfStocks, arrOfPrices) => {
+//   arrOfStocks.map((item, i) => {
+//     Object.assign(item, { latestPrice: `${arrOfPrices[i]}` });
+//     return createStockModel(item);
+//   });
+
+//   return arrOfStocks;
+// };
