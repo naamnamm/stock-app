@@ -4,6 +4,7 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
       "name": "Nodemon",
       "port": 9229,
@@ -25,9 +26,27 @@
       "program": "${workspaceFolder}/server.js",
       "cwd": "${workspaceFolder}",
       "args": ["${env:USERNAME}"]
-    }
+    },
+
     //`launch program` works to debug the server/backend 
     //but need to make sure `npm run dev` isn't running
     //because both can't run on the same port
+
+    {
+      "type": "node",
+      "name": "vscode-jest-tests",
+      "request": "launch",
+      "args": [
+        "--runInBand",
+        "__test__/utils/authToken.test.js",
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "internalConsoleOptions": "openOnSessionStart",
+      "disableOptimisticBPs": true,
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest"
+    }
   ]
 }
+
+//https://betterprogramming.pub/how-to-use-vs-code-to-debug-unit-test-cases-6aebfd7021bd
