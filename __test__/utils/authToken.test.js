@@ -58,7 +58,7 @@ describe('verify Token', () => {
   });
 
   describe('verify token unsuccessfully', () => {
-    test('error should be thrown, send status 401', async () => {
+    test('response should send status 401', async () => {
       const req = {
         headers: { authorization: null },
         user: 'user123',

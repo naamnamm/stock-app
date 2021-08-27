@@ -49,8 +49,6 @@ const getPrice = (item) => {
 };
 
 const fetchStockLatestPrices = async (array) => {
-  console.log('array :>> ', array);
-
   const mappedPromises = array.map((item) =>
     getPrice(item)
       .then((res) => {
