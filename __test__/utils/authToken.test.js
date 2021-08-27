@@ -68,20 +68,5 @@ describe('verify Token', () => {
       authToken.verifyToken(req, res, next);
       expect(res.sendStatus).toHaveBeenCalledWith(401);
     });
-
-    // test('error should be thrown, send status 403', async () => {
-    //   const req = {
-    //     headers: { authorization: 'Bearer Token123' },
-    //     user: 'user123',
-    //   };
-    //   const res = getMockedResponse();
-    //   const next = jest.fn();
-
-    //   try {
-    //     authToken.verifyToken(req, res, next);
-    //   } catch (error) {
-    //     // expect next to be called
-    //     expect(next).toHaveBeenCalled();
-    //   }
   });
 });
