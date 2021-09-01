@@ -41,7 +41,6 @@ const calculateHoldingValue = (array) => {
 };
 
 const getPrice = (item) => {
-  console.log('this ran 1 ');
   return axios.get(
     //`https://cloud.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.IEX_API_TOKEN}`
     `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.SANDBOX_IEX_API_TOKEN}`
@@ -51,10 +50,7 @@ const getPrice = (item) => {
 const fetchStockLatestPrices = async (array) => {
   const mappedPromises = array.map((item) =>
     getPrice(item)
-      .then((res) => {
-        console.log('data : >> ', res.data);
-        return res.data;
-      })
+      .then((res) => res.data)
       .catch()
   );
 
@@ -73,43 +69,7 @@ module.exports = {
   createOrderModel,
   fetchStockLatestPrices,
   calculateHoldingValue,
-  getPrice,
 };
-
-// const mappedStock = (arrOfStocks, arrOfPrices) => {
-//   arrOfStocks.map((item, i) => {
-//     Object.assign(item, { latestPrice: `${arrOfPrices[i]}` });
-//     return createStockModel(item);
-//   });
-
-//   return arrOfStocks;
-// };
-
-// const mappedPromises = array.map((item) =>
-// axios
-//   .get(
-//     //`https://cloud.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.IEX_API_TOKEN}`
-//     `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.SANDBOX_IEX_API_TOKEN}`
-//   )
-//   .then((res) => {
-//     console.log('data : >> ', res.data);
-//     return res.data;
-//   })
-//   .catch()
-// );
-
-//https://stackoverflow.com/questions/44847775/how-to-set-a-test-for-multiple-fetches-with-promise-all-using-jest
-
-// const array2 = [...array];
-
-// const sample = await Promise.all(
-//   array2.map((eachStockItem) => getPrice(eachStockItem))
-// ).then((response) => {
-//   console.log('response :>> ', response);
-//   return response.map((item) => item.quote.latestPrice);
-// });
-
-// console.log('sample :>> ', sample);
 
 // const mappedPromises = array.map((item) =>
 // axios
