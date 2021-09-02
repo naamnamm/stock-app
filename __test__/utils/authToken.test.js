@@ -27,6 +27,12 @@ describe('verify Token', () => {
         status = code;
         return response;
       }),
+      // code: 403,
+      // status: jest.fn((c) => {
+      //   code = c;
+      //   return response;
+      // }),
+      // send: jest.fn((obj) => obj),
     };
     return response;
   };
@@ -34,20 +40,18 @@ describe('verify Token', () => {
   const res = getMockedResponse();
 
   describe('verify token successfully', () => {
-    test('next should be called', async () => {
-      const req = {
-        headers: { authorization: 'Bearer Token123' },
-        user: 'user123',
-      };
-
-      const verify = jest.spyOn(jwt, 'verify');
-
-      const next = jest.fn();
-
-      await authToken.verifyToken(req, res, next);
-
-      expect(verify).toHaveBeenCalled();
-    });
+    // test('verify and next should be called', async () => {
+    //   const req = {
+    //     headers: { authorization: 'Bearer Token123' },
+    //     user: 'user123',
+    //   };
+    //   const next = jest.fn();
+    //   const verify = jest.spyOn(jwt, 'verify');
+    //   verify.mockImplementation(() => next());
+    //   await authToken.verifyToken(req, res, next);
+    //   expect(verify).toHaveBeenCalled();
+    //   expect(next).toHaveBeenCalled();
+    // });
   });
 
   describe('verify token unsuccessfully', () => {
@@ -60,5 +64,24 @@ describe('verify Token', () => {
     //   authToken.verifyToken(req, res, next);
     //   expect(res.sendStatus).toHaveBeenCalledWith(401);
     // });
+
+    test('response should send error message', async () => {
+      const req = {
+        headers: { authorization: 'Bearer Token123' },
+        user: 'user123',
+      };
+      const next = jest.fn();
+
+      const verify = jest.spyOn(jwt, 'verify');
+      verify.mockImplementation(() => new Error());
+
+      const mockSendObject = { message: 'Invalid or expired token' };
+
+      await authToken.verifyToken(req, res, next);
+
+      //expect(res.status).toHaveBeenCalledWith(403);
+      expect(res.status).toEqual(403);
+      //expect(res.send).toHaveBeenCalledWith(mockSendObject);
+    });
   });
 });
