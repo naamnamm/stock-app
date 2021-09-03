@@ -24,10 +24,7 @@ const verifyToken = (req, res, next) => {
 
   if (token == null) return res.sendStatus(401);
 
-  console.log('token :>> ', token);
-
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    console.log('req :>> ', req); //this doesn't get call
     if (err)
       return res.status(403).send({ message: 'Invalid or expired token' });
     req.user = user;
