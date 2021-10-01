@@ -12,8 +12,6 @@ import {
 import { Link, useHistory } from 'react-router-dom';
 import './SearchNav.css';
 import { FaStarAndCrescent } from 'react-icons/fa';
-
-//import { useAuth } from '../../context/AuthContext';
 import { AuthContext } from '../../context/AuthContext';
 
 const SearchNav = () => {
@@ -21,9 +19,7 @@ const SearchNav = () => {
   const [stocks, setStocks] = useState([]);
   const [options, setOptions] = useState();
   const history = useHistory();
-
-  //const { user, setUser, isAuth, setIsAuth } = useAuth();
-  const { user, setUser, isAuth, setIsAuth } = useContext(AuthContext);
+  const { user, setIsAuth } = useContext(AuthContext);
 
   const inputRef = useRef();
   const ulRef = useRef();
@@ -167,17 +163,6 @@ const SearchNav = () => {
         </Nav>
       </Navbar>
       <ListGroup id='results' className='option-container' ref={ulRef}>
-        {/* {options.length > 0
-          ? options.map((option, index) => {
-              return (
-                <ListGroup.Item key={index + 100} action>
-                  <Link to={`/stock?stock=${option.symbol}`}>
-                    {option.symbol} {option.name}
-                  </Link>
-                </ListGroup.Item>
-              );
-            })
-          : null} */}
         {displayOptions}
       </ListGroup>
     </div>

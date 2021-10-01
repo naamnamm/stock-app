@@ -1,6 +1,5 @@
 const pool = require('../database/dbPool');
 
-// need to rename this to transaction
 const getOrderByUserId = async (userid) => {
   const dbResponse = await pool.query(
     'SELECT * FROM orders WHERE user_id::text = $1',

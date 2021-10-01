@@ -4,10 +4,14 @@ const {
 } = require('../../database/dbCashTransfer');
 jest.mock('../../database/dbCashTransfer');
 
-//const { updateCashBalanceByUserId } = require('../../database/dbCashTransfer');
 jest.mock('../../database/dbCashBalance');
 
 const cashTransferController = require('../../controllers/cashTransferController');
+
+const request = {
+  body: { user: { id: 'id123' }, amount: 10, type: 'transfer-in' },
+  params: { userid: 'id123' },
+};
 
 const getMockedResponse = () => {
   const response = {
@@ -22,10 +26,6 @@ const getMockedResponse = () => {
   return response;
 };
 
-const request = {
-  body: { user: { id: 'id123' }, amount: 10, type: 'transfer-in' },
-  params: { userid: 'id123' },
-};
 const response = getMockedResponse();
 
 describe('Cash Transfer Controller', () => {

@@ -70,14 +70,3 @@ const sellingTransaction = async (reqBody) => {
 };
 
 module.exports = { buyingTransaction, sellingTransaction };
-
-//the front end has the logic to check if buying or selling unit is valid
-// for example the front won't let user sell more than what user currectly hold
-// question: do I still need to check this logic at the backend?
-// if (Number(existingHolding) < Number(quantity)) {
-//   const error = new Error('not enough amount to sell');
-//   error.status = 403;
-//   throw error;
-// }
-
-//

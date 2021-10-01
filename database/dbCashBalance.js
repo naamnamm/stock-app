@@ -22,5 +22,3 @@ module.exports = {
   getCashBalanceByUserId,
   updateCashBalanceByUserId,
 };
-
-//e0183565-a2fd-4168-bb23-bc7ad78010bc

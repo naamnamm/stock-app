@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import { Modal, Form, Button, ListGroup, FormControl } from 'react-bootstrap';
-
-import { useAuth } from '../../context/AuthContext';
+import { Modal, Form, ListGroup, FormControl } from 'react-bootstrap';
 import { AuthContext } from '../../context/AuthContext';
 
 const AddWatchlist = ({ closeModal, setWatchlist }) => {
@@ -11,7 +9,6 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
   const [errorMsg, setErrorMsg] = useState('');
 
   const { user } = useContext(AuthContext);
-  //const { user, isAuth } = useAuth();
 
   const inputRef = useRef();
   const ulRef = useRef();

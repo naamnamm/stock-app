@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Table } from 'react-bootstrap';
 import SearchNav from '../dashboard-page/SearchNav';
-
-//import { useAuth } from '../../context/AuthContext';
 import { AuthContext } from '../../context/AuthContext';
 
 const moment = require('moment');
 
 const Order = () => {
   const [orders, setOrders] = useState('');
-  //const { user } = useAuth();
   const { user } = useContext(AuthContext);
 
   const displayFilledOrder = orders ? (

@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState, useContext } from 'react';
 import { Form, Button, Col, Row, Card } from 'react-bootstrap';
 import './Transaction.css';
 import useQuery from '../../utils/Hooks/UseQuery';
-
 import { AuthContext } from '../../context/AuthContext';
-//import { useAuth } from '../../context/AuthContext';
 
 function formatNum(num) {
   return num.toLocaleString(undefined, { minimumFractionDigits: 2 });
@@ -21,7 +19,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   const [position, setPosition] = useState('');
   const [loading, setLoading] = useState(false);
 
-  //const { user } = useAuth();
   const { user } = useContext(AuthContext);
 
   const getCashBalance = async () => {
@@ -60,8 +57,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
       setLoading(true);
       const response = await fetch('/api/transactions', config);
       const orderData = await response.json();
-
-      console.log(orderData);
 
       if (!response.ok) {
         setOrderMsg(orderData);
@@ -126,8 +121,8 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   }, [type]);
 
   useEffect(() => {
-    console.log(query.get('stock'));
     const selectedStock = query.get('stock');
+
     setSelectedStock(selectedStock);
   }, [query.get('stock')]);
 
@@ -150,8 +145,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     setQuantity(newQuantity);
     setTotal(totalTransactionValue);
   }
-
-  //https://dmitripavlutin.com/differences-between-arrow-and-regular-functions/
 
   useEffect(() => {
     const totalTransactionValue = quantity * currentPrice;
@@ -252,9 +245,8 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
           variant='success'
           type='submit'
           className='my-3'
-          //disabled={!loading}
+          disabled={!loading}
         >
-          {/* disable if it's still loading */}
           {type} now
         </Button>
       </Form>
@@ -268,41 +260,3 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
 };
 
 export default Transaction;
-
-// useEffect(() => {
-//   const selectedStock = query.get('stock');
-//   setSelectedStock(selectedStock);
-//   getPosition();
-// }, [query.get('stock')]);
-
-// useEffect(() => {
-//   if (!currentPrice && !currentBalance) return;
-//   //debugger;
-
-//   getMaxQuantity();
-// }, [currentPrice, currentBalance]);
-
-// // useEffect(() => {
-// //   if (!selectedStock) return;
-
-// //   getPosition();
-// // }, [selectedStock]);
-
-// useEffect(() => {
-//   //debugger;
-//   if (user.length === 0) return;
-//   getCashBalance();
-//   getPosition();
-// }, [user]);
-
-// useEffect(() => {
-//   const totalTransactionValue = quantity * currentPrice;
-//   setTotal(totalTransactionValue);
-//   setOrderMsg('');
-// }, [quantity]);
-
-// useEffect(() => {
-//   //debugger;
-//   getPosition();
-//   getMaxQuantity();
-// }, [type]);

@@ -3,7 +3,7 @@ import SearchNav from '../dashboard-page/SearchNav';
 import ControlledTabs from './ControlledTabs';
 import { Chart } from 'react-google-charts';
 import './Stocks.css';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { formatNumber } from '../../utils/function';
 import { Card, Alert } from 'react-bootstrap';
 import useQuery from '../../utils/Hooks/UseQuery';

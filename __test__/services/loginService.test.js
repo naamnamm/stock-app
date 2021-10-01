@@ -52,6 +52,3 @@ describe('Login User Service', () => {
     });
   });
 });
-
-//https://stackoverflow.com/questions/51801027/how-do-i-mock-a-function-that-is-called-inside-the-function-i-am-testing/51801378
-//https://jestjs.io/docs/tutorial-async#rejects

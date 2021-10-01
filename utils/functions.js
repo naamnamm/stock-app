@@ -58,8 +58,6 @@ const fetchStockLatestPrices = async (array) => {
     return response.map((item) => item.quote.latestPrice);
   });
 
-  console.log('latestPrices :>> ', latestPrices);
-
   return latestPrices;
 };
 
@@ -70,16 +68,3 @@ module.exports = {
   fetchStockLatestPrices,
   calculateHoldingValue,
 };
-
-// const mappedPromises = array.map((item) =>
-// axios
-//   .get(
-//     //`https://cloud.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.IEX_API_TOKEN}`
-//     `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.SANDBOX_IEX_API_TOKEN}`
-//   )
-//   .then((res) => {
-//     //console.log('data : >> ', res.data);
-//     return res.data;
-//   })
-//   .catch()
-// );

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useContext } from 'react';
 import { Form, Button, Navbar, Card } from 'react-bootstrap';
-//import { useAuth } from '../../context/AuthContext';
 import { AuthContext } from '../../context/AuthContext';
 import './Login-Signup.css';
 import { useHistory } from 'react-router-dom';
@@ -11,12 +10,14 @@ const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const usernameRef = useRef();
   const passwordRef = useRef();
-  //const { setUser, setIsAuth } = useAuth();
   const { setUser, setIsAuth } = useContext(AuthContext);
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     try {
       const data = {
@@ -34,7 +35,6 @@ const Login = () => {
 
       const response = await fetch('/api/auth/login', config);
       const loginData = await response.json();
-      console.log(loginData);
 
       if (!response.ok) {
         setErrorMsg(loginData.errorMessage);
@@ -42,6 +42,7 @@ const Login = () => {
         localStorage.setItem('accessToken', JSON.stringify(loginData.token));
         setIsAuth(true);
         setUser(loginData);
+        setLoading(false);
         history.push('/dashboard');
       }
     } catch (error) {
@@ -88,7 +89,9 @@ const Login = () => {
               />{' '}
             </Form.Group>
 
-            <Button type='submit'>Login</Button>
+            <Button type='submit' disabled={!loading}>
+              Login
+            </Button>
           </Form>
         </Card.Body>
       </Card>

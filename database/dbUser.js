@@ -21,6 +21,12 @@ const createNewUser = async (username, password, lastActiveAt) => {
     [username, password, lastActiveAt]
   );
 
+  //create the same user on cash_balances table
+  await pool.query(
+    'INSERT INTO cash_balances (amount, user_id) VALUES (0, $1)',
+    [newUser.rows[0].id]
+  );
+
   return newUser.rows[0];
 };
 

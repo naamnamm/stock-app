@@ -75,11 +75,4 @@ CREATE TABLE cash_balances (
 CREATE UNIQUE INDEX cash_balances_user_id ON cash_balances (user_id);
 
 
--- ALTER TABLE currentHoldings 
--- ADD CONSTRAINT currentHoldings_user_id
---\c into the database
 
---CREATE TABLE 
---https://www.youtube.com/watch?v=_Mun4eOOf2Q
---https://stackoverflow.com/questions/8917065/how-to-add-a-conditional-unique-index-on-postgresql/8918141#8918141
---https://stackoverflow.com/questions/34495479/add-constraint-to-make-column-unique-per-group-of-rows

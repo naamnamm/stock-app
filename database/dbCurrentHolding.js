@@ -62,12 +62,3 @@ module.exports = {
   updateSellingHoldingByUserId,
   deleteHoldingByUserId,
 };
-
-// const searchExistingHoldingByUserId = async (symbol, userid) => {
-//   const dbResponse = await pool.query(
-//     'SELECT quantity FROM currentHoldings WHERE symbol = $1 AND user_id::text = $2',
-//     [symbol, userid]
-//   );
-
-//   return dbResponse.rows;
-// };

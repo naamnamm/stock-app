@@ -1,5 +1,4 @@
 const functions = require('../../utils/functions');
-//jest.mock('../../utils/functions');
 
 const axios = require('axios');
 jest.mock('axios');

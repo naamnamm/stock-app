@@ -9,16 +9,14 @@ import {
   Form,
 } from 'react-bootstrap';
 import './Dashboard.css';
-import { Link, useParams, useLocation } from 'react-router-dom';
-import SearchNav from './SearchNav';
+import { Link } from 'react-router-dom';
 import { FaPlus, FaEdit, FaMinusCircle } from 'react-icons/fa';
 import { formatNumber } from '../../utils/function';
-import AddWatchlist from './AddWatchlist';
 import { Doughnut } from 'react-chartjs-2';
-import Tutorial from './Tutorial';
-
-//import { useAuth } from '../../context/AuthContext';
 import { AuthContext } from '../../context/AuthContext';
+import SearchNav from './SearchNav';
+import AddWatchlist from './AddWatchlist';
+import Tutorial from './Tutorial';
 
 const Dashboard = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -28,9 +26,6 @@ const Dashboard = () => {
   const [currentHoldings, setCurrentHoldings] = useState('');
   const [currentHoldingValue, setCurrentHoldingValue] = useState([]);
   const [chartData, setChartData] = useState('');
-  const location = useLocation();
-
-  //const { user } = useAuth();
   const { user } = useContext(AuthContext);
 
   const userid = user ? user.id : null;
@@ -128,10 +123,14 @@ const Dashboard = () => {
   };
 
   const getCashBalance = async () => {
-    const response = await fetch(`/api/cashBalance/${userid}`);
-    const data = await response.json();
-    //console.log('cash', data.amount);
-    setCurrentCashBalance(Number(data.amount));
+    try {
+      const response = await fetch(`/api/cashBalance/${userid}`);
+      const data = await response.json();
+
+      setCurrentCashBalance(Number(data.amount));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getDoughnutChart = () => {
