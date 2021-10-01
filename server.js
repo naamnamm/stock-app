@@ -15,12 +15,7 @@ app.use('/api/cashBalance', require('./routes/cashBalance'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/orders', require('./routes/orders'));
-
-// do i need stock controller?
 app.use('/api/stocks', require('./routes/stocks'));
-
-//app.use('/api/position', require('./routes/position'));
-//app.use('/api/assetChart', require('./routes/assetChart'));
 
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/build', 'index.html'));

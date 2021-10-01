@@ -89,7 +89,7 @@ const Login = () => {
               />{' '}
             </Form.Group>
 
-            <Button type='submit' disabled={!loading}>
+            <Button type='submit' disabled={loading}>
               Login
             </Button>
           </Form>
