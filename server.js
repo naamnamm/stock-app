@@ -12,6 +12,7 @@ app.use('/api/watchlist', require('./routes/watchlist'));
 app.use('/api/cashTransfer', require('./routes/cashTransfer'));
 app.use('/api/currentHoldings', require('./routes/currentHoldings'));
 app.use('/api/cashBalance', require('./routes/cashBalance'));
+
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/transactions', require('./routes/transactions'));
 app.use('/api/orders', require('./routes/orders'));
