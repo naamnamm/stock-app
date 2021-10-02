@@ -2,6 +2,7 @@ const { getUserByUsername, createNewUser } = require('../database/dbUser');
 const bcrypt = require('bcrypt');
 
 const signupUser = async (username, password) => {
+  console.log('from signup service :>> ', username);
   const usernameMatch = await getUserByUsername(username);
 
   if (usernameMatch) {

@@ -16,10 +16,14 @@ const updateUserLastActiveAt = async (lastActiveAt, username) => {
 };
 
 const createNewUser = async (username, password, lastActiveAt) => {
+  console.log('username from dbUser :>> ', username);
+
   const newUser = await pool.query(
     'INSERT INTO users (name, password, last_active_at) VALUES ($1, $2, $3) RETURNING *',
     [username, password, lastActiveAt]
   );
+
+  console.log('newUser from dbUser:>> ', newUser);
 
   //create the same user on cash_balances table
   // await pool.query(
