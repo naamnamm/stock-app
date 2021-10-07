@@ -5,7 +5,7 @@
 -- Dumped from database version 13.0
 -- Dumped by pg_dump version 13.0
 
--- Started on 2021-09-22 08:14:29
+-- Started on 2021-10-07 10:28:41
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -27,7 +27,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
 
 
 --
--- TOC entry 3062 (class 0 OID 0)
+-- TOC entry 3052 (class 0 OID 0)
 -- Dependencies: 2
 -- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: 
 --
@@ -36,7 +36,7 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
--- TOC entry 219 (class 1255 OID 24627)
+-- TOC entry 218 (class 1255 OID 24627)
 -- Name: generate_uid(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -62,7 +62,7 @@ $$;
 ALTER FUNCTION public.generate_uid(size integer) OWNER TO postgres;
 
 --
--- TOC entry 218 (class 1255 OID 24588)
+-- TOC entry 217 (class 1255 OID 24588)
 -- Name: generate_uuid(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -92,23 +92,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 206 (class 1259 OID 32891)
--- Name: cash_balance; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.cash_balance (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    type text NOT NULL,
-    amount numeric(8,2) NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    user_id uuid
-);
-
-
-ALTER TABLE public.cash_balance OWNER TO postgres;
-
---
--- TOC entry 207 (class 1259 OID 32906)
+-- TOC entry 206 (class 1259 OID 32906)
 -- Name: cash_balances; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -204,16 +188,7 @@ CREATE TABLE public.watchlists (
 ALTER TABLE public.watchlists OWNER TO postgres;
 
 --
--- TOC entry 2917 (class 2606 OID 32900)
--- Name: cash_balance cash_balance_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cash_balance
-    ADD CONSTRAINT cash_balance_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 2919 (class 2606 OID 32912)
+-- TOC entry 2910 (class 2606 OID 32912)
 -- Name: cash_balances cash_balances_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -222,7 +197,7 @@ ALTER TABLE ONLY public.cash_balances
 
 
 --
--- TOC entry 2908 (class 2606 OID 24674)
+-- TOC entry 2901 (class 2606 OID 24674)
 -- Name: cash_transfer cash_transfer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -231,7 +206,7 @@ ALTER TABLE ONLY public.cash_transfer
 
 
 --
--- TOC entry 2914 (class 2606 OID 24722)
+-- TOC entry 2907 (class 2606 OID 24722)
 -- Name: currentholdings currentholdings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -240,7 +215,7 @@ ALTER TABLE ONLY public.currentholdings
 
 
 --
--- TOC entry 2912 (class 2606 OID 24707)
+-- TOC entry 2905 (class 2606 OID 24707)
 -- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -249,7 +224,7 @@ ALTER TABLE ONLY public.orders
 
 
 --
--- TOC entry 2906 (class 2606 OID 24611)
+-- TOC entry 2899 (class 2606 OID 24611)
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -258,7 +233,7 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 2910 (class 2606 OID 24692)
+-- TOC entry 2903 (class 2606 OID 24692)
 -- Name: watchlists watchlists_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -267,7 +242,7 @@ ALTER TABLE ONLY public.watchlists
 
 
 --
--- TOC entry 2920 (class 1259 OID 41098)
+-- TOC entry 2911 (class 1259 OID 41098)
 -- Name: cash_balances_user_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -275,7 +250,7 @@ CREATE UNIQUE INDEX cash_balances_user_id ON public.cash_balances USING btree (u
 
 
 --
--- TOC entry 2915 (class 1259 OID 32890)
+-- TOC entry 2908 (class 1259 OID 32890)
 -- Name: currentholdings_user_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -283,16 +258,7 @@ CREATE UNIQUE INDEX currentholdings_user_id ON public.currentholdings USING btre
 
 
 --
--- TOC entry 2925 (class 2606 OID 32901)
--- Name: cash_balance cash_balance_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.cash_balance
-    ADD CONSTRAINT cash_balance_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
-
-
---
--- TOC entry 2926 (class 2606 OID 32913)
+-- TOC entry 2916 (class 2606 OID 32913)
 -- Name: cash_balances cash_balances_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -301,7 +267,7 @@ ALTER TABLE ONLY public.cash_balances
 
 
 --
--- TOC entry 2921 (class 2606 OID 24668)
+-- TOC entry 2912 (class 2606 OID 24668)
 -- Name: cash_transfer cash_transfer_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -310,7 +276,7 @@ ALTER TABLE ONLY public.cash_transfer
 
 
 --
--- TOC entry 2924 (class 2606 OID 24723)
+-- TOC entry 2915 (class 2606 OID 24723)
 -- Name: currentholdings currentholdings_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -319,7 +285,7 @@ ALTER TABLE ONLY public.currentholdings
 
 
 --
--- TOC entry 2923 (class 2606 OID 24708)
+-- TOC entry 2914 (class 2606 OID 24708)
 -- Name: orders orders_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -328,7 +294,7 @@ ALTER TABLE ONLY public.orders
 
 
 --
--- TOC entry 2922 (class 2606 OID 24693)
+-- TOC entry 2913 (class 2606 OID 24693)
 -- Name: watchlists watchlists_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -336,7 +302,7 @@ ALTER TABLE ONLY public.watchlists
     ADD CONSTRAINT watchlists_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
--- Completed on 2021-09-22 08:14:29
+-- Completed on 2021-10-07 10:28:41
 
 --
 -- PostgreSQL database dump complete
