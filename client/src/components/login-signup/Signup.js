@@ -31,7 +31,6 @@ const Signup = () => {
 
       const response = await fetch('/api/auth/signup', config);
       const signupData = await response.json();
-      console.log('signup :>> ', signupData);
 
       !response.ok ? setErrorMsg(signupData) : history.push('/login');
     } catch (error) {
