@@ -11,7 +11,8 @@ router.get('/search/:stockId', async (req, res) => {
     //`https://cloud.iexapis.com/stable/stock/${stockId}/batch?types=quote,chart&token=${process.env.IEX_API_TOKEN}`
   );
   const fetchCompany = await fetch(
-    `https://cloud.iexapis.com/stable/stock/${stockId}/company?token=${process.env.IEX_API_TOKEN}`
+    `https://sandbox.iexapis.com/stable/stock/${stockId}/company?token=${process.env.SANDBOX_IEX_API_TOKEN}`
+    //`https://cloud.iexapis.com/stable/stock/${stockId}/company?token=${process.env.IEX_API_TOKEN}`
   );
   const companyData = await fetchCompany.json();
 
