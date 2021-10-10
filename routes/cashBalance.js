@@ -7,6 +7,8 @@ router.get('/:userid', async (req, res) => {
 
   const cashBalance = await getCashBalanceByUserId(userid);
 
+  console.log('cashBalance :>> ', cashBalance);
+
   res.send(cashBalance);
 });
 

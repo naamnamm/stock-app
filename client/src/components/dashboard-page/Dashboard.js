@@ -83,10 +83,14 @@ const Dashboard = () => {
     );
 
   const displayCurrentHolding = currentHoldings ? (
-    currentHoldings.map((item) => {
+    currentHoldings.map((item, index) => {
       return (
-        <ListGroup.Item action>
-          <Link to={`/stock?stock=${item.symbol}`} className='d-flex'>
+        <ListGroup.Item key={index + 300} action>
+          <Link
+            to={`/stock?stock=${item.symbol}`}
+            key={index + 200}
+            className='d-flex'
+          >
             <div className='stock-left text-left'>
               <div className='font-weight-bold'>{item.symbol}</div>
               <div className='text-muted'>{item.quantity} Shares</div>

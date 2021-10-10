@@ -22,9 +22,9 @@ const Order = () => {
         </tr>
       </thead>
       <tbody>
-        {orders.map((item) => {
+        {orders.map((item, index) => {
           return (
-            <tr>
+            <tr key={index + 10000}>
               <td>{moment(item.created_at).format('MMM Do YY')}</td>
               <td>{item.symbol}</td>
               <td>{item.type}</td>

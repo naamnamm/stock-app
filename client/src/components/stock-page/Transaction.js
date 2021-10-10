@@ -22,11 +22,17 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
   const { user } = useContext(AuthContext);
 
   const getCashBalance = async () => {
-    const userid = user.id;
-    const response = await fetch(`/api/cashBalance/${userid}`);
-    const data = await response.json();
+    try {
+      const userid = user.id;
+      const response = await fetch(`/api/cashBalance/${userid}`);
+      const data = await response.json();
 
-    setCurrentBalance(data.amount);
+      console.log('cash balance :>> ', data);
+
+      setCurrentBalance(data.amount);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleOrderSubmit = async (e) => {
@@ -107,9 +113,11 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
     );
     const data = await response.json();
 
-    if (data.errorMessage) {
-      setPosition('');
-    }
+    console.log('position data :>> ', data);
+
+    // if (data.errorMessage) {
+    //   setPosition('');
+    // }
 
     setPosition(data.quantity);
   };
@@ -245,7 +253,7 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
           variant='success'
           type='submit'
           className='my-3'
-          disabled={!loading}
+          disabled={loading}
         >
           {type} now
         </Button>

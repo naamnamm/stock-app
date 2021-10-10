@@ -31,11 +31,13 @@ const getHoldingByStockSymbol = async (userid, stockSymbol) => {
     stockSymbol
   );
 
-  if (!currentHolding) {
-    const error = new Error('no currentHolding found');
-    error.status = 404;
-    throw error;
-  }
+  // if (!currentHolding) {
+  //   const error = new Error('no currentHolding found');
+  //   error.status = 404;
+  //   throw error;
+  // }
+
+  if (!currentHolding) return { quantity: 0 };
 
   return currentHolding;
 };
