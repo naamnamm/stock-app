@@ -27,8 +27,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
       const response = await fetch(`/api/cashBalance/${userid}`);
       const data = await response.json();
 
-      console.log('cash balance :>> ', data);
-
       setCurrentBalance(data.amount);
     } catch (error) {
       console.log(error);
@@ -112,12 +110,6 @@ const Transaction = ({ type, currentPrice, setOrderMsg, orderMsg }) => {
       `/api/currentHoldings/${userid}/${selectedStock}`
     );
     const data = await response.json();
-
-    console.log('position data :>> ', data);
-
-    // if (data.errorMessage) {
-    //   setPosition('');
-    // }
 
     setPosition(data.quantity);
   };

@@ -50,12 +50,12 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
       setSearchInput('');
       setOptions([]);
     } else {
-      const filterSymbol = stocks
+      const filterSymbol = stocks.stockList
         .filter((s) => s.symbol.includes(searchInput.toUpperCase()))
         .slice(0, 3);
 
-      const filterName = stocks
-        .filter((s) => s.name.includes(searchInput.toUpperCase()))
+      const filterName = stocks.stockList
+        .filter((s) => s.name.toUpperCase().includes(searchInput.toUpperCase()))
         .slice(0, 3);
 
       const mergeArr = [...filterSymbol, ...filterName];
@@ -67,10 +67,10 @@ const AddWatchlist = ({ closeModal, setWatchlist }) => {
   useEffect(() => {
     const getStocksList = async () => {
       try {
-        const response = await fetch(
-          'https://api.iextrading.com/1.0/ref-data/symbols'
-        );
+        const response = await fetch(`/api/stocks/stocksList`);
+
         const data = await response.json();
+
         setStocks(data);
       } catch (error) {
         console.log(error);

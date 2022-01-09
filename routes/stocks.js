@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
 const formatChart = require('../utils/chart');
+const { stockList } = require('../utils/symbols');
 
 router.get('/search/:stockId', async (req, res) => {
   const { stockId } = req.params;
@@ -21,6 +22,10 @@ router.get('/search/:stockId', async (req, res) => {
   const chartData = formatChart(quoteData);
 
   res.send({ quoteData, chartData, companyData });
+});
+
+router.get('/stocksList', async (req, res) => {
+  res.send({ stockList });
 });
 
 module.exports = router;
