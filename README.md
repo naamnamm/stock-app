@@ -51,13 +51,14 @@ This is my second full-stack application and first time implementing unit testin
 1. Run `npm install` in root folder
 2. Run `npm install --prefix client` in root folder
 3. create `.env` file in the root directory and set the following environment variables
-   1. DB_DATABASE
-   2. DB_HOST
-   3. DB_PASSWORD
-   4. DB_PORT
-   5. DB_USER
-   6. apikey - You can signup and get a free API key from this [site](https://site.financialmodelingprep.com/developer/docs/).
-   7. ACCESS_TOKEN_SECRET - this can be created using this [site](https://www.javainuse.com/jwtgenerator).
+   1. DB variables - This can be set up pretty quickly using [ElephantSQL](https://www.elephantsql.com/).
+      - `DB_DATABASE`
+      - `DB_HOST`
+      - `DB_PASSWORD`
+      - `DB_PORT`
+      - `DB_USER`
+   2. `apikey` - You can signup and get a free API key from this [site](https://site.financialmodelingprep.com/developer/docs/).
+   3. `ACCESS_TOKEN_SECRET` - this can be created using this [site](https://www.javainuse.com/jwtgenerator).
 4. Run `npm run dev` to start server
 5. Open browser at `http://localhost:5000`
 
