@@ -47,6 +47,19 @@ This is my second full-stack application and first time implementing unit testin
 
 - [Heroku](https://www.heroku.com)
 
+## Installation
+1. Run `npm install` in root folder
+2. Run `npm install --prefix client` in root folder
+3. create `.env` file in the root directory and set the following environment variables
+   1. DB_DATABASE
+   2. DB_HOST
+   3. DB_PASSWORD
+   4. DB_PORT
+   5. DB_USER
+   6. apikey - You can signup and get a free API key from [here](https://site.financialmodelingprep.com/developer/docs/).
+4. Run `npm run dev` to start server
+5. Open browser at `http://localhost:5000`
+
 ## Author
 
 - Naam Pondpat - _Full Stack Software Developer_ - [LinkedIn](https://www.linkedin.com/in/naam-pondpat-638153150/)
