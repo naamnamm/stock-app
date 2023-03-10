@@ -56,7 +56,8 @@ This is my second full-stack application and first time implementing unit testin
    3. DB_PASSWORD
    4. DB_PORT
    5. DB_USER
-   6. apikey - You can signup and get a free API key from [here](https://site.financialmodelingprep.com/developer/docs/).
+   6. apikey - You can signup and get a free API key from this [site](https://site.financialmodelingprep.com/developer/docs/).
+   7. ACCESS_TOKEN_SECRET - this can be created using this [site](https://www.javainuse.com/jwtgenerator).
 4. Run `npm run dev` to start server
 5. Open browser at `http://localhost:5000`
 
