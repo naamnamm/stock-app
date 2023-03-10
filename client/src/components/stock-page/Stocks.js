@@ -21,9 +21,10 @@ const Stocks = () => {
     const response = await fetch(`/api/stocks/search/${stockId}`);
     const data = await response.json();
 
-    setStock(data.quoteData);
+    //setStock(data.quoteData);
+    console.log(data.companyData[0])
     setChart(data.chartData);
-    setCompany(data.companyData);
+    setCompany(data.companyData[0]);
   };
 
   useEffect(() => {
@@ -84,13 +85,16 @@ const Stocks = () => {
           {orderMsg.errorMsg}{' '}
         </Alert>
       ) : null}
-      <div className='stock-main-container d-flex mx-auto mt-3'>
+
+      <div className='stock-main-container d-flex mx-auto my-3'>
         <div>
           <div className='text-left header-graph-container'>
-            {stock ? stock.quote.companyName : null}
+            {/* {stock ? stock.quote.companyName : null} */}
+            {company ? company.companyName : null}
           </div>
           <div className='text-left header-graph-container'>
-            {stock ? stock.quote.latestPrice : null}
+            {/* {stock ? stock.quote.latestPrice : null} */}
+            {company ? company.price : null}
           </div>
           {displayChart}
         </div>
@@ -98,7 +102,8 @@ const Stocks = () => {
         <div className='right-container'>
           <Card className=''>
             <ControlledTabs
-              currentPrice={stock ? stock.quote.latestPrice : null}
+              // currentPrice={stock ? stock.quote.latestPrice : null}
+              currentPrice={company ? company.price : null}
               setOrderMsg={setOrderMsg}
               orderMsg={orderMsg}
             />
@@ -106,15 +111,15 @@ const Stocks = () => {
         </div>
       </div>
 
-      <div className='company-info-container mx-auto mt-4'>
+      <div className='company-info-container mx-auto my-4'>
         <Card>
-          <Card.Header>About</Card.Header>
+          <Card.Header>About {company ? company.companyName : null}</Card.Header>
           <Card.Body>
             <div className='upper-container d-flex mx-auto'>
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
                   <Card.Title>CEO</Card.Title>
-                  <Card.Text>{company ? company.CEO : null}</Card.Text>
+                  <Card.Text>{company ? company.ceo : null}</Card.Text>
                 </Card.Body>
               </Card>
 
@@ -123,7 +128,7 @@ const Stocks = () => {
                   <Card.Title>Headquarters</Card.Title>
                   <Card.Text>
                     {company
-                      ? `${company.city}, ${company.state} ${company.country}`
+                      ? `${company.city}, ${company.state}, ${company.country}`
                       : null}
                   </Card.Text>
                 </Card.Body>
@@ -135,36 +140,43 @@ const Stocks = () => {
                   <Card.Text>{company ? company.industry : null}</Card.Text>
                 </Card.Body>
               </Card>
+
               <Card style={{ width: '13rem' }}>
+                <Card.Body className='info-text text-left'>
+                  <Card.Title>Sector</Card.Title>
+                  <Card.Text>{company ? company.sector : null}</Card.Text>
+                </Card.Body>
+              </Card>
+              
+            </div>
+
+            <div className='lower-container d-flex mx-auto'>
+
+            <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
                   <Card.Title>Exchange</Card.Title>
                   <Card.Text>{company ? company.exchange : null}</Card.Text>
                 </Card.Body>
               </Card>
-            </div>
 
-            <div className='lower-container d-flex mx-auto'>
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
                   <Card.Title>Market Cap</Card.Title>
                   <Card.Text>
-                    {stock ? formatNumber(stock.quote.marketCap) : null}
+                    {/* {stock ? formatNumber(stock.quote.marketCap) : null} */}
+                    {company ? formatNumber(company.mktCap) : null}
                   </Card.Text>
                 </Card.Body>
               </Card>
 
-              <Card style={{ width: '13rem' }}>
-                <Card.Body className='info-text text-left'>
-                  <Card.Title>Price-Earnings Ratio</Card.Title>
-                  <Card.Text>{stock ? stock.quote.peRatio : null}</Card.Text>
-                </Card.Body>
-              </Card>
+              
 
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
                   <Card.Title>Average Daily Trading Volume</Card.Title>
                   <Card.Text>
-                    {stock ? formatNumber(stock.quote.avgTotalVolume) : null}
+                    {/* {stock ? formatNumber(stock.quote.avgTotalVolume) : null} */}
+                    {company ? formatNumber(company.volAvg) : null}
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -177,6 +189,11 @@ const Stocks = () => {
               </Card>
             </div>
           </Card.Body>
+
+            <Card.Footer>
+              <p class="card-text text-left">{company ? company.description : null}</p>
+            </Card.Footer>
+                    
         </Card>
       </div>
     </>

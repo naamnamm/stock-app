@@ -7,7 +7,7 @@ const formatDate = (date) => moment(date).format('MMM DD');
 function formatChart(fetchObject) {
   const formattedData = [['date', 'close']];
 
-  fetchObject.chart.forEach(({ date, close }) => {
+  fetchObject.historical.forEach(({ date, close }) => {
     formattedData.push([formatDate(date), close]);
   });
 
