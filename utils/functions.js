@@ -42,8 +42,8 @@ const calculateHoldingValue = (array) => {
 
 const getPrice = (item) => {
   return axios.get(
-    //`https://cloud.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.IEX_API_TOKEN}`
-    `https://sandbox.iexapis.com/stable/stock/${item.symbol}/batch?types=quote&token=${process.env.SANDBOX_IEX_API_TOKEN}`
+    `https://financialmodelingprep.com/api/v3/profile/${item.symbol}?apikey=${process.env.apikey}`
+
   );
 };
 
@@ -55,7 +55,7 @@ const fetchStockLatestPrices = async (array) => {
   );
 
   const latestPrices = await Promise.all(mappedPromises).then((response) => {
-    return response.map((item) => item.quote.latestPrice);
+    return response.map((item) => item[0].price);
   });
 
   return latestPrices;

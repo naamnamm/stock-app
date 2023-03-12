@@ -9,7 +9,6 @@ import { Card, Alert } from 'react-bootstrap';
 import useQuery from '../../utils/Hooks/UseQuery';
 
 const Stocks = () => {
-  const [stock, setStock] = useState('');
   const [chart, setChart] = useState([]);
   const [company, setCompany] = useState('');
   const query = useQuery();
@@ -21,8 +20,6 @@ const Stocks = () => {
     const response = await fetch(`/api/stocks/search/${stockId}`);
     const data = await response.json();
 
-    //setStock(data.quoteData);
-    console.log(data.companyData[0])
     setChart(data.chartData);
     setCompany(data.companyData[0]);
   };
@@ -89,11 +86,9 @@ const Stocks = () => {
       <div className='stock-main-container d-flex mx-auto my-3'>
         <div>
           <div className='text-left header-graph-container'>
-            {/* {stock ? stock.quote.companyName : null} */}
             {company ? company.companyName : null}
           </div>
           <div className='text-left header-graph-container'>
-            {/* {stock ? stock.quote.latestPrice : null} */}
             {company ? company.price : null}
           </div>
           {displayChart}
@@ -102,7 +97,6 @@ const Stocks = () => {
         <div className='right-container'>
           <Card className=''>
             <ControlledTabs
-              // currentPrice={stock ? stock.quote.latestPrice : null}
               currentPrice={company ? company.price : null}
               setOrderMsg={setOrderMsg}
               orderMsg={orderMsg}
@@ -163,19 +157,15 @@ const Stocks = () => {
                 <Card.Body className='info-text text-left'>
                   <Card.Title>Market Cap</Card.Title>
                   <Card.Text>
-                    {/* {stock ? formatNumber(stock.quote.marketCap) : null} */}
                     {company ? formatNumber(company.mktCap) : null}
                   </Card.Text>
                 </Card.Body>
               </Card>
-
-              
-
+          
               <Card style={{ width: '13rem' }}>
                 <Card.Body className='info-text text-left'>
                   <Card.Title>Average Daily Trading Volume</Card.Title>
                   <Card.Text>
-                    {/* {stock ? formatNumber(stock.quote.avgTotalVolume) : null} */}
                     {company ? formatNumber(company.volAvg) : null}
                   </Card.Text>
                 </Card.Body>

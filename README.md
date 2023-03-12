@@ -50,7 +50,7 @@ This is my second full-stack application and first time implementing unit testin
 ## Installation
 1. Run `npm install` in root folder
 2. Run `npm install --prefix client` in root folder
-3. create `.env` file in the root directory and set the following environment variables
+3. Create `.env` file in the root directory and set the following environment variables
    1. DB variables - This can be set up pretty quickly using [ElephantSQL](https://www.elephantsql.com/).
       - `DB_DATABASE`
       - `DB_HOST`
