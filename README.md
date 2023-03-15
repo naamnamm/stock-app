@@ -1,6 +1,6 @@
 # Stock Trading App
 
-App built with React (frontend), Express (backend), pgAdmin (DB) that pulls stock data from [IEX API](https://iexcloud.io/docs/api/).
+App built with React (frontend), Express (backend), pgAdmin (DB) that pulls stock data from this [FMP API](https://site.financialmodelingprep.com/developer/docs/).
 
 View Application on [Heroku](https://naamp-stock-trading.herokuapp.com/)
 
