@@ -57,7 +57,7 @@ This is my second full-stack application and first time implementing unit testin
       - `DB_PASSWORD`
       - `DB_PORT`
       - `DB_USER`
-      - Connect to the ElephantSQL server from pgAdmin and then create new query and run the script from `db.sql` file
+      - Connect to the ElephantSQL server on pgAdmin and then create new query and run the script from `db.sql` file
    2. `apikey` - You can signup and get a free API key from this [site](https://site.financialmodelingprep.com/developer/docs/).
    3. `ACCESS_TOKEN_SECRET` - this can be created using this [site](https://www.javainuse.com/jwtgenerator).
 4. Run `npm run dev` to start server
